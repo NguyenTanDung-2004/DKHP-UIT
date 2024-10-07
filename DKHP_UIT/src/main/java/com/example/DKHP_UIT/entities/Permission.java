@@ -1,6 +1,9 @@
 package com.example.DKHP_UIT.entities;
 
 import java.util.HashSet;
+import java.util.Set;
+
+import com.fasterxml.jackson.annotation.JsonBackReference;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -21,10 +24,28 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class Permission {
     @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
-    private String id;
+    private Integer id;
     private String permissionName;
+    private String groupName;
 
     @ManyToMany(mappedBy = "permissions")
-    private HashSet<Role> roles = new HashSet<>();
+    @JsonBackReference
+    private Set<Role> roles = new HashSet<>();
+
+    @Override
+    public int hashCode() {
+
+        return this.id;
+    }
+
+    @Override
+    public String toString() {
+        return "Permission{" +
+                "id=" + id +
+                ", permissionName='" + permissionName + '\'' +
+                ", groupName='" + groupName + '\'' +
+                // Không gọi toString() cho roles để tránh vòng lặp
+                ", rolesCount=" + (roles != null ? roles.size() : 0) +
+                '}';
+    }
 }
