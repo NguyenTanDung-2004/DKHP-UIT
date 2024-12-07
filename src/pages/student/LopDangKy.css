@@ -1,0 +1,38 @@
+.left-panel {
+  flex: 5;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  height: 100%;
+  padding: 20px;
+}
+
+.search-bar {
+  width: 100%;
+  position: relative;
+}
+
+.search-bar:focus{
+  outline:solid 1px var(--hint-text);
+}
+
+.search-bar > i{
+  position: absolute;
+  top: 10px; left: 10px;
+}
+
+.search-input {
+  width: 100%;
+  padding: 10px 40px;
+  margin-bottom: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  background-color: rgba(234, 237, 238, 1);
+}
+
+.right-panel {
+  flex: 1;
+  height: 100%;
+  position: relative;
+}

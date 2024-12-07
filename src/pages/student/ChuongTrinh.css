@@ -1,0 +1,52 @@
+.select-nganh {
+	display: flex;
+	flex-direction: row;
+	width: 80%;
+	gap: 20px;
+	margin: 20px;
+}
+
+.select-nganh select{
+	border: 1px solid black;
+	border-radius: 8px;
+	padding: 0px 10px;
+	font-size: 16px;
+  color: var(--hint-text);
+}
+
+.nganh-btn {
+	width: 100px;
+}
+
+.title-nganh {
+	display: flex;
+	flex-direction: column;
+	margin-bottom: 20px;
+	align-items: center;
+}
+
+.title-nganh h2 {
+	color: red;
+	padding-bottom: 20px;
+}
+
+.display-nganh {
+	width: 75%;
+}
+
+.display-nganh table tr {
+	height: 60px;
+}
+
+.display-nganh table th {
+	color: black;
+}
+
+.display-nganh table td {
+	text-align: center;
+}
+
+.display-nganh table td:nth-child(2),
+.display-nganh table td:nth-child(3) {
+	text-align: left;
+}

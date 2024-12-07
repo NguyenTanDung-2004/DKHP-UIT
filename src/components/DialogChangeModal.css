@@ -1,0 +1,15 @@
+.input-group {
+	position: relative;
+}
+
+.error-text {
+	position: absolute;
+	bottom: -16px;
+	left: 0;
+	color: red;
+	font-size: 10px;
+	font-weight: 700;
+	text-align: left;
+	text-underline-position: from-font;
+	text-decoration-skip-ink: none;
+}

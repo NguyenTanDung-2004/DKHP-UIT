@@ -1,0 +1,114 @@
+/* Navbar.css */
+.navbar {
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+	justify-content: space-between;
+	padding: 10px 20px;
+	height: 60px;
+	background-color: white;
+	box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
+	z-index: 100;
+	position: relative;
+}
+
+.navbar-link {
+	list-style: none;
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+	gap: 40px;
+}
+
+.navbar-link > a,
+.dropdown-toggle {
+	color: black;
+	text-decoration: none;
+	cursor: pointer;
+	font-size: 18px;
+	font-weight: 500;
+	text-align: left;
+	padding: 10px;
+}
+
+.navbar-link a.active,
+.dropdown-toggle.active {
+	font-weight: 600;
+	color: var(--primary-color);
+	text-decoration: underline;
+	text-underline-position: under;
+	text-decoration-skip-ink: none;
+  cursor: pointer;
+}
+
+.dropdown-container {
+	position: relative;
+}
+
+.dropdown-container:hover .dropdown-menu{
+	display: block;
+}
+
+.dropdown-menu {
+	position: absolute;
+	top: 120%;
+	left: 0;
+  min-width: 200px;
+	display: flex;
+	flex-direction: column;
+	background-color: rgba(255, 255, 255, 1);
+  box-shadow: 0px 1px 3px 1px rgba(0, 0, 0, 0.15);
+	border: 1px solid rgba(212, 212, 212, 0.8);
+	list-style: none;
+  display: none;
+}
+
+.dropdown-menu.right{
+  position: absolute;
+	top: 120%;
+	left: -60%;
+	display: flex;
+	flex-direction: column;
+	background-color: rgba(255, 255, 255, 1);
+  box-shadow: 0px 1px 3px 1px rgba(0, 0, 0, 0.15);
+	border: 1px solid rgba(212, 212, 212, 0.8);
+	list-style: none;
+  display: none;
+}
+
+.dropdown-menu li{
+  padding: 10px 20px;
+	font-size: 18px;
+	font-weight: 400;
+	text-align: left;
+  text-wrap: nowrap;
+  display: block;
+  border-bottom: 1px solid var(--color-dropdown, rgba(212, 212, 212, 1));
+  cursor: pointer;
+}
+
+.dropdown-menu li:hover {
+  background-color: rgba(0, 0, 0, 0.15);
+}
+
+.dropdown-menu li a{
+  color: black;
+  text-decoration: none;
+	text-underline-position: from-font;
+	text-decoration-skip-ink: none;
+}
+
+.navbar-user{
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 20px;
+  font-size: 18px;
+	font-weight: 500;
+	text-align: left;
+  cursor: pointer;
+}
+
+.navbar-user > i {
+  color: gray;
+}

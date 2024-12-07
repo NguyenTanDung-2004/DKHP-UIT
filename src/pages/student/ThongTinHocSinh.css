@@ -1,0 +1,87 @@
+.info-form .form-container {
+	margin: 0 auto;
+	/* background: #f9f9f9;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); */
+	padding: 20px;
+	border-radius: 10px;
+	display: flex;
+	flex-direction: row;
+	align-items: flex-start;
+	justify-content: space-between;
+	gap: 30px;
+}
+
+.info-form .form-title {
+	text-align: center;
+	color: var(--primary-color);
+  font-size: 30px;
+  margin-bottom: 30px;
+}
+
+.info-form .form-group {
+	flex: 3;
+	display: flex;
+	flex-direction: column;
+	align-items: flex-start;
+	gap: 20px;
+}
+
+.info-form .form-group:last-child {
+	flex: 1;
+	justify-content: space-between;
+	height: 100%;
+}
+
+.info-form .form-group__item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 360px;
+}
+
+.info-form label {
+	font-weight: bold;
+	font-size: 16px;
+	font-weight: 400;
+	text-align: left;
+	text-underline-position: from-font;
+	text-decoration-skip-ink: none;
+}
+
+.info-form .form-group__item-inp,
+.info-form select {
+	width: 260px;
+	padding: 10px;
+	border: 1px solid #ddd;
+	border-radius: 5px;
+}
+
+.info-form input:focus,
+.info-form select:focus {
+	border-color: #007bff;
+	outline: none;
+}
+
+.info-form .btn-submit {
+	align-self: flex-end;
+}
+
+.info-form .btn-submit:hover {
+	background-color: #0056b3;
+}
+
+.required {
+	color: red;
+}
+
+.student-avatar {
+	width: 210px;
+	height: 270px;
+	border: 1px solid black;
+	object-fit: cover; 
+	cursor: pointer;
+}
+
+.student-avatar:hover {
+	opacity: 0.8;
+}

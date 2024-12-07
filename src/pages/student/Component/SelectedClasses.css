@@ -1,0 +1,79 @@
+.selected-classes {
+	border: 1px solid #ccc;
+	border-radius: 5px;
+	height: calc(100vh - 60px);
+	background: white;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+	position: absolute;
+	top: 0; left: 0;
+	width: 100%;
+}
+
+.selected-classes__view{
+  padding: 20px 16px;
+  flex: 1;
+  overflow-y: auto;
+}
+
+
+.selected-classes__view h4 {
+	font-size: 24px;
+	font-weight: 700;
+	text-align: left;
+	color: var(--primary-color);
+	text-underline-position: from-font;
+	text-decoration-skip-ink: none;
+}
+
+.selected-classes__view p {
+  font-size: 16px;
+  font-weight: 700;
+  text-align: left;
+  text-underline-position: from-font;
+  text-decoration-skip-ink: none;
+  margin: 10px 0px;
+}
+
+.view-list {
+	list-style-type: none;
+	padding: 0;
+}
+
+.view-list__tag {
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+	justify-content: space-between;
+	margin-bottom: 10px;
+	border: 1px solid var(--primary-color);
+	border-radius: 8px;
+	color: var(--primary-color);
+	padding: 8px;
+	font-size: 14px;
+	font-weight: 400;
+	text-align: left;
+	text-underline-position: from-font;
+	text-decoration-skip-ink: none;
+}
+
+.view-list__tag .remove-icon {
+	border: none;
+	border-radius: 3px;
+	cursor: pointer;
+}
+
+.selected-classes__action{
+  border-top: 0.3px solid #ccc;
+  padding: 20px;
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
+}
+
+.selected-classes__action > button {
+  width: 120px;
+}
+
+
