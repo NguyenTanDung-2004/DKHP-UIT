@@ -35,8 +35,8 @@ public class CTDTController {
     }
 
     @PostMapping("/deleteSubject")
-    public ResponseEntity deleteSubject() {
-
+    public ResponseEntity deleteSubject(@RequestBody String[] subjectIds) {
+        return ctdtService.deleteSubject(subjectIds);
     }
 
     @GetMapping("/getCTDT")

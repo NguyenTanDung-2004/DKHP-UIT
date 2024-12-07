@@ -1,12 +1,16 @@
 package com.example.DKHP_UIT.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import com.example.DKHP_UIT.entities.Subject;
 import com.example.DKHP_UIT.entities.ctdt.CTDT;
 import com.example.DKHP_UIT.entities.ctdt.CTDTID;
+
+import jakarta.transaction.Transactional;
+
 import java.util.List;
 import java.util.Set;
 
@@ -23,4 +27,12 @@ public interface CTDTRepository extends JpaRepository<CTDT, CTDTID> {
             "\tinner join subject where ctdt_subject.subject_id = subject.id and ctdt_subject.ctdt_ma_khoa = :maKhoa and ctdt_hoc_ky = :hocKy", nativeQuery = true)
 
     public List<List<Object>> getCTDT(String maKhoa, int hocKy);
+
+    @Query(value = "select count(*) from ctdt_subject where subject_id = :subjectId", nativeQuery = true)
+    public int check1SubjectInCTDT(String subjectId);
+
+    @Modifying
+    @Transactional
+    @Query(value = "delete from ctdt_subject where subject_id = :subjectId", nativeQuery = true)
+    public void deleteSubjectInRepository(String subjectId);
 }

@@ -4,6 +4,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import com.example.DKHP_UIT.entities.OpenSubject.OpenSubject;
 import com.example.DKHP_UIT.entities.ctdt.CTDT;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 
@@ -15,6 +16,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -42,4 +44,12 @@ public class Subject {
 
     @ManyToMany(mappedBy = "subjects")
     private Set<CTDT> ctdts = new HashSet<>();
+
+    @OneToMany
+    @JoinColumn(name = "subject_id")
+    private Set<OpenSubject> listOpenSubject;
+
+    @OneToMany
+    @JoinColumn(name = "subject_id")
+    private Set<Class> listClasses = new HashSet();
 }

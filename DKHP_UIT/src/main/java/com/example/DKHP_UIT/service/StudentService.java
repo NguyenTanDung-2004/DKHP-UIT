@@ -6,6 +6,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
+import com.example.DKHP_UIT.entities.Class;
 import com.example.DKHP_UIT.entities.Student;
 import com.example.DKHP_UIT.exception.ExceptionCode;
 import com.example.DKHP_UIT.exception.ExceptionStudent;
@@ -16,6 +17,7 @@ import com.example.DKHP_UIT.request.StudentRequestAdd;
 import com.example.DKHP_UIT.request.StudentRequestEdit;
 import com.example.DKHP_UIT.request.StudentRequestLogin;
 import com.example.DKHP_UIT.response.ResponseCode;
+import com.example.DKHP_UIT.response.ResponseDKHP;
 import com.example.DKHP_UIT.response.StudentResponseList;
 import com.example.DKHP_UIT.support_service.SupportStudentService;
 import com.example.DKHP_UIT.utils.UtilsHandleCookie;
@@ -242,5 +244,36 @@ public class StudentService {
         this.utilsHandleCookie.setCookie("jwtToken", token, httpServletResponse);
         // return
         return ResponseEntity.ok().body(ResponseCode.jsonOfResponseCode(ResponseCode.LoginSuccessfully));
+    }
+
+    public ResponseEntity dkhp(List<String> listClassId, String token) {
+        List<String> listTrue = new ArrayList<>();
+        List<String> listWrong = new ArrayList<>();
+        List<String> listProblem = new ArrayList<>();
+        // get userId
+        String userId = this.utilsHandleJwtToken.verifyToken(token);
+
+        // System.out.println(userId);
+        // return null;
+
+        // get list new classes
+        List<Class> newClasses = this.supportStudentService.listNewClasses(listClassId);
+        // sort list
+        this.supportStudentService.sortList(newClasses);
+        // Check siso, schedule, firstSubject, practice and theory of each new class
+        // with list registered
+        // classes
+        // save
+        this.supportStudentService.dkhp(newClasses, listWrong, listTrue, listProblem,
+                userId);
+
+        ResponseDKHP responseDKHP = ResponseDKHP.builder()
+                .listTrue(listTrue)
+                .listWrong(listWrong)
+                .listProblem(listProblem)
+                .code(1000)
+                .message("dkhp successfully!")
+                .build();
+        return ResponseEntity.ok().body(responseDKHP);
     }
 }

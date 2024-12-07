@@ -24,4 +24,10 @@ public class ExceptionGlobalHandler {
         return ResponseEntity.status(exceptionStaff.getExceptionCode().getStatus())
                 .body(ExceptionCode.jsonOfExceptionCode(exceptionStaff.getExceptionCode()));
     }
+
+    @ExceptionHandler(value = ExceptionUser.class)
+    public ResponseEntity handleExceptionUser(ExceptionUser exceptionStaff) {
+        return ResponseEntity.status(exceptionStaff.getExceptionCode().getStatus())
+                .body(ExceptionCode.jsonOfExceptionCode(exceptionStaff.getExceptionCode()));
+    }
 }

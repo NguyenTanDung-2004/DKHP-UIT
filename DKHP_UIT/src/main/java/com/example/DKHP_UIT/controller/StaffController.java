@@ -23,4 +23,10 @@ public class StaffController {
             @RequestParam(name = "email") String email) {
         return staffService.createStudentAccount(mssv, email);
     }
+
+    @PostMapping("/login")
+    public ResponseEntity login(@RequestParam(name = "email") String email,
+            @RequestParam(name = "password") String password) {
+        return staffService.login(email, password);
+    }
 }

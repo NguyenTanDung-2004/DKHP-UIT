@@ -23,7 +23,14 @@ public enum ResponseCode {
     CreateAllAccount(1000, "Create all account successfully!", HttpStatus.ACCEPTED),
     DeleteStudent(1000, "Delete student successfully!", HttpStatus.ACCEPTED),
     DeleteSubject(1000, "Delete subject successfully!", HttpStatus.ACCEPTED),
-    EditSubject(1000, "Edit subject successfully!", HttpStatus.ACCEPTED);
+    EditSubject(1000, "Edit subject successfully!", HttpStatus.ACCEPTED),
+    AddOpenSubject(1000, "Add open subject successfully!", HttpStatus.ACCEPTED),
+    SetSemesterAndYear(1000, "Set semester and year successfully!", HttpStatus.ACCEPTED),
+    AddRoom(1000, "Add room successfully!", HttpStatus.ACCEPTED),
+    AddClassWithOutTH(1000, "Add successfully!", HttpStatus.ACCEPTED),
+    AddClassWithInTH(1000, "Add successfully!", HttpStatus.ACCEPTED),
+    DeleteClass(1000, "Delete class successfully!", HttpStatus.ACCEPTED),
+    EditClass(1000, "Edit class successfully!", HttpStatus.ACCEPTED);
 
     private int code;
     private String message;

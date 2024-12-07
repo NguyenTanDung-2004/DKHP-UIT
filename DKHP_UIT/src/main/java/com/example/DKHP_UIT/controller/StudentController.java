@@ -135,4 +135,9 @@ public class StudentController {
     public ResponseEntity login(HttpServletResponse httpServletResponse, @RequestBody LoginRequest loginRequest) {
         return this.studentService.login(httpServletResponse, loginRequest);
     }
+
+    @PostMapping("/dkhp")
+    public ResponseEntity dkhp(@RequestParam(name = "token") String token, @RequestBody List<String> listClassId) {
+        return this.studentService.dkhp(listClassId, token);
+    }
 }

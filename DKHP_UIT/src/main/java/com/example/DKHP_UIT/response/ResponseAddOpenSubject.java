@@ -6,15 +6,16 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import java.util.Map;
 
+@Builder
+@Data
 @AllArgsConstructor
 @NoArgsConstructor
-@Data
-@Builder
-public class ResponseDeleteSubjectFromAllSubject {
-    private int code;
-    private String message;
+public class ResponseAddOpenSubject {
+    private int hocKy;
+    private int nam;
     private List<String> listTrue;
     private List<String> listWrong;
-    private List<String> listProblem;
+    private Map<String, Object> responseCode;
 }

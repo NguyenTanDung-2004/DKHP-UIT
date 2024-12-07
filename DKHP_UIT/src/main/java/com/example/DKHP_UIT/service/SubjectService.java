@@ -9,12 +9,14 @@ import com.example.DKHP_UIT.entities.Subject;
 import com.example.DKHP_UIT.exception.ExceptionCode;
 import com.example.DKHP_UIT.exception.ExceptionSubject;
 import com.example.DKHP_UIT.mapper.SubjectMapper;
+import com.example.DKHP_UIT.repository.OpenSubjectRepository;
 import com.example.DKHP_UIT.repository.SubjectRepository;
 import com.example.DKHP_UIT.request.RequestDeleteSubjectFromAllSubject;
 import com.example.DKHP_UIT.request.SubjectRequest;
 import com.example.DKHP_UIT.response.ResponseCode;
 import com.example.DKHP_UIT.response.ResponseDeleteSubjectFromAllSubject;
 import com.example.DKHP_UIT.support_service.SupportCTDTService;
+import com.example.DKHP_UIT.support_service.SupportSubjectService;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -30,6 +32,9 @@ public class SubjectService {
 
     @Autowired
     private SupportCTDTService supportCTDTService;
+
+    @Autowired
+    private SupportSubjectService supportSubjectService;
 
     public ResponseEntity createListSubject(List<SubjectRequest> listSubject) {
         for (int i = 0; i < listSubject.size(); i++) {
@@ -64,15 +69,29 @@ public class SubjectService {
     public ResponseEntity deleteListSubject(List<RequestDeleteSubjectFromAllSubject> list) {
         List<String> listWrong = new ArrayList<>();
         List<String> listTrue = new ArrayList<>();
+        List<String> listProblem = new ArrayList<>();
 
         for (int i = 0; i < list.size(); i++) {
-            Subject subject = this.subjectRepository.checkMaMonHoc(list.get(i).getMaMonHoc());
-            // check subject if it is in CTDT
-            if (this.supportCTDTService.checkSubjectInCTDT(subject.getId(), list.get(i).getMaKhoa()) == false) {
-                listWrong.add(list.get(i).getMaMonHoc());
+            Subject subject = this.subjectRepository.findById(list.get(i).getSubjectId()).get();
+            // check subject in open subject
+            if (this.supportSubjectService.checkOpenSubject(subject) == true) {
+                listWrong.add(subject.getId());
+                listProblem.add("open subject");
                 continue;
             }
-            listTrue.add(list.get(i).getMaMonHoc());
+            // check ctdt
+            else if (this.supportSubjectService.check1SubjectInCTDT(subject.getId()) == true) {
+                listWrong.add(subject.getId());
+                listProblem.add("ctdt");
+                continue;
+            }
+            // check class
+            else if (this.supportSubjectService.checkSubjectClass(subject.getId()) == true) {
+                listWrong.add(subject.getId());
+                listProblem.add("class");
+                continue;
+            }
+            listTrue.add(subject.getId());
             this.subjectRepository.delete(subject);
         }
 
@@ -80,6 +99,7 @@ public class SubjectService {
                 .code(1000)
                 .listTrue(listTrue)
                 .listWrong(listWrong)
+                .listProblem(listProblem)
                 .message("Delete successfully!")
                 .build();
         return ResponseEntity.ok().body(response);

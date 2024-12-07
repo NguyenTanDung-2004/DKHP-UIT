@@ -7,6 +7,8 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
+import jakarta.persistence.JoinTable;
+import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
@@ -18,6 +20,8 @@ import java.util.Date;
 
 import com.example.DKHP_UIT.abstract_class.User;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import java.util.Set;
+import java.util.HashSet;
 
 @Entity
 @Table(name = "student")
@@ -50,4 +54,10 @@ public class Student extends User {
     @JoinColumn(name = "role_id")
     @JsonIgnore
     private Role role;
+
+    //
+    @ManyToMany
+    @JoinTable(name = "student_class", joinColumns = @JoinColumn(name = "student_id"), inverseJoinColumns = @JoinColumn(name = "class_id"))
+    private Set<Class> classes = new HashSet<>();
+
 }

@@ -134,4 +134,11 @@ public class CTDTService {
         // get result
         return ResponseEntity.ok().body(ctdtMapper.createResponseCTDT(list, hocKy, maKhoa));
     }
+
+    public ResponseEntity deleteSubject(String[] subjectIds) {
+        for (int i = 0; i < subjectIds.length; i++) {
+            this.ctdtRepository.deleteSubjectInRepository(subjectIds[i]);
+        }
+        return ResponseEntity.ok().body(ResponseCode.DeleteSubject);
+    }
 }

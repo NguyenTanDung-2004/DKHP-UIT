@@ -1,4 +1,4 @@
-package com.example.DKHP_UIT.request;
+package com.example.DKHP_UIT.response;
 
 import java.util.List;
 
@@ -7,10 +7,11 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-@Builder
 @Data
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class RequestDeleteSubjectFromAllSubject {
-    private String subjectId;
+public class ResponseListRoom {
+    private String building;
+    private List<List<Integer>> listRoomsInFloors;
 }
