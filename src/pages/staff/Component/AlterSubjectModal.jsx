@@ -1,15 +1,15 @@
 import React, { useState } from "react";
 import "./StaffModal.css";
 
-const AddSubjectModal = ({ isOpen, onClose }) => {
+const AddSubjectModal = ({ isOpen, onClose, data = {} }) => {
 	const [formData, setFormData] = useState({
-		"Mã môn học": "",
-		"Tên môn học": "",
-		"Loại môn học": "",
-		"Mã khoa": "",
-		"Mã môn trước": "",
-		"TCLT": "",
-		"TCTH": ""
+		"Mã môn học": data?.["Mã môn học"] || "",
+		"Tên môn học": data?.["Tên môn học"] || "",
+		"Loại môn học": data?.["Loại môn học"] || "Bắt buộc",
+		"Mã khoa": data?.["Mã khoa"] || "",
+		"Mã môn trước": data?.["Mã môn trước"] || "",
+		"TCLT": data?.["TCLT"] || 0,
+		"TCTH": data?.["TCTH"] || 0,
 	});
 
 	const handleInputChange = (e) => {

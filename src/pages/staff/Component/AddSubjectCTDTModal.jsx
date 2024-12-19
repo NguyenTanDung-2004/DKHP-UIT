@@ -1,15 +1,16 @@
 import React, { useState } from "react";
 import "./StaffModal.css";
 
-const AddSubjectModal = ({ isOpen, onClose }) => {
+const AddSubjectCTDTModal = ({ isOpen, onClose }) => {
 	const [formData, setFormData] = useState({
+		"Học kỳ": "",
 		"Mã môn học": "",
 		"Tên môn học": "",
 		"Loại môn học": "",
 		"Mã khoa": "",
 		"Mã môn trước": "",
-		"TCLT": "",
-		"TCTH": ""
+		TCLT: "",
+		TCTH: "",
 	});
 
 	const handleInputChange = (e) => {
@@ -32,8 +33,21 @@ const AddSubjectModal = ({ isOpen, onClose }) => {
 		<div className="staff-modal__overlay">
 			<div className="staff-modal__content">
 				<i className="fa-solid fa-xmark close" onClick={onClose}></i>
-				<h2 className="title">Sửa môn học</h2>
+				<h2 className="title">Thêm môn học vào chương trình đào tạo</h2>
 				<form onSubmit={handleSubmit} className="staff-form">
+					<div className="form-group">
+						<div className="form-group__item">
+							<label>
+								Học kỳ <span className="required">*</span>
+							</label>
+							<input
+								type="text"
+								name="Học kỳ"
+								value={formData["Học kỳ"]}
+								onChange={handleInputChange}
+							/>
+						</div>
+					</div>
 					<div className="form-group">
 						<div className="form-group__item">
 							<label>
@@ -62,47 +76,8 @@ const AddSubjectModal = ({ isOpen, onClose }) => {
 					</div>
 					<div className="form-group">
 						<div className="form-group__item">
-							<label>Loại Môn Học</label>
-							<select
-								name="Loại môn học"
-								value={formData["Loại môn học"] || "LT"}
-								onChange={handleInputChange}
-							>
-								<option value="LT">LT</option>
-								<option value="TH">TH</option>
-							</select>
-						</div>
-					</div>
-					<div className="form-group">
-						<div className="form-group__item">
 							<label>
-								Mã Khoa<span className="required">*</span>
-							</label>
-							<input
-								type="text"
-								name="Mã khoa"
-								value={formData["Mã khoa"]}
-								onChange={handleInputChange}
-							/>
-						</div>
-					</div>
-					<div className="form-group">
-						<div className="form-group__item">
-							<label>
-								Mã môn học trước<span className="required">*</span>
-							</label>
-							<input
-								type="text"
-								name="Mã môn trước"
-								value={formData["Mã môn trước"]}
-								onChange={handleInputChange}
-							/>
-						</div>
-					</div>
-					<div className="form-group">
-						<div className="form-group__item">
-							<label>
-								Số tín chỉ lý thuyết<span className="required">*</span>
+								Số TCLT<span className="required">*</span>
 							</label>
 							<input
 								type="text"
@@ -115,7 +90,7 @@ const AddSubjectModal = ({ isOpen, onClose }) => {
 					<div className="form-group">
 						<div className="form-group__item">
 							<label>
-								Số tín chỉ thực hành<span className="required">*</span>
+								Số TCTH<span className="required">*</span>
 							</label>
 							<input
 								type="text"
@@ -125,6 +100,7 @@ const AddSubjectModal = ({ isOpen, onClose }) => {
 							/>
 						</div>
 					</div>
+					<div className="form-group"></div>
 					<div className="form-actions">
 						<button type="submit">Xác nhận</button>
 					</div>
@@ -134,4 +110,4 @@ const AddSubjectModal = ({ isOpen, onClose }) => {
 	);
 };
 
-export default AddSubjectModal;
+export default AddSubjectCTDTModal;

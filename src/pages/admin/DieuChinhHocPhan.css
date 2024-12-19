@@ -1,0 +1,72 @@
+.admin-study-section .main-section {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  width: 80%;
+  height: 100%;
+  align-items: center;
+  justify-content: center;
+}
+
+.admin-study-section .main-section .admin-form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  width: 60%;
+}
+
+.admin-form .form-group {
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+  justify-content: space-between;
+	gap: 20px;
+}
+
+.admin-form .form-group:last-child {
+	flex-direction: column;
+}
+
+.admin-form .form-group__item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 360px;
+}
+
+.admin-form .course-list {
+  list-style: none;
+}
+
+.admin-form .course-list li {
+  padding: 5px 0px;
+}
+
+.admin-form label {
+  display: block;
+	font-weight: bold;
+	font-size: 16px;
+	font-weight: 400;
+	text-align: left;
+	text-underline-position: from-font;
+	text-decoration-skip-ink: none;
+}
+
+.admin-form .form-group__item input,
+.admin-form select {
+	padding: 10px;
+	border: 1px solid #ddd;
+	border-radius: 5px;
+  max-width: 320px;
+  min-width: 240px;
+}
+
+.admin-form input:focus,
+.admin-form select:focus {
+	border-color: #007bff;
+	outline: none;
+}
+
+.admin-form button{
+  width: fit-content;
+}

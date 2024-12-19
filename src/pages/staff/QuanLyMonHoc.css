@@ -1,19 +1,20 @@
-.left-panels{ 
+.qlmh .left-panels{ 
   display: flex;
   flex-direction: column;
 }
 
-.left-panels .list-subjects .title{
+.qlmh .left-panels .list-subjects .title{
   margin-bottom: 20px;
 }
 
-.left-panels .list-subjects .grid-view{
+.qlmh .left-panels .list-subjects .grid-view{
   height: 500px;
 }
 
-.right-panels{
+.qlmh .right-panels{
   display: flex;
   flex-direction: column;
   justify-content: flex-end;
   gap: 20px;
+  
 }

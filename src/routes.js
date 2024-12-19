@@ -14,9 +14,9 @@ import StaffQuanlyMonHoc from "./pages/staff/QuanLyMonHoc";
 import StaffQuanlyChuongTrinh from "./pages/staff/QuanLyChuongTrinh";
 import StaffSinhvien from "./pages/staff/Sinhvien";
 
-import AdminDashboardPage from "./pages/admin/DashboardPage";
-import AdminManageUsersPage from "./pages/admin/ManageUsersPage";
-import AdminTimetablePage from "./pages/admin/TimetablePage";
+import AdminTrangChu from "./pages/admin/TrangChu";
+import AdminDanhSachTaiKhoan from "./pages/admin/DanhSachTaiKhoan";
+import AdminDieuChinhHocPhan from "./pages/admin/DieuChinhHocPhan";
 
 import AuthPage from "./pages/AuthPage";
 import NotFoundPage from "./pages/NotFoundPage";
@@ -100,26 +100,26 @@ const AppRoutes = () => (
 
 		{/* Routes for admins */}
 		<Route
-			path="/admin"
+			path="/admin/trangchu"
 			element={
 				<ProtectedRoute role="admin">
-					<AdminDashboardPage />
+					<AdminTrangChu />
 				</ProtectedRoute>
 			}
 		/>
 		<Route
-			path="/admin/manage-users"
+			path="/admin/danh-sach-tai-khoan"
 			element={
 				<ProtectedRoute role="admin">
-					<AdminManageUsersPage />
+					<AdminDanhSachTaiKhoan />
 				</ProtectedRoute>
 			}
 		/>
 		<Route
-			path="/admin/reports"
+			path="/admin/danh-sach-hoc-phan"
 			element={
 				<ProtectedRoute role="admin">
-					<AdminTimetablePage />
+					<AdminDieuChinhHocPhan />
 				</ProtectedRoute>
 			}
 		/>

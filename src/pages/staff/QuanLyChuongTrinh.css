@@ -1,0 +1,32 @@
+.ctdt .main-section{
+  width: 80%;
+  height: 100%;
+  margin: 40px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.ctdt .main-section table th:nth-child(4){
+  width: 50%;
+}
+
+.ctdt .main-section table th:nth-child(6),
+.ctdt .main-section table th:nth-child(7){
+  width: 5%;
+}
+
+.ctdt .main-section table td{
+  text-align: center;
+}
+
+.ctdt .main-section table td:nth-child(3),
+.ctdt .main-section table td:nth-child(4){
+  text-align: justify;
+}
+
+.ctdt .main-section .data-actions{
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}

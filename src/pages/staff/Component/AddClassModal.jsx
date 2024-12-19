@@ -1,20 +1,17 @@
 import React, { useState } from "react";
 import "./StaffModal.css";
 
-const AddClassModal = ({ isOpen, onClose }) => {
+const AlterClassModal = ({ isOpen, onClose }) => {
 	const [formData, setFormData] = useState({
-		subjectCode: "",
-		subjectName: "",
-		classCode: "",
-		type: "",
-		day: "",
-		capacity: "",
-		startDate: "",
-		endDate: "",
-		startPeriod: "",
-		endPeriod: "",
-		teacher: "",
-		room: "",
+    "Mã lớp": "",
+    "Sĩ số": "",
+    "Ngày bắt đầu": "",
+    "Ngày kết thúc": "",
+    "Thứ": "",
+    "Tiết": "",
+    "Phòng": "",
+    "Giảng viên": "",
+    "Loại": "" || "LT",
 	});
 
 	const handleInputChange = (e) => {
@@ -42,39 +39,26 @@ const AddClassModal = ({ isOpen, onClose }) => {
 					<div className="form-group">
 						<div className="form-group__item">
 							<label>
-								Mã môn<span className="required">*</span>
+								Mã lớp<span className="required">*</span>
 							</label>
 							<input
 								type="text"
-								name="subjectCode"
-								value={formData.subjectCode}
+								name="Mã lớp"
+								value={formData["Mã lớp"]}
 								onChange={handleInputChange}
 							/>
 						</div>
 						<div className="form-group__item">
-							<label>
-								Tên môn<span className="required">*</span>
-							</label>
+							<label>Sĩ số</label>
 							<input
-								type="text"
-								name="subjectName"
-								value={formData.subjectName}
+								type="number"
+								name="Sĩ số"
+								value={formData["Sĩ số"]}
 								onChange={handleInputChange}
 							/>
 						</div>
 					</div>
 					<div className="form-group">
-						<div className="form-group__item">
-							<label>
-								Mã lớp<span className="required">*</span>
-							</label>
-							<input
-								type="text"
-								name="classCode"
-								value={formData.classCode}
-								onChange={handleInputChange}
-							/>
-						</div>
 						<div className="form-group__item">
 							<label>Hình thức</label>
 							<select
@@ -90,6 +74,18 @@ const AddClassModal = ({ isOpen, onClose }) => {
 					<div className="form-group">
 						<div className="form-group__item">
 							<label>
+								Tiết<span className="required">*</span>
+							</label>
+							<input
+								type="text"
+								name="Tiết"
+								value={formData["Tiết"]}
+								onChange={handleInputChange}
+								required
+							/>
+						</div>
+						<div className="form-group__item">
+							<label>
 								Thứ<span className="required">*</span>
 							</label>
 							<input
@@ -100,15 +96,6 @@ const AddClassModal = ({ isOpen, onClose }) => {
 								required
 							/>
 						</div>
-						<div className="form-group__item">
-							<label>Sĩ số</label>
-							<input
-								type="number"
-								name="capacity"
-								value={formData.capacity}
-								onChange={handleInputChange}
-							/>
-						</div>
 					</div>
 					<div className="form-group">
 						<div className="form-group__item">
@@ -117,8 +104,8 @@ const AddClassModal = ({ isOpen, onClose }) => {
 							</label>
 							<input
 								type="date"
-								name="startDate"
-								value={formData.startDate}
+								name="Ngày bắt đầu"
+								value={formData["Ngày bắt đầu"]}
 								onChange={handleInputChange}
 								required
 							/>
@@ -129,34 +116,8 @@ const AddClassModal = ({ isOpen, onClose }) => {
 							</label>
 							<input
 								type="date"
-								name="endDate"
-								value={formData.endDate}
-								onChange={handleInputChange}
-								required
-							/>
-						</div>
-					</div>
-					<div className="form-group">
-						<div className="form-group__item">
-							<label>
-								Tiết bắt đầu<span className="required">*</span>
-							</label>
-							<input
-								type="text"
-								name="startPeriod"
-								value={formData.startPeriod}
-								onChange={handleInputChange}
-								required
-							/>
-						</div>
-						<div className="form-group__item">
-							<label>
-								Tiết kết thúc<span className="required">*</span>
-							</label>
-							<input
-								type="text"
-								name="endPeriod"
-								value={formData.endPeriod}
+								name="Ngày kết thúc"
+								value={formData["Ngày kết thúc"]}
 								onChange={handleInputChange}
 								required
 							/>
@@ -167,8 +128,8 @@ const AddClassModal = ({ isOpen, onClose }) => {
 							<label>Giảng viên</label>
 							<input
 								type="text"
-								name="teacher"
-								value={formData.teacher}
+								name="Giảng viên"
+								value={formData["Giảng viên"]}
 								onChange={handleInputChange}
 							/>
 						</div>
@@ -178,8 +139,8 @@ const AddClassModal = ({ isOpen, onClose }) => {
 							</label>
 							<input
 								type="text"
-								name="room"
-								value={formData.room}
+								name="Phòng"
+								value={formData["Phòng"]}
 								onChange={handleInputChange}
 								required
 							/>
@@ -194,4 +155,4 @@ const AddClassModal = ({ isOpen, onClose }) => {
 	);
 };
 
-export default AddClassModal;
+export default AlterClassModal;

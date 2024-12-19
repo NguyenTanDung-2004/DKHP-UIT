@@ -1,0 +1,63 @@
+/* staff.staff .css */
+
+.staff .title {
+	text-align: center;
+	margin: 20px 0;
+}
+
+.staff .content {
+	display: flex;
+	width: 80%;
+	border: 1px solid #ccc;
+	height: 70vh;
+}
+
+.staff .list-student {
+	background-color: #f4f8fb;
+	overflow: auto;
+}
+
+.staff .info-student {
+	overflow: auto;
+	display: flex;
+	flex-direction: column;
+	gap: 20px;
+}
+
+.staff .info-student h3 {
+	width: 100%;
+	border-bottom: 1px solid #ccc;
+	text-align: center;
+	font-size: 24px;
+	font-weight: 700;
+	text-underline-position: from-font;
+	text-decoration-skip-ink: none;
+  padding: 20px;
+  color: var(--primary-color);
+}
+
+.staff .resizer {
+	width: 4px;
+	cursor: ew-resize;
+	background-color: #aaa;
+	transition: background-color staff 0.3s;
+}
+
+.staff .resizer:hover {
+	background-color: #888;
+}
+
+.staff .info-student .staff-form{
+  padding: 20px;
+}
+
+.staff .info-student .staff-form .form-group{
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.staff .info-student .staff-form .form-group__item{
+  width: 45%;
+  min-width: 390px;
+  align-items: center;
+}

@@ -1,14 +1,14 @@
-.list-class{
+.qllh .list-class{
   height: 100%;
   margin-top: 20px;
 }
 
-.list-class .title{
+.qllh .list-class .title{
   text-align: center;
   padding: 20px;
 }
 
-.list-class__actions{
+.qllh .list-class__actions{
   display: flex;
   flex-direction: row;
   gap: 30px;

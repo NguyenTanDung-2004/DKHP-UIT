@@ -9,7 +9,8 @@ const DataGridView = ({
 	getCheckedRows,
 	selectedClasses,
 	canEdit, 
-	showEditModal
+	showEditModal,
+	getEditItem
 }) => {
 	const [selectedRows, setSelectedRows] = useState([]);
 
@@ -101,7 +102,10 @@ const DataGridView = ({
 								<td>
 									<button
 										className="edit-button"
-										onClick={() => showEditModal(item)} // Gọi modal chỉnh sửa
+										onClick={() => {
+											getEditItem(item); 
+											showEditModal(); 
+										}}
 									>
 										<i className="fa-regular fa-pen-to-square"></i>
 									</button>

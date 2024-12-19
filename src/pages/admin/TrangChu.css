@@ -1,0 +1,56 @@
+.admin-home{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: unset;
+  width: 100%;
+}
+
+.status-section{
+  display: flex;
+  justify-content: space-between;
+  margin-top: 20px;
+  margin-bottom: 20px;
+  width: 80%;
+  padding: 20px 40px;
+}
+
+.status-section div{
+  width: 30%;
+  border: 1px solid #ccc;
+  border-radius: 10px;
+  padding: 20px;
+  background-color: rgba(255, 255, 255, 1);
+}
+
+.status-section div p{
+  font-size: 24px;
+  font-weight: 700;
+  line-height: 28px;
+  text-underline-position: from-font;
+  text-decoration-skip-ink: none;
+  margin-bottom: 20px;
+}
+
+.status-section div span{
+  font-size: 48px;
+  font-weight: 700;
+  line-height: 28px;
+  text-align: center;
+  text-underline-position: from-font;
+  text-decoration-skip-ink: none;
+}
+
+.chart-section{
+  width: 80%;
+  padding: 20px 40px;
+  background-color: rgba(255, 255, 255, 1);
+  height: 500px;
+}
+
+
+
+
+
+
+

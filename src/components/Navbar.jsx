@@ -24,9 +24,9 @@ function Navbar() {
 			case "admin":
 				return (
 					<>
-						<NavLink to="/admin/dashboard">Trang chủ Admin</NavLink>
-						<NavLink to="/admin/manage-users">Quản lý người dùng</NavLink>
-						<NavLink to="/admin/reports">Báo cáo</NavLink>
+						<NavLink to="/admin/trangchu">Trang chủ</NavLink>
+						<NavLink to="/admin/danh-sach-tai-khoan">Danh sách tài khoản</NavLink>
+						<NavLink to="/admin/danh-sach-hoc-phan">Điều chỉnh đăng ký học phần</NavLink>
 					</>
 				);
 			case "staff":

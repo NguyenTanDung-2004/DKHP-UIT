@@ -1,0 +1,102 @@
+.admin-account #mode-view {
+  width: 200px;
+  padding: 10px 20px;
+  height: 40px;
+  border-radius: 8px;
+}
+
+.admin-account #mode-view option {
+  padding: 10px;
+  height: 40px;
+  border-radius: 8px;
+}
+
+.admin-account .content {
+	display: flex;
+  flex-direction: row;
+	width: 80%;
+	border: 1px solid #ccc;
+	height: 70vh;
+}
+
+.admin-account .list-accounts {
+	background-color: #f4f8fb;
+	overflow: auto;
+  border: 1px solid #ccc;
+  width: 40%;
+}
+
+.admin-account .list-accounts table th, .admin-account .list-accounts table td {
+  height: 40px;
+}
+
+.admin-account .list-accounts .list-actions {
+	display: flex;
+	justify-content: space-between;
+  gap: 20px;
+	align-items: center;
+	padding: 20px 0px;
+}
+
+.admin-account .list-accounts .list-actions select {
+	width: 120px;
+	padding: 10px;
+	height: 40px;
+	border-radius: 8px;
+}
+
+.admin-account .list-accounts .list-actions .list-btns {
+	display: flex;
+	flex-direction: row;
+	gap: 20px;
+	cursor: pointer;
+}
+
+.admin-account .permit-accounts {
+	overflow: auto;
+	display: flex;
+	flex-direction: column;
+}
+
+.admin-account .permit-accounts h3 {
+	width: 100%;
+	text-align: center;
+	font-size: 24px;
+	font-weight: 700;
+	text-underline-position: from-font;
+	text-decoration-skip-ink: none;
+	padding-top: 20px;
+	color: var(--primary-color);
+}
+
+.admin-account .permit-accounts .admin-form {
+	padding: 20px;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 20px;
+}
+
+.admin-account .permit-accounts .form-group {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  align-items: flex-start;
+	flex-wrap: wrap;
+  width: 45%;
+  gap: 16px;
+}
+
+.admin-account .permit-accounts .form-group p {
+  font-size: 20px;
+  font-weight: bold;
+}
+
+.admin-account .permit-accounts .form-group__item {
+	align-items: center;
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  gap: 10px;
+}
