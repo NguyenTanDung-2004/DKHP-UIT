@@ -25,16 +25,22 @@ public class SubjectController {
     @Autowired
     private SubjectService subjectService;
 
+
+    // API thêm 1 môn học
+    @PostMapping("/create1Subject")
+    public ResponseEntity create1Subject(@RequestBody SubjectRequest subjectRequest) {
+        return subjectService.create1Subject(subjectRequest);
+    }
+
+
+    // API thêm 1 list môn học
     @PostMapping("/createSubject")
     public ResponseEntity createSubject(@RequestBody List<SubjectRequest> list) {
 
         return subjectService.createListSubject(list);
     }
 
-    @PostMapping("/create1Subject")
-    public ResponseEntity create1Subject(@RequestBody SubjectRequest subjectRequest) {
-        return subjectService.create1Subject(subjectRequest);
-    }
+
 
     @PostMapping("/delete1Subject")
     public ResponseEntity deleteSubject(@RequestParam(name = "maMonHoc") String maMonHoc,
