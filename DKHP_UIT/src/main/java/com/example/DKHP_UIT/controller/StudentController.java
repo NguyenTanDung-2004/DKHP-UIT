@@ -32,6 +32,13 @@ public class StudentController {
     private RoleService roleService;
 
 
+    // Tạo 1 sinh viên
+    @PostMapping("/create1Student")
+    public ResponseEntity create1Student(@RequestBody StudentRequestAdd studentRequestAdd) {
+        return studentService.create1Student(studentRequestAdd);
+    }
+
+    // Tạo 1 list sinh viên
     @PostMapping("/createStudent") 
     public ResponseEntity addStudent(@RequestBody List<StudentRequestAdd> list) {
         return studentService.createListStudent(list);
@@ -47,10 +54,7 @@ public class StudentController {
         return studentService.deleteListStudent(array);
     }
 
-    @PostMapping("/create1Student")
-    public ResponseEntity create1Student(@RequestBody StudentRequestAdd studentRequestAdd) {
-        return studentService.create1Student(studentRequestAdd);
-    }
+
 
     @PostMapping("/editStudent")
     public ResponseEntity editStudent(@RequestBody StudentRequestEdit studentRequestEdit) {

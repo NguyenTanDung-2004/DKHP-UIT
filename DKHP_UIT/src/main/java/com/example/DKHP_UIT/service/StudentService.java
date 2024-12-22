@@ -84,12 +84,17 @@ public class StudentService {
     }
 
     public ResponseEntity<Map<String, Object>> editStudent(StudentRequestEdit studentRequestEdit) {
+
+        // Get sinh viên theo MSSV
         Student student = this.studentRepository.findById(studentRequestEdit.getMssv()).get();
 
+        // Cập nhật thông tin sinh viên từ StudentRequestEdit vào student entity
         this.studentMapper.convertRequestEdit(studentRequestEdit, student);
 
+        // Lưu 
         this.studentRepository.save(student);
 
+        // Trả về response thành công
         return ResponseEntity.ok().body(ResponseCode.jsonOfResponseCode(ResponseCode.EditStudentSuccessfully));
     }
 
@@ -200,27 +205,47 @@ public class StudentService {
 
     public ResponseEntity create1Student(StudentRequestAdd studentRequestAdd) {
 
+        // Get sinh viên theo MSSV
         Optional<Student> st = this.studentRepository.findById(studentRequestAdd.getMssv());
+
+        // Kiểm tra xem sinh viên đã tồn tại chưa
         if (st.isEmpty() == false) {
             throw new ExceptionStudent(ExceptionCode.StudentExist);
         }
 
+        // Chuyển đổi từ StudentRequestAdd sang Student (entity)
         Student student = this.studentMapper.convertRequestAdd(studentRequestAdd);
+
+        // Lưu 
         this.studentRepository.save(student);
+
+        // Trả về response 
         return ResponseEntity.ok().body(ResponseCode.jsonOfResponseCode(ResponseCode.CreateStudentSuccessfully));
     }
 
     public ResponseEntity delete1Student(String mssv) {
+
+        // Get sinh viên theo MSSV
         Student st = this.studentRepository.findById(mssv).get();
+        // Xoá sinh viên khỏi database
         this.studentRepository.delete(st);
+        // Trả về response
         return ResponseEntity.ok().body(ResponseCode.jsonOfResponseCode(ResponseCode.DeleteStudent));
     }
 
+
     public ResponseEntity deleteListStudent(String[] array) {
+        
+        // Duyệt qua danh sách MSSV
         for (int i = 0; i < array.length; i++) {
+            
+            // Get sinh viên theo MSSV
             Student st = this.studentRepository.findById(array[i]).get();
+
+            // Xoá sinh viên khỏi database
             this.studentRepository.delete(st);
         }
+        // Trả về response thành công
         return ResponseEntity.ok().body(ResponseCode.jsonOfResponseCode(ResponseCode.DeleteStudent));
     }
 
