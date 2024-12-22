@@ -55,12 +55,14 @@ public class StudentController {
     }
 
 
+    // API chỉnh sửa
     @PostMapping("/editStudent")
     public ResponseEntity editStudent(@RequestBody StudentRequestEdit studentRequestEdit) {
         return studentService.editStudent(studentRequestEdit);
     }
 
 
+    // API lấy thông tin chi tiết
     @PostMapping("/getDetailStudent")
     public ResponseEntity getDetailStudent(@RequestParam(name = "mssv") String mssv) {
         return studentService.getDetailStudent(mssv);
@@ -119,6 +121,7 @@ public class StudentController {
         return emitter;
     }
 
+    // API login của sinh viên
     @PostMapping("/login")
     public ResponseEntity login(HttpServletResponse httpServletResponse, @RequestBody LoginRequest loginRequest) {
         return this.studentService.login(httpServletResponse, loginRequest);

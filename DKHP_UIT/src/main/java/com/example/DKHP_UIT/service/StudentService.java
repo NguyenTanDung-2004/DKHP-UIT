@@ -257,26 +257,28 @@ public class StudentService {
         return ResponseEntity.ok().body(ResponseCode.jsonOfResponseCode(ResponseCode.DeleteStudent));
     }
 
-    public ResponseEntity login(HttpServletResponse httpServletResponse,
-            LoginRequest loginRequest) {
-        // get student by MSSV
-        java.util.Optional<Student> optional = this.studentRepository.findById(loginRequest.getUserName());
+    public ResponseEntity login(HttpServletResponse httpServletResponse, LoginRequest loginRequest) {
+        // Lấy thông tin sinh viên theo MSSV
+        Optional<Student> optional = this.studentRepository.findById(loginRequest.getUserName());
 
+        // Kiểm tra xem sinh viên có tồn tại không
         if (optional.isPresent() == false) {
-            throw new ExceptionStudent(ExceptionCode.AccountWrong);
+        // Nếu không tồn tại, ném exception báo lỗi sai tài khoản
+        throw new ExceptionStudent(ExceptionCode.AccountWrong);
         }
 
+        // Lấy đối tượng sinh viên từ Optional
         Student student = optional.get();
-        // check password
+        // Kiểm tra mật khẩu
         if (this.utilsHandlePassword.checkPassword(loginRequest.getPassword(), student.getPassword()) == 0) {
             throw new ExceptionStudent(ExceptionCode.PasswordWrong);
         }
 
-        // create token
+        // Tạo JWT token
         String token = this.utilsHandleJwtToken.createToken(student);
-        // set token for cookie
+        // Thiết lập token vào cookie
         this.utilsHandleCookie.setCookie("jwtToken", token, httpServletResponse);
-        // return
+        // Trả về response thành công
         return ResponseEntity.ok().body(ResponseCode.jsonOfResponseCode(ResponseCode.LoginSuccessfully));
     }
 
