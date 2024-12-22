@@ -41,19 +41,6 @@ public class SubjectController {
     }
 
 
-
-    @PostMapping("/delete1Subject")
-    public ResponseEntity deleteSubject(@RequestParam(name = "maMonHoc") String maMonHoc,
-            @RequestParam(name = "maKhoa") String maKhoa) {
-        return subjectService.deleteSubject(maMonHoc, maKhoa);
-    }
-
-    @PostMapping("/deleteListSubject")
-    public ResponseEntity deleteListSubject(
-            @RequestBody List<RequestDeleteSubjectFromAllSubject> listRequestDeleteSubjectFromAllSubjects) {
-        return subjectService.deleteListSubject(listRequestDeleteSubjectFromAllSubjects);
-    }
-
     @PostMapping("/editSubject")
     public ResponseEntity editSubject(@RequestBody SubjectRequest subjectRequest,
             @RequestParam(name = "id") String id) {
@@ -63,6 +50,21 @@ public class SubjectController {
     @GetMapping("/getSubject")
     public ResponseEntity getSubject(@RequestParam(name = "maKhoa") String maKhoa) {
         return subjectService.getSubject(maKhoa);
+    }
+
+    // API xóa 1 môn học
+    @PostMapping("/delete1Subject")
+    public ResponseEntity deleteSubject(@RequestParam(name = "maMonHoc") String maMonHoc,
+            @RequestParam(name = "maKhoa") String maKhoa) {
+        return subjectService.deleteSubject(maMonHoc, maKhoa);
+    }
+
+    
+    // API xóa list môn học
+    @PostMapping("/deleteListSubject")
+    public ResponseEntity deleteListSubject(
+            @RequestBody List<RequestDeleteSubjectFromAllSubject> listRequestDeleteSubjectFromAllSubjects) {
+        return subjectService.deleteListSubject(listRequestDeleteSubjectFromAllSubjects);
     }
 
     @Autowired
