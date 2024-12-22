@@ -55,21 +55,23 @@ public class StudentController {
     }
 
 
-
     @PostMapping("/editStudent")
     public ResponseEntity editStudent(@RequestBody StudentRequestEdit studentRequestEdit) {
         return studentService.editStudent(studentRequestEdit);
     }
 
-    @PostMapping("/getStudent")
-    public ResponseEntity getStudent(@RequestParam(name = "page") int page) {
-        return studentService.getStudent(page);
-    }
 
     @PostMapping("/getDetailStudent")
     public ResponseEntity getDetailStudent(@RequestParam(name = "mssv") String mssv) {
         return studentService.getDetailStudent(mssv);
     }
+
+    // API lấy ra danh sách sinh viên theo phân trang
+    @PostMapping("/getStudent")
+    public ResponseEntity getStudent(@RequestParam(name = "page") int page) {
+        return studentService.getStudent(page);
+    }
+
 
     @PostMapping("/closeDKHP")
     public ResponseEntity closeDKHP() {

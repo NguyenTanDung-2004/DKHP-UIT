@@ -98,9 +98,17 @@ public class StudentService {
         return ResponseEntity.ok().body(ResponseCode.jsonOfResponseCode(ResponseCode.EditStudentSuccessfully));
     }
 
+
+    // Lấy danh sách sinh viên theo trang
     public ResponseEntity getStudent(int page) {
+
+        // Lấy danh sách sinh viên tương ứng với số trang theo phân trang
         List<List<String>> list = this.studentRepository.getStudentList(page * 10);
+
+        // Chuyển đổi danh sách từ List<List<String>> thành List<StudentResponseList>
         List<StudentResponseList> result = StudentResponseList.createListStudentResponseList(list);
+
+         // Trả về response thành công cùng với danh sách sinh viên
         return ResponseEntity.ok().body(result);
     }
 
