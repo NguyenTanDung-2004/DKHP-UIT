@@ -41,16 +41,15 @@ public class SubjectController {
     }
 
 
+    // API chỉnh sửa chi tiết 1 môn học
     @PostMapping("/editSubject")
     public ResponseEntity editSubject(@RequestBody SubjectRequest subjectRequest,
             @RequestParam(name = "id") String id) {
         return subjectService.editSubject(subjectRequest, id);
     }
 
-    @GetMapping("/getSubject")
-    public ResponseEntity getSubject(@RequestParam(name = "maKhoa") String maKhoa) {
-        return subjectService.getSubject(maKhoa);
-    }
+    
+
 
     // API xóa 1 môn học
     @PostMapping("/delete1Subject")

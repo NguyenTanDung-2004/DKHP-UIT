@@ -62,6 +62,21 @@ public class SubjectService {
         return ResponseEntity.ok().body(ResponseCode.jsonOfResponseCode(ResponseCode.CreateSubjectSuccessfully));
     }
 
+    public ResponseEntity editSubject(SubjectRequest subjectRequest, String id) {
+        // kiểm tra mã môn học có tồn tại chưa.
+        Subject sub = this.subjectRepository.checkMaMonHoc(subjectRequest.getMaMonHoc());
+        if (sub != null) {
+            throw new ExceptionSubject(ExceptionCode.MaMonHocExist);
+        }
+
+        Subject subject = this.subjectRepository.findById(id).get();
+        Subject subject1 = this.subjectMapper.convertRequest(subjectRequest);
+        subject1.setId(subject.getId());
+        this.subjectRepository.save(subject1);
+        return ResponseEntity.ok().body(ResponseCode.jsonOfResponseCode(ResponseCode.EditSubject));
+    }
+
+
 
     public ResponseEntity deleteSubject(String maMonHoc, String maKhoa) {
         Subject subject = this.subjectRepository.checkMaMonHoc(maMonHoc);
@@ -111,22 +126,5 @@ public class SubjectService {
         return ResponseEntity.ok().body(response);
     }
 
-    public ResponseEntity editSubject(SubjectRequest subjectRequest, String id) {
-        // kiểm tra mã môn học có tồn tại chưa.
-        Subject sub = this.subjectRepository.checkMaMonHoc(subjectRequest.getMaMonHoc());
-        if (sub != null) {
-            throw new ExceptionSubject(ExceptionCode.MaMonHocExist);
-        }
 
-        Subject subject = this.subjectRepository.findById(id).get();
-        Subject subject1 = this.subjectMapper.convertRequest(subjectRequest);
-        subject1.setId(subject.getId());
-        this.subjectRepository.save(subject1);
-        return ResponseEntity.ok().body(ResponseCode.jsonOfResponseCode(ResponseCode.EditSubject));
-        // honghannev ncvjnvbnvbnvbnvb
-    }
-
-    public ResponseEntity getSubject(String maKhoa) {
-        return ResponseEntity.ok().body(this.subjectRepository.getSubjectFollowingMaKhoa(maKhoa));
-    }
 }
