@@ -4,13 +4,9 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.Executors;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatusCode;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -22,11 +18,9 @@ import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 import com.example.DKHP_UIT.request.LoginRequest;
 import com.example.DKHP_UIT.request.StudentRequestAdd;
 import com.example.DKHP_UIT.request.StudentRequestEdit;
-import com.example.DKHP_UIT.request.StudentRequestLogin;
 import com.example.DKHP_UIT.service.RoleService;
 import com.example.DKHP_UIT.service.StudentService;
 
-import jakarta.servlet.ServletOutputStream;
 import jakarta.servlet.http.HttpServletResponse;
 
 @RestController
@@ -37,13 +31,8 @@ public class StudentController {
     @Autowired
     private RoleService roleService;
 
-    // @PostMapping("/login")
-    // public ResponseEntity login(@RequestBody StudentRequestLogin
-    // studentRequestLogin) {
-    // return null;
-    // }
 
-    @PostMapping("/createStudent") // create list student
+    @PostMapping("/createStudent") 
     public ResponseEntity addStudent(@RequestBody List<StudentRequestAdd> list) {
         return studentService.createListStudent(list);
     }
@@ -88,13 +77,6 @@ public class StudentController {
         return this.roleService.openDkhpPermission();
     }
 
-    // @PostMapping("/createStudentAccount")
-    // public ResponseEntity createStudentAccount(@RequestBody String[] listStudent,
-    // HttpServletResponse httpServletResponse) {
-    // return
-    // ResponseEntity.ok().body(this.studentService.createStudentAccount(listStudent,
-    // httpServletResponse));
-    // }
 
     @PostMapping("/createStudentAccount")
     public SseEmitter createStudentAccount(@RequestBody String[] listStudent,
