@@ -77,7 +77,6 @@ public class SubjectService {
     }
 
 
-
     public ResponseEntity deleteSubject(String maMonHoc, String maKhoa) {
         Subject subject = this.subjectRepository.checkMaMonHoc(maMonHoc);
         if (this.supportCTDTService.checkSubjectInCTDT(subject.getId(), maKhoa) == false) {
@@ -126,5 +125,9 @@ public class SubjectService {
         return ResponseEntity.ok().body(response);
     }
 
+
+    public ResponseEntity getSubject(String maKhoa) {
+        return ResponseEntity.ok().body(this.subjectRepository.getSubjectFollowingMaKhoa(maKhoa));
+    }
 
 }

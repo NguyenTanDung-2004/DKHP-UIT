@@ -49,6 +49,11 @@ public class SubjectController {
     }
 
     
+    // API lấy danh sách môn học theo khoa
+    @GetMapping("/getSubject")
+    public ResponseEntity getSubject(@RequestParam(name = "maKhoa") String maKhoa) {
+        return subjectService.getSubject(maKhoa);
+    }
 
 
     // API xóa 1 môn học
