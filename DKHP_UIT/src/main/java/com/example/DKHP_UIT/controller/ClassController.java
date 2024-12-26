@@ -45,4 +45,10 @@ public class ClassController {
     public ResponseEntity editClass(@RequestBody RequestEditClass requestEditClass) {
         return this.classService.editClass(requestEditClass);
     }
+
+
+    @GetMapping("/getAllClass")
+    public ResponseEntity getAllClass() {
+        return this.classService.getAllOpenClass();
+    }
 }

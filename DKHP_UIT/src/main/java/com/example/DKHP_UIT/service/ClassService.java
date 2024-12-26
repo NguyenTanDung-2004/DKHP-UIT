@@ -133,4 +133,8 @@ public class ClassService {
         return ResponseEntity.ok().body(ResponseCode.jsonOfResponseCode(ResponseCode.EditClass));
     }
 
+    public ResponseEntity getAllOpenClass() {
+        List<Class> classes = this.classRepository.findAll();
+        return ResponseEntity.ok().body(classes);
+    }
 }
