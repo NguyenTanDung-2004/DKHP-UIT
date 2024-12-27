@@ -4,13 +4,9 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.Executors;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatusCode;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -22,11 +18,9 @@ import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 import com.example.DKHP_UIT.request.LoginRequest;
 import com.example.DKHP_UIT.request.StudentRequestAdd;
 import com.example.DKHP_UIT.request.StudentRequestEdit;
-import com.example.DKHP_UIT.request.StudentRequestLogin;
 import com.example.DKHP_UIT.service.RoleService;
 import com.example.DKHP_UIT.service.StudentService;
 
-import jakarta.servlet.ServletOutputStream;
 import jakarta.servlet.http.HttpServletResponse;
 
 @RestController
@@ -37,13 +31,15 @@ public class StudentController {
     @Autowired
     private RoleService roleService;
 
-    // @PostMapping("/login")
-    // public ResponseEntity login(@RequestBody StudentRequestLogin
-    // studentRequestLogin) {
-    // return null;
-    // }
 
-    @PostMapping("/createStudent") // create list student
+    // Tạo 1 sinh viên
+    @PostMapping("/create1Student")
+    public ResponseEntity create1Student(@RequestBody StudentRequestAdd studentRequestAdd) {
+        return studentService.create1Student(studentRequestAdd);
+    }
+
+    // Tạo 1 list sinh viên
+    @PostMapping("/createStudent") 
     public ResponseEntity addStudent(@RequestBody List<StudentRequestAdd> list) {
         return studentService.createListStudent(list);
     }
@@ -58,25 +54,26 @@ public class StudentController {
         return studentService.deleteListStudent(array);
     }
 
-    @PostMapping("/create1Student")
-    public ResponseEntity create1Student(@RequestBody StudentRequestAdd studentRequestAdd) {
-        return studentService.create1Student(studentRequestAdd);
-    }
 
+    // API chỉnh sửa
     @PostMapping("/editStudent")
     public ResponseEntity editStudent(@RequestBody StudentRequestEdit studentRequestEdit) {
         return studentService.editStudent(studentRequestEdit);
     }
 
+
+    // API lấy thông tin chi tiết
+    @PostMapping("/getDetailStudent")
+    public ResponseEntity getDetailStudent(@RequestParam(name = "mssv") String mssv) {
+        return studentService.getDetailStudent(mssv);
+    }
+
+    // API lấy ra danh sách sinh viên theo phân trang
     @PostMapping("/getStudent")
     public ResponseEntity getStudent(@RequestParam(name = "page") int page) {
         return studentService.getStudent(page);
     }
 
-    @PostMapping("/getDetailStudent")
-    public ResponseEntity getDetailStudent(@RequestParam(name = "mssv") String mssv) {
-        return studentService.getDetailStudent(mssv);
-    }
 
     @PostMapping("/closeDKHP")
     public ResponseEntity closeDKHP() {
@@ -88,13 +85,6 @@ public class StudentController {
         return this.roleService.openDkhpPermission();
     }
 
-    // @PostMapping("/createStudentAccount")
-    // public ResponseEntity createStudentAccount(@RequestBody String[] listStudent,
-    // HttpServletResponse httpServletResponse) {
-    // return
-    // ResponseEntity.ok().body(this.studentService.createStudentAccount(listStudent,
-    // httpServletResponse));
-    // }
 
     @PostMapping("/createStudentAccount")
     public SseEmitter createStudentAccount(@RequestBody String[] listStudent,
@@ -131,6 +121,7 @@ public class StudentController {
         return emitter;
     }
 
+    // API login của sinh viên
     @PostMapping("/login")
     public ResponseEntity login(HttpServletResponse httpServletResponse, @RequestBody LoginRequest loginRequest) {
         return this.studentService.login(httpServletResponse, loginRequest);

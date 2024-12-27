@@ -58,6 +58,7 @@ public class StudentService {
     @Autowired
     private UtilsHandleCookie utilsHandleCookie;
 
+
     public ResponseEntity<Map<String, Object>> login(StudentRequestLogin studentRequestLogin) {
         java.util.Optional<Student> optional = this.studentRepository.findById(studentRequestLogin.getMssv());
 
@@ -83,18 +84,31 @@ public class StudentService {
     }
 
     public ResponseEntity<Map<String, Object>> editStudent(StudentRequestEdit studentRequestEdit) {
+
+        // Get sinh viên theo MSSV
         Student student = this.studentRepository.findById(studentRequestEdit.getMssv()).get();
 
+        // Cập nhật thông tin sinh viên từ StudentRequestEdit vào student entity
         this.studentMapper.convertRequestEdit(studentRequestEdit, student);
 
+        // Lưu 
         this.studentRepository.save(student);
 
+        // Trả về response thành công
         return ResponseEntity.ok().body(ResponseCode.jsonOfResponseCode(ResponseCode.EditStudentSuccessfully));
     }
 
+
+    // Lấy danh sách sinh viên theo trang
     public ResponseEntity getStudent(int page) {
+
+        // Lấy danh sách sinh viên tương ứng với số trang theo phân trang
         List<List<String>> list = this.studentRepository.getStudentList(page * 10);
+
+        // Chuyển đổi danh sách từ List<List<String>> thành List<StudentResponseList>
         List<StudentResponseList> result = StudentResponseList.createListStudentResponseList(list);
+
+         // Trả về response thành công cùng với danh sách sinh viên
         return ResponseEntity.ok().body(result);
     }
 
@@ -199,50 +213,72 @@ public class StudentService {
 
     public ResponseEntity create1Student(StudentRequestAdd studentRequestAdd) {
 
+        // Get sinh viên theo MSSV
         Optional<Student> st = this.studentRepository.findById(studentRequestAdd.getMssv());
+
+        // Kiểm tra xem sinh viên đã tồn tại chưa
         if (st.isEmpty() == false) {
             throw new ExceptionStudent(ExceptionCode.StudentExist);
         }
 
+        // Chuyển đổi từ StudentRequestAdd sang Student (entity)
         Student student = this.studentMapper.convertRequestAdd(studentRequestAdd);
+
+        // Lưu 
         this.studentRepository.save(student);
+
+        // Trả về response 
         return ResponseEntity.ok().body(ResponseCode.jsonOfResponseCode(ResponseCode.CreateStudentSuccessfully));
     }
 
     public ResponseEntity delete1Student(String mssv) {
+
+        // Get sinh viên theo MSSV
         Student st = this.studentRepository.findById(mssv).get();
+        // Xoá sinh viên khỏi database
         this.studentRepository.delete(st);
+        // Trả về response
         return ResponseEntity.ok().body(ResponseCode.jsonOfResponseCode(ResponseCode.DeleteStudent));
     }
+
 
     public ResponseEntity deleteListStudent(String[] array) {
+        
+        // Duyệt qua danh sách MSSV
         for (int i = 0; i < array.length; i++) {
+            
+            // Get sinh viên theo MSSV
             Student st = this.studentRepository.findById(array[i]).get();
+
+            // Xoá sinh viên khỏi database
             this.studentRepository.delete(st);
         }
+        // Trả về response thành công
         return ResponseEntity.ok().body(ResponseCode.jsonOfResponseCode(ResponseCode.DeleteStudent));
     }
 
-    public ResponseEntity login(HttpServletResponse httpServletResponse,
-            LoginRequest loginRequest) {
-        // get student by MSSV
-        java.util.Optional<Student> optional = this.studentRepository.findById(loginRequest.getUserName());
+    public ResponseEntity login(HttpServletResponse httpServletResponse, LoginRequest loginRequest) {
+        // Lấy thông tin sinh viên theo MSSV
+        Optional<Student> optional = this.studentRepository.findById(loginRequest.getUserName());
 
+        // Kiểm tra xem sinh viên có tồn tại không
         if (optional.isPresent() == false) {
-            throw new ExceptionStudent(ExceptionCode.AccountWrong);
+        // Nếu không tồn tại, ném exception báo lỗi sai tài khoản
+        throw new ExceptionStudent(ExceptionCode.AccountWrong);
         }
 
+        // Lấy đối tượng sinh viên từ Optional
         Student student = optional.get();
-        // check password
+        // Kiểm tra mật khẩu
         if (this.utilsHandlePassword.checkPassword(loginRequest.getPassword(), student.getPassword()) == 0) {
             throw new ExceptionStudent(ExceptionCode.PasswordWrong);
         }
 
-        // create token
+        // Tạo JWT token
         String token = this.utilsHandleJwtToken.createToken(student);
-        // set token for cookie
+        // Thiết lập token vào cookie
         this.utilsHandleCookie.setCookie("jwtToken", token, httpServletResponse);
-        // return
+        // Trả về response thành công
         return ResponseEntity.ok().body(ResponseCode.jsonOfResponseCode(ResponseCode.LoginSuccessfully));
     }
 

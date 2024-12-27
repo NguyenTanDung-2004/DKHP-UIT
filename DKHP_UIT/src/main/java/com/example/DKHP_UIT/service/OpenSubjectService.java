@@ -4,7 +4,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import com.example.DKHP_UIT.entities.Subject;
 import com.example.DKHP_UIT.repository.OpenSubjectRepository;
+import com.example.DKHP_UIT.repository.SubjectRepository;
 import com.example.DKHP_UIT.request.RequestOpenSubject;
 import com.example.DKHP_UIT.response.ResponseAddOpenSubject;
 import com.example.DKHP_UIT.response.ResponseCode;
@@ -13,6 +15,7 @@ import com.example.DKHP_UIT.support_service.SupportOpenSubjectService;
 import com.example.DKHP_UIT.support_service.SupportSubjectService;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.ArrayList;
 
 @Service
@@ -23,6 +26,9 @@ public class OpenSubjectService {
 
     @Autowired
     private SupportSubjectService supportSubjectService;
+
+    @Autowired
+    private SubjectRepository subjectRepository;
 
     public ResponseEntity addOpenSubject(RequestOpenSubject requestAddOpenSubject) {
         // get List opensubject with the condition (year and semester)
@@ -81,4 +87,14 @@ public class OpenSubjectService {
                 .build();
         return ResponseEntity.ok().body(response);
     }
+
+    public ResponseEntity getAllOpenSubject() {
+        List<String> listSubjectId = this.supportOpenSubjectService.getListSubjectFollowingYearAndSemester();
+         List<Subject> subjects = new ArrayList<>();
+         for (String subjectId : listSubjectId) {
+             Optional<Subject> optionalSubject = this.subjectRepository.findById(subjectId);
+             optionalSubject.ifPresent(subjects::add);
+         }
+       return ResponseEntity.ok().body(subjects);
+   }
 }

@@ -35,22 +35,21 @@ public class StaffService {
     public ResponseEntity<Map<String, Object>> createStudentAccount(String mssv, String email) {
         String password = this.utilsStaffService.createPassword();
 
-        // Student student = (Student) this.studentRepository.findById(mssv).get();
-        // student.setPassword(password);
-
-        // this.studentRepository.save(student);
+        // Gửi password cho người dùng qua email
         this.utilsHandleEmail.sendCreateAccount(email, "TÀI KHOẢN MẬT KHẨU - DKHP - UIT", mssv, password);
 
         return ResponseEntity.ok().body(ResponseCode.jsonOfResponseCode(ResponseCode.CreateAccountSuccessfully));
     }
 
+
+
     public ResponseEntity login(String email, String password) {
-        // get by email
+        // Get Staff bằng email
         Staff staff = this.staffRepository.getStaffByEmail(email);
         if (staff == null) {
             throw new ExceptionUser(ExceptionCode.AccountWrong);
         }
-        // check password
+        // Kiểm tra mật khẩu
         if (this.utilsHandlePassword.checkPassword(password, staff.getPassword()) == 0) {
             throw new ExceptionUser(ExceptionCode.PasswordWrong);
         }

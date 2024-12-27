@@ -25,38 +25,50 @@ public class SubjectController {
     @Autowired
     private SubjectService subjectService;
 
+
+    // API thêm 1 môn học
+    @PostMapping("/create1Subject")
+    public ResponseEntity create1Subject(@RequestBody SubjectRequest subjectRequest) {
+        return subjectService.create1Subject(subjectRequest);
+    }
+
+
+    // API thêm 1 list môn học
     @PostMapping("/createSubject")
     public ResponseEntity createSubject(@RequestBody List<SubjectRequest> list) {
 
         return subjectService.createListSubject(list);
     }
 
-    @PostMapping("/create1Subject")
-    public ResponseEntity create1Subject(@RequestBody SubjectRequest subjectRequest) {
-        return subjectService.create1Subject(subjectRequest);
-    }
 
-    @PostMapping("/delete1Subject")
-    public ResponseEntity deleteSubject(@RequestParam(name = "maMonHoc") String maMonHoc,
-            @RequestParam(name = "maKhoa") String maKhoa) {
-        return subjectService.deleteSubject(maMonHoc, maKhoa);
-    }
-
-    @PostMapping("/deleteListSubject")
-    public ResponseEntity deleteListSubject(
-            @RequestBody List<RequestDeleteSubjectFromAllSubject> listRequestDeleteSubjectFromAllSubjects) {
-        return subjectService.deleteListSubject(listRequestDeleteSubjectFromAllSubjects);
-    }
-
+    // API chỉnh sửa chi tiết 1 môn học
     @PostMapping("/editSubject")
     public ResponseEntity editSubject(@RequestBody SubjectRequest subjectRequest,
             @RequestParam(name = "id") String id) {
         return subjectService.editSubject(subjectRequest, id);
     }
 
+    
+    // API lấy danh sách môn học theo khoa
     @GetMapping("/getSubject")
     public ResponseEntity getSubject(@RequestParam(name = "maKhoa") String maKhoa) {
         return subjectService.getSubject(maKhoa);
+    }
+
+
+    // API xóa 1 môn học
+    @PostMapping("/delete1Subject")
+    public ResponseEntity deleteSubject(@RequestParam(name = "maMonHoc") String maMonHoc,
+            @RequestParam(name = "maKhoa") String maKhoa) {
+        return subjectService.deleteSubject(maMonHoc, maKhoa);
+    }
+
+    
+    // API xóa list môn học
+    @PostMapping("/deleteListSubject")
+    public ResponseEntity deleteListSubject(
+            @RequestBody List<RequestDeleteSubjectFromAllSubject> listRequestDeleteSubjectFromAllSubjects) {
+        return subjectService.deleteListSubject(listRequestDeleteSubjectFromAllSubjects);
     }
 
     @Autowired

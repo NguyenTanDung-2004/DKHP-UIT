@@ -18,15 +18,19 @@ public class StaffController {
     @Autowired
     private StaffService staffService;
 
-    @PostMapping("/createStudentAccount")
-    public ResponseEntity createStudentAccount(@RequestParam(name = "mssv") String mssv,
-            @RequestParam(name = "email") String email) {
-        return staffService.createStudentAccount(mssv, email);
-    }
 
+    // API đăng nhập của staff
     @PostMapping("/login")
     public ResponseEntity login(@RequestParam(name = "email") String email,
             @RequestParam(name = "password") String password) {
         return staffService.login(email, password);
+    }
+
+
+    // API tạo tài khoản 
+    @PostMapping("/createStudentAccount")
+    public ResponseEntity createStudentAccount(@RequestParam(name = "mssv") String mssv,
+            @RequestParam(name = "email") String email) {
+        return staffService.createStudentAccount(mssv, email);
     }
 }

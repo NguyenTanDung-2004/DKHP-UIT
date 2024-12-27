@@ -3,13 +3,10 @@ package com.example.DKHP_UIT.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.PostMapping;
-
 import com.example.DKHP_UIT.entities.Subject;
 import com.example.DKHP_UIT.exception.ExceptionCode;
 import com.example.DKHP_UIT.exception.ExceptionSubject;
 import com.example.DKHP_UIT.mapper.SubjectMapper;
-import com.example.DKHP_UIT.repository.OpenSubjectRepository;
 import com.example.DKHP_UIT.repository.SubjectRepository;
 import com.example.DKHP_UIT.request.RequestDeleteSubjectFromAllSubject;
 import com.example.DKHP_UIT.request.SubjectRequest;
@@ -20,7 +17,6 @@ import com.example.DKHP_UIT.support_service.SupportSubjectService;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class SubjectService {
@@ -36,26 +32,50 @@ public class SubjectService {
     @Autowired
     private SupportSubjectService supportSubjectService;
 
-    public ResponseEntity createListSubject(List<SubjectRequest> listSubject) {
+    public ResponseEntity create1Subject(SubjectRequest subjectRequest) {
+        // Kiểm tra xem môn học đã tồn tại trong database theo mã môn học
+       Subject subject = this.subjectRepository.checkMaMonHoc(subjectRequest.getMaMonHoc());
+
+       // Nếu môn học đã tồn tại, ném ra exception
+       if (subject != null) {
+           throw new ExceptionSubject(ExceptionCode.SubjectExist);
+       }
+
+       // Chuyển đổi SubjectRequest sang Subject entity
+       Subject subject1 = this.subjectMapper.convertRequest(subjectRequest);
+        // Lưu Subject entity vào database
+       this.subjectRepository.save(subject1);
+
+       // Trả về response thành công
+       return ResponseEntity.ok().body(ResponseCode.jsonOfResponseCode(ResponseCode.CreateSubjectSuccessfully));
+   }
+
+   public ResponseEntity createListSubject(List<SubjectRequest> listSubject) {
+        // Duyệt qua danh sách các SubjectRequest
         for (int i = 0; i < listSubject.size(); i++) {
+            // Chuyển đổi SubjectRequest sang Subject entity
             Subject subject = this.subjectMapper.convertRequest(listSubject.get(i));
+            // Lưu Subject entity vào database
             this.subjectRepository.save(subject);
         }
+        // Trả về response thành công
         return ResponseEntity.ok().body(ResponseCode.jsonOfResponseCode(ResponseCode.CreateSubjectSuccessfully));
     }
 
-    public ResponseEntity create1Subject(SubjectRequest subjectRequest) {
-        Subject subject = this.subjectRepository.checkMaMonHoc(subjectRequest.getMaMonHoc());
-
-        if (subject != null) {
-            throw new ExceptionSubject(ExceptionCode.SubjectExist);
+    public ResponseEntity editSubject(SubjectRequest subjectRequest, String id) {
+        // kiểm tra mã môn học có tồn tại chưa.
+        Subject sub = this.subjectRepository.checkMaMonHoc(subjectRequest.getMaMonHoc());
+        if (sub != null) {
+            throw new ExceptionSubject(ExceptionCode.MaMonHocExist);
         }
 
+        Subject subject = this.subjectRepository.findById(id).get();
         Subject subject1 = this.subjectMapper.convertRequest(subjectRequest);
+        subject1.setId(subject.getId());
         this.subjectRepository.save(subject1);
-
-        return ResponseEntity.ok().body(ResponseCode.jsonOfResponseCode(ResponseCode.CreateSubjectSuccessfully));
+        return ResponseEntity.ok().body(ResponseCode.jsonOfResponseCode(ResponseCode.EditSubject));
     }
+
 
     public ResponseEntity deleteSubject(String maMonHoc, String maKhoa) {
         Subject subject = this.subjectRepository.checkMaMonHoc(maMonHoc);
@@ -105,22 +125,9 @@ public class SubjectService {
         return ResponseEntity.ok().body(response);
     }
 
-    public ResponseEntity editSubject(SubjectRequest subjectRequest, String id) {
-        // kiểm tra mã môn học có tồn tại chưa.
-        Subject sub = this.subjectRepository.checkMaMonHoc(subjectRequest.getMaMonHoc());
-        if (sub != null) {
-            throw new ExceptionSubject(ExceptionCode.MaMonHocExist);
-        }
-
-        Subject subject = this.subjectRepository.findById(id).get();
-        Subject subject1 = this.subjectMapper.convertRequest(subjectRequest);
-        subject1.setId(subject.getId());
-        this.subjectRepository.save(subject1);
-        return ResponseEntity.ok().body(ResponseCode.jsonOfResponseCode(ResponseCode.EditSubject));
-        // honghannev ncvjnvbnvbnvbnvb
-    }
 
     public ResponseEntity getSubject(String maKhoa) {
         return ResponseEntity.ok().body(this.subjectRepository.getSubjectFollowingMaKhoa(maKhoa));
     }
+
 }
