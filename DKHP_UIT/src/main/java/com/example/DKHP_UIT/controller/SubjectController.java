@@ -71,4 +71,9 @@ public class SubjectController {
         }
         return ResponseEntity.ok().body(list);
     }
+
+    @GetMapping("/getSubjects")
+    public ResponseEntity getClasses() {
+        return ResponseEntity.ok().body(this.subjectRepository.findAll());
+    }
 }
