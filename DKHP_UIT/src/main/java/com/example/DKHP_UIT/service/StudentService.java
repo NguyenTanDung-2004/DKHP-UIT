@@ -58,7 +58,6 @@ public class StudentService {
     @Autowired
     private UtilsHandleCookie utilsHandleCookie;
 
-
     public ResponseEntity<Map<String, Object>> login(StudentRequestLogin studentRequestLogin) {
         java.util.Optional<Student> optional = this.studentRepository.findById(studentRequestLogin.getMssv());
 
@@ -91,13 +90,12 @@ public class StudentService {
         // Cập nhật thông tin sinh viên từ StudentRequestEdit vào student entity
         this.studentMapper.convertRequestEdit(studentRequestEdit, student);
 
-        // Lưu 
+        // Lưu
         this.studentRepository.save(student);
 
         // Trả về response thành công
         return ResponseEntity.ok().body(ResponseCode.jsonOfResponseCode(ResponseCode.EditStudentSuccessfully));
     }
-
 
     // Lấy danh sách sinh viên theo trang
     public ResponseEntity getStudent(int page) {
@@ -108,7 +106,7 @@ public class StudentService {
         // Chuyển đổi danh sách từ List<List<String>> thành List<StudentResponseList>
         List<StudentResponseList> result = StudentResponseList.createListStudentResponseList(list);
 
-         // Trả về response thành công cùng với danh sách sinh viên
+        // Trả về response thành công cùng với danh sách sinh viên
         return ResponseEntity.ok().body(result);
     }
 
@@ -224,10 +222,10 @@ public class StudentService {
         // Chuyển đổi từ StudentRequestAdd sang Student (entity)
         Student student = this.studentMapper.convertRequestAdd(studentRequestAdd);
 
-        // Lưu 
+        // Lưu
         this.studentRepository.save(student);
 
-        // Trả về response 
+        // Trả về response
         return ResponseEntity.ok().body(ResponseCode.jsonOfResponseCode(ResponseCode.CreateStudentSuccessfully));
     }
 
@@ -241,12 +239,11 @@ public class StudentService {
         return ResponseEntity.ok().body(ResponseCode.jsonOfResponseCode(ResponseCode.DeleteStudent));
     }
 
-
     public ResponseEntity deleteListStudent(String[] array) {
-        
+
         // Duyệt qua danh sách MSSV
         for (int i = 0; i < array.length; i++) {
-            
+
             // Get sinh viên theo MSSV
             Student st = this.studentRepository.findById(array[i]).get();
 
@@ -263,8 +260,8 @@ public class StudentService {
 
         // Kiểm tra xem sinh viên có tồn tại không
         if (optional.isPresent() == false) {
-        // Nếu không tồn tại, ném exception báo lỗi sai tài khoản
-        throw new ExceptionStudent(ExceptionCode.AccountWrong);
+            // Nếu không tồn tại, ném exception báo lỗi sai tài khoản
+            throw new ExceptionStudent(ExceptionCode.AccountWrong);
         }
 
         // Lấy đối tượng sinh viên từ Optional
@@ -278,8 +275,13 @@ public class StudentService {
         String token = this.utilsHandleJwtToken.createToken(student);
         // Thiết lập token vào cookie
         this.utilsHandleCookie.setCookie("jwtToken", token, httpServletResponse);
+
+        Map<String, Object> response = ResponseCode.jsonOfResponseCode(ResponseCode.LoginSuccessfully);
+        response.put("role", "Student");
+
         // Trả về response thành công
-        return ResponseEntity.ok().body(ResponseCode.jsonOfResponseCode(ResponseCode.LoginSuccessfully));
+        return ResponseEntity.ok()
+                .body(response);
     }
 
     public ResponseEntity dkhp(List<String> listClassId, String token) {

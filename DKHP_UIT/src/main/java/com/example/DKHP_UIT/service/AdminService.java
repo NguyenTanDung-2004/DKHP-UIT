@@ -34,10 +34,11 @@ public class AdminService {
 
     public ResponseEntity createStaff(RequestCreateStaff requestCreateStaff) {
         // check staffId
-        Staff st = this.staffRepository.getStaffByEmail(requestCreateStaff.getEmail());
+        Staff st = this.staffRepository.getStaffByAccount(requestCreateStaff.getAccount());
         if (st != null) {
             throw new ExceptionUser(ExceptionCode.StaffExist);
         }
+
         // map
         Staff staff = this.staffMapper.convertRequest(requestCreateStaff);
         // create password
@@ -45,7 +46,7 @@ public class AdminService {
         // encrypt password
         String encryptedPassword = this.utilsHandlePassword.encryptPassword(randomPassword);
         // save
-        staff.setAccount(staff.getEmail());
+        staff.setAccount(requestCreateStaff.getAccount());
         staff.setPassword(encryptedPassword);
         this.staffRepository.save(staff);
         // send notification via email.

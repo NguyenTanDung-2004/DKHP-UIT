@@ -16,4 +16,5 @@ public class RequestCreateStaff {
     // in the System, we have 1 parent Admin who have permission to allow 1 staff to
     // admin or change 1 admin to staff.
     private Integer flagAdmin;
+    private String account;
 }

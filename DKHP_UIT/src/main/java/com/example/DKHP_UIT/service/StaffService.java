@@ -12,15 +12,17 @@ import com.example.DKHP_UIT.repository.StaffRepository;
 import com.example.DKHP_UIT.repository.StudentRepository;
 import com.example.DKHP_UIT.response.ResponseCode;
 import com.example.DKHP_UIT.support_service.SupportStaffService;
+import com.example.DKHP_UIT.utils.UtilsHandleCookie;
 import com.example.DKHP_UIT.utils.UtilsHandleEmail;
+import com.example.DKHP_UIT.utils.UtilsHandleJwtToken;
 import com.example.DKHP_UIT.utils.UtilsHandlePassword;
+
+import jakarta.servlet.http.HttpServletResponse;
 
 import java.util.Map;
 
 @Service
 public class StaffService {
-    @Autowired
-    private StudentRepository studentRepository;
     @Autowired
     private SupportStaffService utilsStaffService;
     @Autowired
@@ -30,7 +32,13 @@ public class StaffService {
     private StaffRepository staffRepository;
 
     @Autowired
+    private UtilsHandleJwtToken utilsHandleJwtToken;
+
+    @Autowired
     private UtilsHandlePassword utilsHandlePassword;
+
+    @Autowired
+    private UtilsHandleCookie utilsHandleCookie;
 
     public ResponseEntity<Map<String, Object>> createStudentAccount(String mssv, String email) {
         String password = this.utilsStaffService.createPassword();
@@ -41,11 +49,10 @@ public class StaffService {
         return ResponseEntity.ok().body(ResponseCode.jsonOfResponseCode(ResponseCode.CreateAccountSuccessfully));
     }
 
-
-
-    public ResponseEntity login(String email, String password) {
-        // Get Staff bằng email
-        Staff staff = this.staffRepository.getStaffByEmail(email);
+    public ResponseEntity login(String email, String password,
+            HttpServletResponse httpServletResponse) {
+        // Get Staff bằng account
+        Staff staff = this.staffRepository.getStaffByAccount(email);
         if (staff == null) {
             throw new ExceptionUser(ExceptionCode.AccountWrong);
         }
@@ -53,6 +60,22 @@ public class StaffService {
         if (this.utilsHandlePassword.checkPassword(password, staff.getPassword()) == 0) {
             throw new ExceptionUser(ExceptionCode.PasswordWrong);
         }
-        return ResponseEntity.ok().body(ResponseCode.jsonOfResponseCode(ResponseCode.LoginSuccessfully));
+
+        // Tạo JWT token
+        String token = this.utilsHandleJwtToken.createToken(staff);
+        // Thiết lập token vào cookie
+        this.utilsHandleCookie.setCookie("jwtToken", token, httpServletResponse);
+
+        // add role to response
+        Map<String, Object> response = ResponseCode.jsonOfResponseCode(ResponseCode.LoginSuccessfully);
+        // create role
+        String role = "Staff";
+        if (staff.getFlagAdmin() == 1) {
+            role = "Admin";
+        }
+        response.put("role", role);
+
+        // Trả về response thành công
+        return ResponseEntity.ok().body(response);
     }
 }

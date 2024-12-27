@@ -44,9 +44,11 @@ public class UtilsHandleJwtToken {
         if (user instanceof Staff) {
             Staff staff = (Staff) user;
             userId = staff.getId();
+            System.out.println("staff");
         } else {
             Student student = (Student) user;
             userId = student.getMssv();
+            System.out.println("student");
         }
 
         JWSHeader header = new JWSHeader(JWSAlgorithm.HS256);
@@ -122,7 +124,11 @@ public class UtilsHandleJwtToken {
 
     public String buildRole(User user) {
         if (user instanceof Staff) {
-            return "Staff";
+            if (((Staff) user).getFlagAdmin() == 0) {
+                return "Staff";
+            } else {
+                return "Admin";
+            }
         } else if (user instanceof Student) {
             return "Student";
         } else {

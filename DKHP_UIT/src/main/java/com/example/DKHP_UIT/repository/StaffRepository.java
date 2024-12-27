@@ -8,4 +8,7 @@ import com.example.DKHP_UIT.entities.Staff;
 public interface StaffRepository extends JpaRepository<Staff, String> {
     @Query("select staff from Staff staff where staff.email = :email")
     public Staff getStaffByEmail(String email);
+
+    @Query("select staff from Staff staff where staff.account = :account")
+    public Staff getStaffByAccount(String account);
 }
