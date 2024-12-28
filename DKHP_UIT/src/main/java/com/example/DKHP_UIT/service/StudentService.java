@@ -314,4 +314,36 @@ public class StudentService {
                 .build();
         return ResponseEntity.ok().body(responseDKHP);
     }
+
+    public ResponseEntity undkhp(List<String> listClassId, String token) {
+        List<String> listTrue = new ArrayList<>();
+        List<String> listWrong = new ArrayList<>();
+        List<String> listProblem = new ArrayList<>();
+        // get userId
+        String userId = this.utilsHandleJwtToken.verifyToken(token);
+
+        // get list registered classes
+        List<Class> registeredClasses = this.studentRepository.listRegisteredClass(userId);
+       
+        // un-register class for student
+        this.supportStudentService.undkhp(registeredClasses, listWrong, listTrue, listProblem,
+               userId, listClassId);
+
+        ResponseDKHP responseDKHP = ResponseDKHP.builder()
+                .listTrue(listTrue)
+                .listWrong(listWrong)
+                .listProblem(listProblem)
+                .code(1000)
+                .message("undkhp successfully!")
+                .build();
+        return ResponseEntity.ok().body(responseDKHP);
+    }
+
+     public ResponseEntity getRegisteredClasses(String token) {
+        // get userId
+        String userId = this.utilsHandleJwtToken.verifyToken(token);
+        List<Class> classes = this.studentRepository.listRegisteredClass(userId);
+        
+        return ResponseEntity.ok().body(classes);
+    }
 }

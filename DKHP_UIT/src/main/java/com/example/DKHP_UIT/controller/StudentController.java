@@ -131,4 +131,14 @@ public class StudentController {
     public ResponseEntity dkhp(@RequestParam(name = "token") String token, @RequestBody List<String> listClassId) {
         return this.studentService.dkhp(listClassId, token);
     }
+
+    @PostMapping("/undkhp")
+    public ResponseEntity undkhp(@RequestParam(name = "token") String token, @RequestBody List<String> listClassId) {
+        return this.studentService.undkhp(listClassId, token);
+    }
+
+    @PostMapping("/getRegisteredClasses")
+    public ResponseEntity getRegisteredClasses(@RequestParam(name = "token") String token) {
+        return this.studentService.getRegisteredClasses(token);
+    }
 }

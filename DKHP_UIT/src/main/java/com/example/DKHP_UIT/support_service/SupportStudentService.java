@@ -11,8 +11,10 @@ import com.example.DKHP_UIT.repository.StudentRepository;
 import com.example.DKHP_UIT.repository.SubjectRepository;
 
 import java.util.Random;
+import java.util.Set;
 import java.util.List;
 import java.util.ArrayList;
+import java.util.HashSet;
 
 @Component
 public class SupportStudentService {
@@ -109,6 +111,41 @@ public class SupportStudentService {
             }
         }
     }
+
+    public void undkhp(List<Class> registeredClasses, List<String> listWrong,
+                       List<String> listTrue, List<String> listProblem, String mssv, List<String> listClassId) {
+        List<String> classIds = new ArrayList<>(listClassId);
+        Student student = this.studentRepository.findById(mssv).get();
+        System.out.println("Start undkhp with mssv: " + mssv);
+        System.out.println("List classes need remove " + listClassId);
+        System.out.println("List classes registered " + registeredClasses.size());
+        System.out.println("Student has class:" + student.getClasses().size());
+
+        for (String classId : classIds) {
+           if(registeredClasses.stream().anyMatch(registeredClass -> registeredClass.getId().equals(classId))){
+             // check whether this class is theory or practice class
+                   Class registeredClass = registeredClasses.stream().filter(registeredClass1 -> registeredClass1.getId().equals(classId)).findFirst().get();
+                      if (registeredClass.getFlagTH() == 0 || registeredClass.getFlagTH() == 3 || registeredClass.getFlagTH() == 1) {
+                           // unregister
+                            this.studentRepository.removeClassesFromStudent(mssv, classId);
+                             listTrue.add(classId);
+                                if(registeredClass.getFlagTH() == 0){
+                                 // Nếu là lớp lý thuyết, thì sẽ xóa luôn lớp thực hành của lớp đó
+                                  for (Class class1 : registeredClasses) {
+                                        if (class1.getFlagTH() == 1 && class1.getIdLT() != null && class1.getIdLT().equals(classId)) {
+                                            this.studentRepository.removeClassesFromStudent(mssv, class1.getId());
+                                             listTrue.add(class1.getId());
+                                      }
+                                 }
+                            }
+                        }  else {
+                              addWrongClass("NonTheory", listWrong, listProblem, classId);
+                        }
+                } else {
+                addWrongClass("not registered", listWrong, listProblem, classId);
+              }
+        }
+    }   
 
     public boolean checkStudentSchedule(String mssv, Class newClass) {
         List<List<Integer>> listScheduleIn1Day = this.studentRepository.getStudentScheduleIn1Day(newClass.getThu(),
