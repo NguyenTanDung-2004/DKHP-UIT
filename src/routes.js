@@ -8,7 +8,7 @@ import StudentLopDangKy from "./pages/student/LopDangKy";
 import StudentChuongTrinh from "./pages/student/ChuongTrinh";
 import StudentThongTin from "./pages/student/ThongTinHocSinh";
 
-import StaffTrangchu from "./pages/staff/Trangchu";
+import StaffTrangchu from "./pages/staff/Trangchu";	
 import StaffQuanlyLopHoc from "./pages/staff/QuanLyLopHoc";
 import StaffQuanlyMonHoc from "./pages/staff/QuanLyMonHoc";
 import StaffQuanlyChuongTrinh from "./pages/staff/QuanLyChuongTrinh";
@@ -125,6 +125,7 @@ const AppRoutes = () => (
 		/>
 
 		{/* Public routes */}
+		<Route path="/" element={<AuthPage />} />
 		<Route path="/auth" element={<AuthPage />} />
 		<Route path="*" element={<NotFoundPage />} />
 	</Routes>

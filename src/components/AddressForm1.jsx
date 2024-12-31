@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 
-const AddressForm = ({ onChange }) => {
+const AddressForm1 = ({ onChange }) => {
   const [provinces, setProvinces] = useState([]);
   const [districts, setDistricts] = useState([]);
   const [wards, setWards] = useState([]);
@@ -62,16 +62,16 @@ const AddressForm = ({ onChange }) => {
   useEffect(() => {
     // Send selected address to parent when any selection changes
     onChange({
-      tinh_thanhPho: selectedProvince,
-      quan_huyen: selectedDistrict,
-      xa_phuong: selectedWard,
+      tinh_thanhPho1: selectedProvince,
+      quan_huyen1: selectedDistrict,
+      xa_phuong1: selectedWard,
     });
   }, [selectedProvince, selectedDistrict, selectedWard, onChange]);
 
   return (
     <>
       <div className="form-group__item">
-        <label>Tỉnh/Tp:</label>
+        <label>Tỉnh/Tp hiện ở:</label>
         <select value={selectedProvince} onChange={handleProvinceChange}>
           <option value="">Chọn tỉnh</option>
           {provinces.map((province) => (
@@ -82,7 +82,7 @@ const AddressForm = ({ onChange }) => {
         </select>
       </div>
       <div className="form-group__item">
-        <label>Quận/Huyện:</label>
+        <label>Quận/Huyện hiện ở:</label>
         <select
           value={selectedDistrict}
           onChange={handleDistrictChange}
@@ -97,7 +97,7 @@ const AddressForm = ({ onChange }) => {
         </select>
       </div>
       <div className="form-group__item">
-        <label>Xã/Phường:</label>
+        <label>Xã/Phường hiện ở:</label>
         <select
           value={selectedWard}
           onChange={(e) => setSelectedWard(e.target.value)}
@@ -115,4 +115,4 @@ const AddressForm = ({ onChange }) => {
   );
 };
 
-export default AddressForm;
+export default AddressForm1;

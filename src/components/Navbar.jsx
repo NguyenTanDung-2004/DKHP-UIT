@@ -5,14 +5,14 @@ import "./Navbar.css";
 import logo from "../images/logo.png";
 
 function Navbar() {
-	const { user, logout } = useContext(AuthContext);
+	const { userInfo, handleLogout } = useContext(AuthContext);
 
-	if (!user) {
+	if (!userInfo) {
 		return null;
 	}
 
 	const userNavbarItems = () => {
-		switch (user?.role) {
+		switch (userInfo?.role) {
 			case "student":
 				return (
 					<>
@@ -68,7 +68,7 @@ function Navbar() {
 
 	return (
 		<nav className="navbar">
-			{user ? (
+			{userInfo ? (
 				<>
 					<ul className="navbar-link">
 						<img src={logo} alt="Logo website" style={{ width: "40px" }} />
@@ -79,13 +79,13 @@ function Navbar() {
 						<i className="fa-solid fa-envelope"></i>
 						<div className="navbar-user__group dropdown-container">
               <div className="connector"></div>
-							<i className="fa-solid fa-user"></i> Trần Bảo Phú
+							<i className="fa-solid fa-user"></i> {userInfo?.name}
               <ul className="dropdown-menu right">
 								{/* Các mục con của Quản lý */}
 								<li>
                   <Link to="/student/thongtin">Thông tin</Link>
 								</li>
-								<li onClick={logout}>
+								<li onClick={handleLogout}>
 									Đăng xuất
 								</li>
 							</ul>

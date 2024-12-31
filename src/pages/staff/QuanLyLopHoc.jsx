@@ -1,111 +1,146 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "./QuanLyLopHoc.css";
 import DataGridView from "./../../components/DataGridView";
 import AddClassModal from "./Component/AddClassModal";
 import AlterClassModal from "./Component/AlterClassModal";
+import classService from "./../../services/classService";
 
 const QuanLyLopHoc = () => {
-	const initialListData = [
-		{
-			"Mã lớp": "SE100:P11:PMCLLL",
-			"Sĩ số": 200,
-			"Ngày bắt đầu": "12/12/2024",
-			"Ngày kết thúc": "31/05/2025",
-			Thứ: 5,
-			Tiết: 5,
-			Phòng: "B314",
-			"Giảng viên": "Nguyen Tran Thanh Minh",
-			Loại: "LT",
-		},
-		{
-			"Mã lớp": "SE100:P11:PMCLLL",
-			"Sĩ số": 200,
-			"Ngày bắt đầu": "12/12/2024",
-			"Ngày kết thúc": "31/05/2025",
-			Thứ: 5,
-			Tiết: 5,
-			Phòng: "B314",
-			"Giảng viên": "Nguyen Tran Thanh Minh",
-			Loại: "LT",
-		},
-		{
-			"Mã lớp": "SE100:P11:PMCLLL",
-			"Sĩ số": 200,
-			"Ngày bắt đầu": "12/12/2024",
-			"Ngày kết thúc": "31/05/2025",
-			Thứ: 5,
-			Tiết: 5,
-			Phòng: "B314",
-			"Giảng viên": "Nguyen Tran Thanh Minh",
-			Loại: "LT",
-		},
-		{
-			"Mã lớp": "SE100:P11:PMCLLL",
-			"Sĩ số": 200,
-			"Ngày bắt đầu": "12/12/2024",
-			"Ngày kết thúc": "31/05/2025",
-			Thứ: 5,
-			Tiết: 5,
-			Phòng: "B314",
-			"Giảng viên": "Nguyen Tran Thanh Minh",
-			Loại: "LT",
-		},
-		{
-			"Mã lớp": "SE100:P11:PMCLLL",
-			"Sĩ số": 200,
-			"Ngày bắt đầu": "12/12/2024",
-			"Ngày kết thúc": "31/05/2025",
-			Thứ: 5,
-			Tiết: 5,
-			Phòng: "B314",
-			"Giảng viên": "Nguyen Tran Thanh Minh",
-			Loại: "LT",
-		},
-	];
+  const [listData, setListData] = useState([]);
+  const [selectedClasses, setSelectedClasses] = useState([]);
+  const [editItem, setEditItem] = useState(null);
+  const [isAddModalOpen, setAddModalOpen] = useState(false);
+  const [isEditModalOpen, setEditModalOpen] = useState(false);
 
-	const [listData, setListData] = useState(initialListData);
-	const [disableData] = useState([]);
-	const [selectedClasses] = useState([]);
+  useEffect(() => {
+    // Gọi API khi component mount
+    const fetchClasses = async () => {
+      const classes = await getAllClasses();
+      setListData(classes);
+    };
 
-	const [modalStates, setModalStates] = useState({
-		addClass: false,
-		editClass: false,
-		deleteSubject: false,
-	});
+    fetchClasses();
+  }, []);
 
-	// Hàm để toggle trạng thái modal
-	const toggleModal = (modalName) => {
-		setModalStates((prev) => ({
-			...prev,
-			[modalName]: !prev[modalName],
-		}));
-	};
+  const getAllClasses = async () => {
+    try {
+      // Gọi API lấy danh sách lớp học
+      const rawClasses = await classService.getAllClasses();
 
-	const [editItem, setEditItem] = useState(null);
+      // Hàm chuyển đổi ngày thành "Thứ"
+      const getDayOfWeek = (dateString) => {
+        const days = [
+          "Chủ nhật",
+          "Thứ hai",
+          "Thứ ba",
+          "Thứ tư",
+          "Thứ năm",
+          "Thứ sáu",
+          "Thứ bảy",
+        ];
+        const date = new Date(dateString);
+        return days[date.getDay()];
+      };
 
-	return (
-		<div className="container qllh">
-			<AddClassModal isOpen={modalStates.addClass} onClose={() => toggleModal('addClass')} />
-			<AlterClassModal isOpen={modalStates.editClass} onClose={() => toggleModal('editClass')} data={editItem} />
-			<div className="list-class">
-				<h1 className="title">Danh sách lớp học mở</h1>
-				<DataGridView
-					listData={listData}
-					disableData={disableData}
+      // Lọc và định dạng dữ liệu
+      const formattedClasses = rawClasses.map((item) => ({
+        "Mã lớp": item.className || "Không xác định",
+        "Sĩ số": `${item.students.length} / ${item.siso}` || "Không xác định",
+        "Ngày bắt đầu": item.startDate?.split("T")[0] || "Không xác định",
+        "Ngày kết thúc": item.endDate?.split("T")[0] || "Không xác định",
+        "Thứ": item.startDate ? getDayOfWeek(item.startDate) : "Không xác định", // Lấy "Thứ" từ ngày bắt đầu
+        "Tiết": `${item.tietBatDau || 0}-${item.tietKetThuc || 0}`, // Kết hợp tiết bắt đầu - kết thúc
+        "Phòng": item.room?.roomName || "Không xác định",
+        "Giảng viên": item.giangVien?.name || "Không xác định",
+        "Loại": item.flagTH === 0 ? "LT" : "TH", // Chuyển flagTH thành "LT" hoặc "TH"
+      }));
+
+      return formattedClasses;
+    } catch (error) {
+      console.error("Failed to fetch classes:", error);
+    }
+  };
+
+  const addClassNonTH = async (data) => {
+    try {
+      await classService.addClassNonTH(data);
+      // Sau khi thêm lớp, gọi lại API để cập nhật danh sách lớp
+      const updatedClasses = await getAllClasses();
+      setListData(updatedClasses);
+    } catch (error) {
+      console.error("Failed to add class:", error);
+    }
+  };
+
+  const addClassTH = async (data) => {
+    try {
+      await classService.addClassWithInPractice(data);
+      // Cập nhật lại danh sách lớp sau khi thêm lớp
+      const updatedClasses = await getAllClasses();
+      setListData(updatedClasses);
+    } catch (error) {
+      console.error("Failed to add class:", error);
+    }
+  };
+
+  const delClass = async (classId) => {
+    try {
+      await classService.deleteClass(classId);
+      // Cập nhật lại danh sách lớp sau khi xóa lớp
+      const updatedClasses = await getAllClasses();
+      setListData(updatedClasses);
+    } catch (error) {
+      console.error("Failed to delete class:", error);
+    }
+  };
+
+  // Hàm để toggle trạng thái modal
+  const toggleAddModal = () => {
+    setAddModalOpen((prev) => !prev);
+  };
+
+  const toggleEditModal = () => {
+    setEditModalOpen((prev) => !prev);
+  };
+
+  return (
+    <div className="container qllh">
+      <AddClassModal
+        isOpen={isAddModalOpen}
+        onClose={toggleAddModal}
+        addClassNonTH={addClassNonTH}
+        addClassTH={addClassTH}
+      />
+      <AlterClassModal
+        isOpen={isEditModalOpen}
+        onClose={toggleEditModal}
+        data={editItem}
+        editClass={setEditItem}
+      />
+      <div className="list-class">
+        <h1 className="title">Danh sách lớp học mở</h1>
+        <DataGridView
+          listData={listData}
 					canCheck={true}
-					getCheckedRows={(rows) => console.log("Hàng được chọn:", rows)}
-					selectedClasses={selectedClasses}
-					canEdit={true}
-					showEditModal={() => toggleModal("editClass")}
-					getEditItem={setEditItem}
-				/>
-				<div className="list-class__actions">
-					<button onClick={toggleModal}>Thêm Lớp</button>
-					<button className="cancel">Xóa Lớp</button>
-				</div>
-			</div>
-		</div>
-	);
+          selectedClasses={selectedClasses}
+          canEdit={true}
+          showEditModal={toggleEditModal}
+          getEditItem={setEditItem}
+        />
+        <div className="list-class__actions">
+          <button onClick={toggleAddModal}>Thêm Lớp</button>
+          <button
+            className="cancel"
+            onClick={() => {
+              selectedClasses.forEach((classId) => delClass(classId));
+            }}
+          >
+            Xóa Lớp
+          </button>
+        </div>
+      </div>
+    </div>
+  );
 };
 
 export default QuanLyLopHoc;
