@@ -1,7 +1,8 @@
 import React, { useState } from "react";
 import "./QuanLyChuongTrinh.css";
+import { toast } from "react-toastify";
 import DataGridView from "./../../components/DataGridView";
-import AddSubjectCTDTModal from './Component/AddSubjectCTDTModal';
+import ctdtService from "./../../services/ctdtService";
 
 const QuanLyChuongTrinh = () => {
 	const sampleData = [
@@ -57,24 +58,122 @@ const QuanLyChuongTrinh = () => {
 
 	const [listData, setListData] = useState(sampleData);
 	const [disableData] = useState([]);
-	const [selectedClasses] = useState([]);
+	const [selectedCTDT, setSelectedCTDT] = useState([]);
 
-	const [showModal, setShowModal] = useState(false);
-	const toggleModal = () => setShowModal(!showModal);
+	const handleAddSubjects = async () => {
+		if (selectedCTDT.length === 0) {
+			toast.warning("Vui lòng chọn ít nhất một môn học để thêm.");
+			return;
+		}
+
+		// Chuẩn bị dữ liệu gửi lên API
+		const subjectsToAdd = selectedCTDT.map((subjectId) => {
+			const subject = listData.find((item) => item["Mã môn học"] === subjectId);
+			return {
+				maKhoa: subject["Mã khoa"],
+				maMonHoc: subject["Mã môn học"],
+				hocKy: subject["Học kỳ"],
+			};
+		});
+
+		try {
+			const response = await ctdtService.addSubjectsToCTDT(subjectsToAdd);
+
+			if (response.code === 1000) {
+				const { listMaMonHocTrue, listMaMonHocWrong } = response;
+
+				// Thông báo các môn học thêm thành công
+				if (listMaMonHocTrue.length > 0) {
+					toast.success(
+						`Thêm thành công ${
+							listMaMonHocTrue.length
+						} môn học: ${listMaMonHocTrue.join(", ")}`
+					);
+				}
+
+				// Thông báo các môn học không thêm được
+				if (listMaMonHocWrong.length > 0) {
+					toast.error(
+						`Không thể thêm ${
+							listMaMonHocWrong.length
+						} môn học: ${listMaMonHocWrong.join(", ")}`
+					);
+				}
+			} else {
+				toast.error("Có lỗi xảy ra khi thêm môn học.");
+			}
+		} catch (error) {
+			console.error("Lỗi khi thêm môn học:", error);
+			toast.error("Lỗi kết nối đến server. Vui lòng thử lại.");
+		}
+	};
+
+	const handleDeleteSubjects = async () => {
+		if (selectedCTDT.length === 0) {
+			toast.warning("Vui lòng chọn ít nhất một môn học để xóa.");
+			return;
+		}
+	
+		// Chuẩn bị dữ liệu gửi lên API
+		const subjectsToDelete = selectedCTDT.map((subjectId) => {
+			const subject = listData.find((item) => item["Mã môn học"] === subjectId);
+			return subject ? subject["Mã môn học"] : null;
+		}).filter(Boolean); // Loại bỏ các giá trị null (nếu có)
+	
+		try {
+			const response = await ctdtService.deleteSubjectsFromCTDT(subjectsToDelete);
+	
+			if (response.code === 1000) {
+				const { listMaMonHocTrue, listMaMonHocWrong } = response;
+	
+				// Cập nhật danh sách sau khi xóa
+				if (listMaMonHocTrue.length > 0) {
+					setListData((prevData) =>
+						prevData.filter(
+							(item) => !listMaMonHocTrue.includes(item["Mã môn học"])
+						)
+					);
+					toast.success(
+						`Xóa thành công ${listMaMonHocTrue.length} môn học: ${listMaMonHocTrue.join(", ")}`
+					);
+				}
+	
+				// Thông báo các môn học không thể xóa
+				if (listMaMonHocWrong.length > 0) {
+					toast.error(
+						`Không thể xóa ${listMaMonHocWrong.length} môn học: ${listMaMonHocWrong.join(", ")}`
+					);
+				}
+			} else {
+				toast.error("Có lỗi xảy ra khi xóa môn học.");
+			}
+		} catch (error) {
+			console.error("Lỗi khi xóa môn học:", error);
+			toast.error("Lỗi kết nối đến server. Vui lòng thử lại.");
+		}
+	};
+	
 
 	return (
 		<div className="container ctdt">
-      <AddSubjectCTDTModal isOpen={showModal} onClose={() => setShowModal(false)}/>
 			<section className="main-section">
 				<DataGridView
 					listData={listData}
 					disableData={disableData}
 					canCheck={true}
-					selectedClasses={selectedClasses}
+					selectedClasses={selectedCTDT}
+					getCheckedRows={setSelectedCTDT}
 				/>
 				<div className="data-actions">
-          <button className="btn-add-class" onClick={toggleModal}>Thêm môn học</button>
-					<button className="btn-del-class delete" onClick={toggleModal}>Xóa môn học</button>
+					<button className="btn-add-class" onClick={handleAddSubjects}>
+						Thêm môn học
+					</button>
+					<button
+						className="btn-del-class delete"
+						onClick={handleDeleteSubjects}
+					>
+						Xóa môn học
+					</button>
 				</div>
 			</section>
 		</div>

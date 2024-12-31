@@ -3,19 +3,19 @@ import "./StaffModal.css";
 
 const AddClassModal = ({ isOpen, onClose, addClassNonTH, addClassTH }) => {
   const [formData, setFormData] = useState({
-    classId: "", // Mã lớp
+    subjectId: "", // Mã môn học
     siso: 0, // Sĩ số, với min >= 30
     startDate: "", // Ngày bắt đầu
     endDate: "", // Ngày kết thúc
     tietBatDau: 0, // Tiết bắt đầu
     thu: 0, // Thứ (0 - thứ 2, 1 - thứ 3, ...), sẽ tính từ startDate
+    giangVienId: "", // Mã giảng viên
+    roomId: "", // Phòng học
     flagTH: 0, // Loại lớp học: 0 - lý thuyết, 1 - thực hành, 2 - lý thuyết + thực hành
+    sectionOfDay: 0, // Mã tiết trong ngày (ví dụ: buổi sáng, chiều)
+    classId: "", // Mã lớp
     note: "", // Ghi chú
     idLT: "", // Mã lớp lý thuyết (ví dụ)
-    sectionOfDay: 0, // Mã tiết trong ngày (ví dụ: buổi sáng, chiều)
-    roomId: "", // Phòng học
-    giangVienId: "", // Mã giảng viên
-    subjectId: "", // Mã môn học
   });
 
   const handleInputChange = (e) => {

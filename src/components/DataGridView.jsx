@@ -8,9 +8,9 @@ const DataGridView = ({
 	canCheck,
 	getCheckedRows,
 	selectedClasses,
-	canEdit, 
+	canEdit,
 	showEditModal,
-	getEditItem
+	getEditItem,
 }) => {
 	const [selectedRows, setSelectedRows] = useState([]);
 
@@ -62,7 +62,10 @@ const DataGridView = ({
 		);
 	}, [listData, disableData, isDisabled]);
 
-	const headerNames = listData.length > 0 ? Object.keys(listData[0]) : null;
+	// Lọc cột `id` khỏi danh sách header
+	const headerNames = listData.length > 0
+		? Object.keys(listData[0]).filter((header) => header !== "id")
+		: null;
 
 	return (
 		<div className="grid-view">
@@ -80,7 +83,13 @@ const DataGridView = ({
 							))}
 							{canEdit && <th></th>}
 						</tr>
-					) : <><h2 style={{textAlign: 'center', padding:'40px'}}>Không có dữ liệu phù hợp</h2></>}
+					) : (
+						<>
+							<h2 style={{ textAlign: "center", padding: "40px" }}>
+								Không có dữ liệu phù hợp
+							</h2>
+						</>
+					)}
 				</thead>
 				<tbody>
 					{listData.map((item, index) => (
@@ -103,8 +112,8 @@ const DataGridView = ({
 									<button
 										className="edit-button"
 										onClick={() => {
-											getEditItem(item); 
-											showEditModal(); 
+											getEditItem(item);
+											showEditModal();
 										}}
 									>
 										<i className="fa-regular fa-pen-to-square"></i>

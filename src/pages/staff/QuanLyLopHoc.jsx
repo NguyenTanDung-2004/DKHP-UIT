@@ -52,7 +52,8 @@ const QuanLyLopHoc = () => {
         "Tiết": `${item.tietBatDau || 0}-${item.tietKetThuc || 0}`, // Kết hợp tiết bắt đầu - kết thúc
         "Phòng": item.room?.roomName || "Không xác định",
         "Giảng viên": item.giangVien?.name || "Không xác định",
-        "Loại": item.flagTH === 0 ? "LT" : "TH", // Chuyển flagTH thành "LT" hoặc "TH"
+        "Loại": item.flagTH === 0 ? "LT" : "TH", // Chuyển flagTH thành "LT" hoặc "TH",
+        id: item.id
       }));
 
       return formattedClasses;
@@ -123,6 +124,7 @@ const QuanLyLopHoc = () => {
           listData={listData}
 					canCheck={true}
           selectedClasses={selectedClasses}
+          getCheckedRows={setSelectedClasses}
           canEdit={true}
           showEditModal={toggleEditModal}
           getEditItem={setEditItem}
@@ -132,7 +134,8 @@ const QuanLyLopHoc = () => {
           <button
             className="cancel"
             onClick={() => {
-              selectedClasses.forEach((classId) => delClass(classId));
+              selectedClasses.forEach((id) => delClass(id));
+              setSelectedClasses([]);
             }}
           >
             Xóa Lớp

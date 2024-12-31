@@ -5,12 +5,7 @@ const AddSubjectCTDTModal = ({ isOpen, onClose }) => {
 	const [formData, setFormData] = useState({
 		"Học kỳ": "",
 		"Mã môn học": "",
-		"Tên môn học": "",
-		"Loại môn học": "",
 		"Mã khoa": "",
-		"Mã môn trước": "",
-		TCLT: "",
-		TCTH: "",
 	});
 
 	const handleInputChange = (e) => {
@@ -51,6 +46,19 @@ const AddSubjectCTDTModal = ({ isOpen, onClose }) => {
 					<div className="form-group">
 						<div className="form-group__item">
 							<label>
+								Mã khoa<span className="required">*</span>
+							</label>
+							<input
+								type="text"
+								name="Mã khoa"
+								value={formData["Mã khoa"]}
+								onChange={handleInputChange}
+							/>
+						</div>
+					</div>
+					<div className="form-group">
+						<div className="form-group__item">
+							<label>
 								Mã môn học<span className="required">*</span>
 							</label>
 							<input
@@ -61,46 +69,6 @@ const AddSubjectCTDTModal = ({ isOpen, onClose }) => {
 							/>
 						</div>
 					</div>
-					<div className="form-group">
-						<div className="form-group__item">
-							<label>
-								Tên môn học<span className="required">*</span>
-							</label>
-							<input
-								type="text"
-								name="Tên môn học"
-								value={formData["Tên môn học"]}
-								onChange={handleInputChange}
-							/>
-						</div>
-					</div>
-					<div className="form-group">
-						<div className="form-group__item">
-							<label>
-								Số TCLT<span className="required">*</span>
-							</label>
-							<input
-								type="text"
-								name="TCLT"
-								value={formData["TCLT"]}
-								onChange={handleInputChange}
-							/>
-						</div>
-					</div>
-					<div className="form-group">
-						<div className="form-group__item">
-							<label>
-								Số TCTH<span className="required">*</span>
-							</label>
-							<input
-								type="text"
-								name="TCTH"
-								value={formData["TCTH"]}
-								onChange={handleInputChange}
-							/>
-						</div>
-					</div>
-					<div className="form-group"></div>
 					<div className="form-actions">
 						<button type="submit">Xác nhận</button>
 					</div>

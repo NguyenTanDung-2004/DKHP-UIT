@@ -1,5 +1,7 @@
 import React, { useState, useRef } from "react";
+import { toast } from "react-toastify";
 import "./Sinhvien.css";
+import studentService from './../../services/studentService';
 
 const Sinhvien = () => {
 	const students = [
@@ -46,7 +48,6 @@ const Sinhvien = () => {
 
 	const [listStudentWidth, setListStudentWidth] = useState(300);
 	const containerRef = useRef(null);
-
 	const handleMouseDown = (e) => {
 		const startX = e.clientX;
 		const startWidth = listStudentWidth;
@@ -76,9 +77,42 @@ const Sinhvien = () => {
 	const [selectedStudent, setSelectedStudent] = useState(null);
 	const [formData, setFormData] = useState(null);
 
+	const fetchStudentDetails = async (mssv) => {
+		try {
+			const response = await studentService.getStudentDetails(mssv); // Gọi service
+
+			// Cập nhật thông tin sinh viên từ kết quả trả về
+			const studentData = response.data; // Giả sử dữ liệu trả về là response.data
+
+			setSelectedStudent(studentData); // Lưu sinh viên đã chọn
+			setFormData({
+				mssv: studentData.mssv,
+				name: studentData.tenDayDu,
+				cccd: studentData.cmnd,
+				dob: studentData.ngaySinh, // Ngày sinh
+				province: studentData.tinh_thanhPho,
+				district: studentData.quan_huyen,
+				commune: studentData.xa_phuong,
+				currentAddress: studentData.diaChiChiTiet,
+				faculty: studentData.tenKhoa,
+				major: studentData.tenNganh,
+				phone: studentData.phone, // Thêm trường phone
+				gender: studentData.gioiTinh, // Thêm trường giới tính
+				placeOfBirth: studentData.noiSinh, // Thêm nơi sinh
+				address2: studentData.diaChiChiTiet1, // Địa chỉ 2
+				province2: studentData.tinh_thanhPho1, // Tỉnh/thành phố 2
+				district2: studentData.quan_huyen1, // Quận/huyện 2
+				commune2: studentData.phuong1, // Phường/xã 2
+				email: studentData.emailCaNhan, // Email
+		});
+		} catch (error) {
+			console.error("Lỗi khi lấy thông tin sinh viên:", error);
+			alert("Không thể lấy thông tin sinh viên. Vui lòng thử lại sau.");
+		}
+	};
+
 	const handleEditClick = (student) => {
-		setSelectedStudent(student); // Lưu sinh viên được chọn
-		setFormData({ ...student }); // Cập nhật formData với thông tin của sinh viên mới
+		fetchStudentDetails(student.mssv); // Gọi API khi bấm sửa
 	};
 
 	const handleInputChange = (e) => {
@@ -86,10 +120,46 @@ const Sinhvien = () => {
 		setFormData({ ...formData, [name]: value });
 	};
 
-	const handleSubmit = () => {
-		setSelectedStudent(formData); // Cập nhật lại thông tin của sinh viên đã sửa
-		alert("Thông tin đã được cập nhật!");
+	const handleSubmit = async () => {
+			try {
+					const updatedStudentData = {
+							mssv: formData.mssv,
+							tenDayDu: formData.name,
+							tenKhoa: formData.faculty,
+							tenNganh: formData.major,
+							diaChiChiTiet: formData.currentAddress,
+							tinh_thanhPho: formData.province,
+							quan_huyen: formData.district,
+							xa_phuong: formData.commune,
+							phone: formData.phone,
+							gioiTinh: formData.gender,
+							noiSinh: formData.placeOfBirth,
+							diaChiChiTiet1: formData.address2,
+							tinh_thanhPho1: formData.province2,
+							quan_huyen1: formData.district2,
+							phuong1: formData.commune2,
+							ngaySinh: formData.dob,
+							cmnd: formData.cccd,
+							emailCaNhan: formData.email,
+							password: formData.password || '', // Nếu password không thay đổi, để trống
+							code: formData.code || '', // Nếu có mã, cập nhật
+					};
+	
+					// Gọi service để cập nhật thông tin sinh viên
+					const response = await studentService.getStudentDetails(updatedStudentData);
+	
+					if (response.code === 1000) {
+							toast.success("Thông tin sinh viên đã được cập nhật thành công!"); // Thông báo thành công
+							setSelectedStudent(formData); // Cập nhật lại thông tin đã chỉnh sửa
+					} else {
+							toast.error("Cập nhật thông tin sinh viên không thành công. Vui lòng thử lại."); // Thông báo lỗi
+					}
+			} catch (error) {
+					console.error("Lỗi khi cập nhật thông tin sinh viên:", error);
+					toast.error("Đã xảy ra lỗi. Vui lòng thử lại sau.");
+			}
 	};
+	
 
 	return (
 		<div className="container staff" ref={containerRef}>
