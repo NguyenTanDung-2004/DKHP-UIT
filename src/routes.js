@@ -27,7 +27,7 @@ const AppRoutes = () => (
 		<Route
 			path="/student/trangchu"
 			element={
-				<ProtectedRoute role="student">
+				<ProtectedRoute roleRequired="Student">
 					<StudentTrangchu />
 				</ProtectedRoute>
 			}
@@ -35,7 +35,7 @@ const AppRoutes = () => (
 		<Route
 			path="/student/lopdangky"
 			element={
-				<ProtectedRoute role="student">
+				<ProtectedRoute roleRequired="Student">
 					<StudentLopDangKy />
 				</ProtectedRoute>
 			}
@@ -43,7 +43,7 @@ const AppRoutes = () => (
 		<Route
 			path="/student/chuongtrinh"
 			element={
-				<ProtectedRoute role="student">
+				<ProtectedRoute roleRequired="Student">
 					<StudentChuongTrinh />
 				</ProtectedRoute>
 			}
@@ -51,7 +51,7 @@ const AppRoutes = () => (
 		<Route
 			path="/student/thongtin"
 			element={
-				<ProtectedRoute role="student">
+				<ProtectedRoute roleRequired="Student">
 					<StudentThongTin />
 				</ProtectedRoute>
 			}
@@ -60,7 +60,7 @@ const AppRoutes = () => (
 		<Route
 			path="/staff/trangchu"
 			element={
-				<ProtectedRoute role="staff">
+				<ProtectedRoute roleRequired="Staff">
 					<StaffTrangchu />
 				</ProtectedRoute>
 			}
@@ -68,7 +68,7 @@ const AppRoutes = () => (
 		<Route
 			path="/staff/quanly/danh-sach-lop-hoc"
 			element={
-				<ProtectedRoute role="staff">
+				<ProtectedRoute roleRequired="Staff">
 					<StaffQuanlyLopHoc />
 				</ProtectedRoute>
 			}
@@ -76,7 +76,7 @@ const AppRoutes = () => (
 		<Route
 			path="/staff/quanly/danh-sach-mon-hoc"
 			element={
-				<ProtectedRoute role="staff">
+				<ProtectedRoute roleRequired="Staff">
 					<StaffQuanlyMonHoc />
 				</ProtectedRoute>
 			}
@@ -84,7 +84,7 @@ const AppRoutes = () => (
 		<Route
 			path="/staff/quanly/chuong-trinh-dao-tao"
 			element={
-				<ProtectedRoute role="staff">
+				<ProtectedRoute roleRequired="Staff">
 					<StaffQuanlyChuongTrinh />
 				</ProtectedRoute>
 			}
@@ -92,7 +92,7 @@ const AppRoutes = () => (
 		<Route
 			path="/staff/sinhvien"
 			element={
-				<ProtectedRoute role="staff">
+				<ProtectedRoute roleRequired="Staff">
 					<StaffSinhvien />
 				</ProtectedRoute>
 			}
@@ -102,7 +102,7 @@ const AppRoutes = () => (
 		<Route
 			path="/admin/trangchu"
 			element={
-				<ProtectedRoute role="admin">
+				<ProtectedRoute roleRequired="Admin">
 					<AdminTrangChu />
 				</ProtectedRoute>
 			}
@@ -110,7 +110,7 @@ const AppRoutes = () => (
 		<Route
 			path="/admin/danh-sach-tai-khoan"
 			element={
-				<ProtectedRoute role="admin">
+				<ProtectedRoute roleRequired="Admin">
 					<AdminDanhSachTaiKhoan />
 				</ProtectedRoute>
 			}
@@ -118,7 +118,7 @@ const AppRoutes = () => (
 		<Route
 			path="/admin/danh-sach-hoc-phan"
 			element={
-				<ProtectedRoute role="admin">
+				<ProtectedRoute roleRequired="Admin">
 					<AdminDieuChinhHocPhan />
 				</ProtectedRoute>
 			}

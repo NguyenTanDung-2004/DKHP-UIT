@@ -16,17 +16,19 @@ const AuthPage = () => {
 	const toggleShowPassword = () => setShowPassword(!showPassword);
 	const handleChangeEmail = (event) => setEmail(event.target.value);
 	const handleChangePass = (event) => setPassword(event.target.value);
-	
+
 	const handleSubmit = async (e) => {
 		e.preventDefault();
 		if (isLoading) return;
 		const body = { email, password };
 		setLoading(true);
+
 		await login(body)
 			.then((res) => {
 				const { role } = res.data;
 				setLoading(false);
-				window.location.href = `/${role}/trangchu`;
+				const normalizedRole = role.toLowerCase();
+				window.location.href = `/${normalizedRole}/trangchu`;
 			})
 			.catch((err) => {
 				setShowError(true);

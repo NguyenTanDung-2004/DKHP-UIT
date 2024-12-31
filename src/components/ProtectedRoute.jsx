@@ -1,16 +1,21 @@
-// components/ProtectedRoute.js
-import React, { useContext } from "react";
-import { Navigate } from "react-router-dom";
-import AuthContext from "../context/AuthContext";
+import React from "react";
+import { Navigate } from "react-router-dom"; // For React Router v6
+import { useAuth } from "../context/AuthContext";  // Assuming you have AuthContext to manage user authentication
 
-function ProtectedRoute({ children, role }) {
-	const { userInfo } = useContext(AuthContext);
+const ProtectedRoute = ({ children, roleRequired }) => {
+  const { isAuthenticated, role } = useAuth();
 
-	if (!userInfo || userInfo.role !== role) {
-		return <Navigate to="/auth" replace />;
-	}
+  if (!isAuthenticated) {
+    // Redirect to login page if not authenticated
+    return <Navigate to="/auth" replace />;
+  }
 
-	return children;
-}
+  if (role !== roleRequired) {
+    // Redirect to Not Found page if the role does not match
+    return <Navigate to="/" replace />;
+  }
+
+  return children;
+};
 
 export default ProtectedRoute;
