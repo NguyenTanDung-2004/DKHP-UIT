@@ -77,16 +77,11 @@ public class SecurityConfig {
         @Bean
         public CorsConfigurationSource apiConfigurationSource() {
                 CorsConfiguration configuration = new CorsConfiguration();
-                configuration.setAllowedOriginPatterns(
-                                Arrays.asList("https://www.microsoft.com/edge", "https://coccoc.com",
-                                                "https://www.google.com")); // Thêm
-                // các
-                // origin
-                // cần
-                // thiết
+               configuration.setAllowedOriginPatterns(
+                               Arrays.asList("http://localhost:3000")); //  Allow request from http://localhost:3000
                 configuration.setAllowedMethods(Arrays.asList("GET", "POST", "OPTIONS"));
-                configuration.setAllowedHeaders(Arrays.asList("*")); // Nếu cần
-                configuration.setAllowCredentials(true); // Nếu bạn cần hỗ trợ cookie
+                configuration.setAllowedHeaders(Arrays.asList("*"));
+                configuration.setAllowCredentials(true);
                 UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
                 source.registerCorsConfiguration("/**", configuration);
                 return source;
