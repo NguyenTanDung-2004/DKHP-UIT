@@ -1,0 +1,15 @@
+version: "3"
+services:
+  springboot-app:
+    image: your-spring-boot-app-image # Đặt tên image của bạn ở đây, hoặc sử dụng build để tạo image từ Dockerfile
+    build:
+      context: .
+      dockerfile: Dockerfile # Nếu bạn muốn xây dựng từ Dockerfile
+    ports:
+      - "8080:8080" # Mở cổng 8080 cho Spring Boot
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:mysql://host.docker.internal:3307/docker_database
+      - SPRING_DATASOURCE_USERNAME=root
+      - SPRING_DATASOURCE_PASSWORD=12345
+      - SPRING_JPA_HIBERNATE_DDL_AUTO=update
+      - SPRING_JPA_SHOW_SQL=true
