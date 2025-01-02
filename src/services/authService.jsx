@@ -13,11 +13,11 @@ const login = async (body) => {
 const logout = async () => {
   try {
     const response = await axiosClient.post("/user/logout");
-    console.log("Logout successful", response.data.status)
+    console.log("Logout successful", response.data.status);
   } catch (error) {
     console.error("Login failed", error);
   }
-}
+};
 
 const resetPassword = async (account) => {
   try {

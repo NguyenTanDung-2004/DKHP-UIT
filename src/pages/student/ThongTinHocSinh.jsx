@@ -1,15 +1,14 @@
 import React, { useState, useEffect } from "react";
 import "./ThongTinHocSinh.css";
 import { useAuth } from "../../context/AuthContext";
-import studentService from './../../services/studentService';
+import studentService from "./../../services/studentService";
 import AddressForm from "./../../components/AddressForm";
-import AddressForm1 from "./../../components/AddressForm2"; // Import AddressForm2
+import AddressForm1 from "./../../components/AddressForm1"; // Import AddressForm2
 
 const ThongTinHocSinh = () => {
+  const { userId } = useAuth();
 
-	const { userId } = useAuth();
-
-	const [formData, setFormData] = useState({
+  const [formData, setFormData] = useState({
     mssv: "",
     tenDayDu: "",
     tenKhoa: "",
@@ -28,10 +27,10 @@ const ThongTinHocSinh = () => {
     cmnd: "",
     emailCaNhan: "",
     password: "",
-		code: ""
+    code: "",
   });
 
-	useEffect(() => {
+  useEffect(() => {
     const fetchStudentInfo = async () => {
       if (userId) {
         try {
@@ -112,7 +111,7 @@ const ThongTinHocSinh = () => {
   // Handle edit student info
   const handleEditStudentInfo = async (event) => {
     event.preventDefault();
-		try {
+    try {
       const response = await studentService.getStudentDetails(formData);
       alert("Student details updated:", response);
       // Xử lý thêm nếu cần sau khi cập nhật thành công (ví dụ: hiển thị thông báo)

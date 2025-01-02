@@ -1,9 +1,9 @@
 import React, { createContext, useState, useContext, useEffect } from "react";
 import Cookies from "js-cookie";
-import { login } from "../services/authService";  // Import login từ authService
+import { login } from "../services/authService"; // Import login từ authService
 import { jwtDecode } from "jwt-decode";
 
-const AuthContext = createContext();
+export const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
   const [userId, setUserId] = useState(null);
@@ -23,7 +23,6 @@ export const AuthProvider = ({ children }) => {
       }
     }
   }, []);
-  
 
   const handleLogin = async (email, password) => {
     try {
@@ -37,16 +36,17 @@ export const AuthProvider = ({ children }) => {
       console.error("Login failed:", error);
     }
   };
-  
 
   const handleLogout = () => {
     setUserId(null);
     setIsAuthenticated(false);
-    Cookies.remove("jwtToken");  // Xóa token khỏi cookie
+    Cookies.remove("jwtToken"); // Xóa token khỏi cookie
   };
 
   return (
-    <AuthContext.Provider value={{ userId, isAuthenticated, handleLogin, handleLogout }}>
+    <AuthContext.Provider
+      value={{ userId, isAuthenticated, handleLogin, handleLogout }}
+    >
       {children}
     </AuthContext.Provider>
   );
