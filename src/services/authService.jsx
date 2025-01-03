@@ -1,12 +1,24 @@
 import axiosClient from "./axiosClient";
 
-const login = async (body) => {
+const login = async (credentials) => {
   try {
-    const response = await axiosClient.post("/user/login", body);
-    // Lúc này token JWT đã được backend lưu trong cookie
-    console.log("Login successful", response.data);
+    const response = await axiosClient.post("/user/login", {
+      userName: credentials.userName,
+      password: credentials.password,
+    });
+
+    if (response.data) {
+      return {
+        success: true,
+        data: response.data,
+      };
+    }
   } catch (error) {
-    console.error("Login failed", error);
+    const errorMessage = error.response?.data?.message || "Network Error";
+    return {
+      success: false,
+      error: errorMessage,
+    };
   }
 };
 

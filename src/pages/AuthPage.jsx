@@ -1,12 +1,13 @@
-import React, { useState, useContext } from "react";
+import React, { useState, useEffect } from "react";
 import "./AuthPage.css";
 import { login, resetPassword } from "../services/authService";
 import DialogModal from "../components/DialogModal";
 import LoginBg from "../images/loginBackground.png";
 import Logo from "../images/logo.png";
+// import { useAuth } from "../context/AuthContext"; // Import useAuth
 
 const AuthPage = () => {
-  const [userName, setUserName] = useState(""); // Use new state variable for userName
+  const [userName, setUserName] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [showError, setShowError] = useState(false);
@@ -14,7 +15,7 @@ const AuthPage = () => {
 
   // Part for handle form
   const toggleShowPassword = () => setShowPassword(!showPassword);
-  const handleChangeUserName = (event) => setUserName(event.target.value); // Changed to handle userName
+  const handleChangeUserName = (event) => setUserName(event.target.value);
   const handleChangePass = (event) => setPassword(event.target.value);
 
   const handleSubmit = async (e) => {
@@ -22,21 +23,21 @@ const AuthPage = () => {
     if (isLoading) return;
     const body = { userName: userName, password }; // changed email to userName
     console.log("Body request:", body); // Log the body here
-    setLoading(true);
+    setLoading(false);
 
     await login(body)
-      .then((res) => {
-        const { role } = res.data;
-        setLoading(false);
+      .then((response) => {
+        const { role } = response.data;
+        setLoading(true);
         const normalizedRole = role.toLowerCase();
+        localStorage.setItem("roleUser", normalizedRole);
         window.location.href = `/${normalizedRole}/trangchu`;
       })
       .catch((err) => {
         setShowError(true);
       })
-      .finally(() => setLoading(false));
+      .finally(() => setLoading(true));
   };
-
   // Part for dialog modal
   const [activeDialog, setActiveDialog] = useState(null);
   const setOpenDialog = (type) => setActiveDialog(type);
@@ -64,12 +65,10 @@ const AuthPage = () => {
         alert("Get code success!!! Your new password is sending to your email");
         return true;
       } else {
-        // Nếu có lỗi trong quá trình gọi API, có thể hiện thông báo lỗi
         console.error("Failed to get reset code.");
         return false;
       }
     } catch (error) {
-      // Xử lý lỗi nếu API gọi thất bại
       console.error("Error during reset password API:", error);
       return false;
     }

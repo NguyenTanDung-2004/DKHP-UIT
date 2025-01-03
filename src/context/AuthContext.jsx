@@ -1,56 +1,64 @@
 import React, { createContext, useState, useContext, useEffect } from "react";
 import Cookies from "js-cookie";
-import { login } from "../services/authService"; // Import login từ authService
-import { jwtDecode } from "jwt-decode";
+import { login } from "../services/authService";
+import { useNavigate } from "react-router-dom";
 
 export const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
   const [userId, setUserId] = useState(null);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const [role, setRole] = useState(null); // Store user role
+  const [role, setRole] = useState(null);
+  const navigate = useNavigate();
 
   useEffect(() => {
     // Kiểm tra token trong cookie khi component được render lần đầu
     const token = Cookies.get("jwtToken");
     if (token) {
       setIsAuthenticated(true);
-      try {
-        const decodedToken = jwtDecode(token); // Giải mã token tại đây
-        setRole(decodedToken.role); // Lấy vai trò người dùng từ token
-      } catch (error) {
-        console.error("Error decoding token", error);
-      }
     }
   }, []);
 
-  const handleLogin = async (email, password) => {
+  const handleLogin = async (userName, password) => {
     try {
-      const data = await login(email, password); // Gọi hàm login
-      const decodedToken = jwtDecode(data.token); // Giải mã token sau khi đăng nhập thành công
-      setUserId(data.userId); // Lưu thông tin người dùng
-      setIsAuthenticated(true); // Đánh dấu người dùng đã đăng nhập
-      setRole(decodedToken.role); // Lấy vai trò người dùng từ token
-      Cookies.set("jwtToken", data.token); // Lưu token vào cookie
+      const response = await login({ userName, password });
+      if (response) {
+        if (response.success) {
+          const { role } = response.data;
+          setUserId(userId);
+          setIsAuthenticated(true);
+          setRole(role.toLowerCase());
+          Cookies.set("jwtToken", "token");
+          console.log("auth contexxt: " + role);
+          navigate(`/${role.toLowerCase()}/trangchu`);
+          return true;
+        } else {
+          console.log("Login Fail with message: " + response.error);
+          return false;
+        }
+      } else {
+        console.error("Response is null or undefined");
+        return false;
+      }
     } catch (error) {
-      console.error("Login failed:", error);
+      console.error("Login failed with error:", error);
+      return false;
     }
   };
-
   const handleLogout = () => {
     setUserId(null);
     setIsAuthenticated(false);
-    Cookies.remove("jwtToken"); // Xóa token khỏi cookie
+    setRole(null);
+    Cookies.remove("jwtToken");
   };
 
   return (
     <AuthContext.Provider
-      value={{ userId, isAuthenticated, handleLogin, handleLogout }}
+      value={{ userId, isAuthenticated, role, handleLogin, handleLogout }}
     >
       {children}
     </AuthContext.Provider>
   );
 };
 
-// Custom hook để dễ dàng truy cập AuthContext
 export const useAuth = () => useContext(AuthContext);
