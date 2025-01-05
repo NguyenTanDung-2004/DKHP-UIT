@@ -118,7 +118,7 @@ const Main = () => {
         </span>
 
         {loading ? (
-          <div className="flex justify-center">
+          <div className="flex items-center justify-center h-96">
             <ClipLoader color={"#2F6BFF"} loading={loading} size={40} />
           </div>
         ) : (

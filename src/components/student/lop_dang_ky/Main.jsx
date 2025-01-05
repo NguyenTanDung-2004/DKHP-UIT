@@ -155,7 +155,7 @@ const Main = () => {
   };
   return (
     <Layout role="student">
-      <div className="flex bg-[#F2F4F7]">
+      <div className="flex bg-[#F2F4F7] min-h-screen">
         <div className="flex-1 p-8 overflow-auto">
           <div className="mb-4 flex items-center gap-4">
             <h2 className="text-2xl font-bold mb-3 text-[#2F6BFF]">
@@ -167,7 +167,7 @@ const Main = () => {
             </span>
           </div>
           {loading ? (
-            <div className="flex justify-center">
+            <div className="flex items-center justify-center h-96">
               <ClipLoader color={"#2F6BFF"} loading={loading} size={40} />
             </div>
           ) : (

@@ -1,37 +1,8 @@
-// src/components/Header.js
-import React from "react";
-import { NavLink, Link, useNavigate } from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import { NavLink, Link, useNavigate, useLocation } from "react-router-dom";
 import Cookies from "js-cookie";
 import logo from "../../images/logo.png";
 import defaultAvatar from "../../images/default-avatar.png"; // Import ảnh avatar mặc định
-
-function DropdownMenu({ label, items }) {
-  return (
-    <div className="relative group">
-      <div className="px-3 py-2 text-gray-700 hover:bg-gray-200 rounded flex items-center cursor-pointer">
-        {label} <i className="fa-solid fa-chevron-down fa-xs ml-1"></i>
-      </div>
-      <ul className="w-[200px] absolute hidden group-hover:block bg-white border border-gray-300 rounded shadow-md z-10">
-        {items.map((item, index) => (
-          <li key={index}>
-            <NavLink
-              to={item.to}
-              className={({ isActive }) =>
-                `block px-4 py-2  hover:text-[#2F6BFF] ${
-                  isActive
-                    ? "text-[#2F6BFF] underline decoration-[#2F6BFF] underline-offset-4 font-semibold"
-                    : "text-gray-700"
-                }`
-              }
-            >
-              {item.text}
-            </NavLink>
-          </li>
-        ))}
-      </ul>
-    </div>
-  );
-}
 
 function MenuItem({ to, children }) {
   return (
@@ -50,8 +21,11 @@ function MenuItem({ to, children }) {
   );
 }
 
-function Header({ role }) {
+function Header() {
   const navigate = useNavigate();
+  const location = useLocation(); // Get the current location
+  const [role, setRole] = useState(Cookies.get("roleUser")); // Initialize and store role in state
+
   const menuItems = {
     student: [
       { to: "/student/trangchu", text: "Trang chủ" },
@@ -60,29 +34,23 @@ function Header({ role }) {
     ],
     admin: [
       { to: "/admin/trangchu", text: "Trang chủ" },
-      { to: "/admin/danh-sach-tai-khoan", text: "Danh sách tài khoản" },
-      { to: "/admin/danh-sach-hoc-phan", text: "Điều chỉnh đăng ký học phần" },
+      { to: "/admin/danhsachtaikhoan", text: "Quản lý tài khoản" },
+      { to: "/admin/danhsachhocphan", text: "Điều chỉnh đăng ký học phần" },
     ],
     staff: [
       { to: "/staff/trangchu", text: "Trang chủ" },
-      {
-        label: "Quản lý",
-        items: [
-          {
-            to: "/staff/quanly/danh-sach-lop-hoc",
-            text: "Danh sách lớp học mở",
-          },
-          { to: "/staff/quanly/danh-sach-mon-hoc", text: "Danh sách môn học" },
-          {
-            to: "/staff/quanly/chuong-trinh-dao-tao",
-            text: "Chương trình đào tạo",
-          },
-        ],
-      },
-
-      { to: "/staff/sinhvien", text: "Sinh viên" },
+      { to: "/staff/quanly/monhoc", text: "Quản lý môn học" },
+      { to: "/staff/quanly/monhocmo", text: "Quản lý môn học mở" },
+      { to: "/staff/quanly/lophoc", text: "Quản lý lớp học" },
+      { to: "/staff/quanly/ctdt", text: "Quản lý CTDT" },
+      { to: "/staff/quanly/sinhvien", text: "Quản lý sinh viên" },
     ],
   };
+
+  useEffect(() => {
+    // Update role state when location changes (route navigation)
+    setRole(Cookies.get("roleUser"));
+  }, [location]);
 
   const handleLogoutAndRedirect = () => {
     Cookies.remove("roleUser");
@@ -93,22 +61,11 @@ function Header({ role }) {
 
   const userNavbarItems = () => {
     const items = menuItems[role] || [];
-    return items.map((item, index) => {
-      if (item.items) {
-        return (
-          <DropdownMenu
-            key={index}
-            items={item.items}
-            label={item.label}
-          ></DropdownMenu>
-        );
-      }
-      return (
-        <MenuItem key={index} to={item.to}>
-          {item.text}
-        </MenuItem>
-      );
-    });
+    return items.map((item, index) => (
+      <MenuItem key={index} to={item.to}>
+        {item.text}
+      </MenuItem>
+    ));
   };
 
   return (
