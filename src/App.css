@@ -1,0 +1,84 @@
+/* css reset */
+*,
+*:before,
+*:after {
+  box-sizing: border-box;
+  background-color: white;
+}
+* {
+  margin: 0;
+  padding: 0;
+  font: inherit;
+}
+img,
+picture,
+svg,
+video {
+  display: block;
+  max-width: 100%;
+}
+input,
+select,
+textarea {
+  background-color: transparent;
+  outline: none;
+}
+button {
+  cursor: pointer;
+  background-color: transparent;
+  outline: none;
+  border: 0;
+}
+body {
+  min-height: 100vh;
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 1;
+
+  background-color: rgba(240, 241, 242, 0.7);
+}
+
+/* main */
+.youtube-list {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  grid-gap: 25px;
+  padding: 25px;
+}
+.youtube-image {
+  height: 250px;
+  margin-bottom: 15px;
+}
+.youtube-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.youtube-footer {
+  display: flex;
+  flex-direction: row;
+  gap: 16px;
+  justify-content: start;
+}
+.youtube-avatar {
+  width: 50px;
+  height: 50px;
+  border-radius: 100rem;
+  object-fit: cover;
+  flex-shrink: 0;
+}
+
+.youtube-info {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  gap: 6px;
+}
+.youtube-title {
+  font-size: 16px;
+  font-weight: bold;
+}
+.youtube-author {
+  font-size: 14px;
+  color: #626262;
+}
