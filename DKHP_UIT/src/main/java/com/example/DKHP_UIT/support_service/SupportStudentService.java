@@ -50,67 +50,86 @@ public class SupportStudentService {
     }
 
     public void dkhp(List<Class> newClasses, List<String> listWrong,
-            List<String> listTrue, List<String> listProblem, String mssv) {
+        List<String> listTrue, List<String> listProblem, String mssv) {
 
-        for (int i = 0; i < newClasses.size(); i++) {
-            // check whether this class is theory or practice class
-            if (newClasses.get(i).getFlagTH() == 0 || newClasses.get(i).getFlagTH() == 3) {
-                // check siso
-                if (checkSiSo(listWrong, listProblem, newClasses.get(i)) == false) {
-                    continue;
-                }
-                // check first subject
-                if (checkFirstSubject(listWrong, listProblem, newClasses.get(i)) == false) {
-                    continue;
-                }
-                // check whether this class has practice or not practice class
-                if (havePracticeClass(newClasses.get(i).getId()) == true) {
-                    // check whether it is the end of list
-                    if (i == newClasses.size() - 1) {
-                        addWrongClass("NonPractice", listWrong, listProblem, newClasses.get(i).getId());
+            for (int i = 0; i < newClasses.size(); i++) {
+                Class currentClass = newClasses.get(i);
+                // check whether this class is theory or practice class
+                if (currentClass.getFlagTH() == 0 || currentClass.getFlagTH() == 3) {
+                    // check siso
+                    if (checkSiSo(listWrong, listProblem, currentClass) == false) {
                         continue;
                     }
-                    // check continue class
-                    if (checkContinueClassOfTheoryClass(newClasses.get(i + 1), newClasses.get(i), listWrong,
-                            listProblem) == false) {
+                    // check first subject
+                    if (checkFirstSubject(listWrong, listProblem, currentClass) == false) {
                         continue;
-                    } else {
-                        // check schedule of current class
-                        if (checkStudentSchedule(mssv, newClasses.get(i)) == false) {
-                            addWrongClass("Schedule", listWrong, listProblem, newClasses.get(i).getId());
-                        }
-                        // check schedule of continue class
-                        if (newClasses.get(i + 1).getFlagTH() == 1
-                                && checkStudentSchedule(mssv, newClasses.get(i + 1)) == false) {
+                    }
+                    // check whether this class has practice or not practice class
+                    if (havePracticeClass(currentClass.getId())) {
+                        // check whether it is the end of list
+                        if (i == newClasses.size() - 1) {
+                            addWrongClass("NonPractice", listWrong, listProblem, currentClass.getId());
                             continue;
                         }
-                        // save
+                        Class nextClass = newClasses.get(i+1);
+                        // check continue class
+                        if (checkContinueClassOfTheoryClass(nextClass, currentClass, listWrong,
+                                listProblem) == false) {
+                            continue;
+                        } else {
+                            // check schedule of current class
+                            if (checkStudentSchedule(mssv, currentClass) == false) {
+                                addWrongClass("Schedule", listWrong, listProblem, currentClass.getId());
+                            }
+                            // check schedule of continue class
+                            if (nextClass.getFlagTH() == 1
+                                    && checkStudentSchedule(mssv, nextClass) == false) {
+                                continue;
+                            }
+                            // save
+                            Student student = this.studentRepository.findById(mssv).get();
+                            student.getClasses().add(currentClass);
+                            student.getClasses().add(nextClass);
+
+                            // Tăng currentSiSo của cả 2 lớp
+                            updateCurrentSiSo(currentClass, 1);
+                            updateCurrentSiSo(nextClass, 1);
+
+
+                            listTrue.add(currentClass.getId());
+                            listTrue.add(nextClass.getId());
+                            this.studentRepository.save(student);
+                            i = i + 1;
+                        }
+                    } else {
+                        System.out.println("nguyentandungdeptrai123");
+                        // check schedule of current class
+                        if (checkStudentSchedule(mssv, currentClass) == false) {
+                            addWrongClass("Schedule", listWrong, listProblem, currentClass.getId());
+                            continue;
+                        } // save
                         Student student = this.studentRepository.findById(mssv).get();
-                        student.getClasses().add(newClasses.get(i));
-                        student.getClasses().add(newClasses.get(i + 1));
-                        listTrue.add(newClasses.get(i).getId());
-                        listTrue.add(newClasses.get(i + 1).getId());
+                        student.getClasses().add(currentClass);
+
+                        // Tăng currentSiSo
+                        updateCurrentSiSo(currentClass, 1);
+
+                        listTrue.add(currentClass.getId());
                         this.studentRepository.save(student);
-                        i = i + 1;
                     }
                 } else {
-                    System.out.println("nguyentandungdeptrai123");
-                    // check schedule of current class
-                    if (checkStudentSchedule(mssv, newClasses.get(i)) == false) {
-                        addWrongClass("Schedule", listWrong, listProblem, newClasses.get(i).getId());
-                        continue;
-                    } // save
-                    Student student = this.studentRepository.findById(mssv).get();
-                    student.getClasses().add(newClasses.get(i));
-                    listTrue.add(newClasses.get(i).getId());
-                    this.studentRepository.save(student);
+                    // add wrong
+                    addWrongClass("NonTheory", listWrong, listProblem, currentClass.getId());
                 }
-            } else {
-                // add wrong
-                addWrongClass("NonTheory", listWrong, listProblem, newClasses.get(i).getId());
             }
-        }
     }
+
+
+    private void updateCurrentSiSo(Class myClass, int amount) {
+        myClass.setCurrentSiSo(myClass.getCurrentSiSo() + amount);
+        this.classRepository.save(myClass);
+    }
+
 
     public void undkhp(List<Class> registeredClasses, List<String> listWrong,
                        List<String> listTrue, List<String> listProblem, String mssv, List<String> listClassId) {
@@ -122,30 +141,35 @@ public class SupportStudentService {
         System.out.println("Student has class:" + student.getClasses().size());
 
         for (String classId : classIds) {
-           if(registeredClasses.stream().anyMatch(registeredClass -> registeredClass.getId().equals(classId))){
-             // check whether this class is theory or practice class
-                   Class registeredClass = registeredClasses.stream().filter(registeredClass1 -> registeredClass1.getId().equals(classId)).findFirst().get();
-                      if (registeredClass.getFlagTH() == 0 || registeredClass.getFlagTH() == 3 || registeredClass.getFlagTH() == 1) {
-                           // unregister
-                            this.studentRepository.removeClassesFromStudent(mssv, classId);
-                             listTrue.add(classId);
-                                if(registeredClass.getFlagTH() == 0){
-                                 // Nếu là lớp lý thuyết, thì sẽ xóa luôn lớp thực hành của lớp đó
-                                  for (Class class1 : registeredClasses) {
-                                        if (class1.getFlagTH() == 1 && class1.getIdLT() != null && class1.getIdLT().equals(classId)) {
-                                            this.studentRepository.removeClassesFromStudent(mssv, class1.getId());
-                                             listTrue.add(class1.getId());
-                                      }
-                                 }
+            if(registeredClasses.stream().anyMatch(registeredClass -> registeredClass.getId().equals(classId))){
+                // check whether this class is theory or practice class
+                Class registeredClass = registeredClasses.stream().filter(registeredClass1 -> registeredClass1.getId().equals(classId)).findFirst().get();
+                if (registeredClass.getFlagTH() == 0 || registeredClass.getFlagTH() == 3 || registeredClass.getFlagTH() == 1) {
+                    // unregister
+                    this.studentRepository.removeClassesFromStudent(mssv, classId);
+                    // Giảm currentSiSo khi hủy đăng ký
+                     updateCurrentSiSo(registeredClass, -1);
+
+                    listTrue.add(classId);
+                    if(registeredClass.getFlagTH() == 0){
+                        // Nếu là lớp lý thuyết, thì sẽ xóa luôn lớp thực hành của lớp đó
+                        for (Class class1 : registeredClasses) {
+                            if (class1.getFlagTH() == 1 && class1.getIdLT() != null && class1.getIdLT().equals(classId)) {
+                                this.studentRepository.removeClassesFromStudent(mssv, class1.getId());
+                                 // Giảm currentSiSo khi hủy đăng ký
+                                   updateCurrentSiSo(class1, -1);
+                                listTrue.add(class1.getId());
                             }
-                        }  else {
-                              addWrongClass("NonTheory", listWrong, listProblem, classId);
                         }
-                } else {
-                addWrongClass("not registered", listWrong, listProblem, classId);
-              }
+                    }
+                }  else {
+                    addWrongClass("NonTheory", listWrong, listProblem, classId);
+                }
+            } else {
+                addWrongClass("NotRegistered", listWrong, listProblem, classId);
+            }
         }
-    }   
+    }
 
     public boolean checkStudentSchedule(String mssv, Class newClass) {
         List<List<Integer>> listScheduleIn1Day = this.studentRepository.getStudentScheduleIn1Day(newClass.getThu(),

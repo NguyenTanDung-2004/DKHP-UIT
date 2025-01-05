@@ -31,4 +31,9 @@ public class OpenSubjectController {
     public ResponseEntity getAllOpenSubject() {
         return this.openSubjectService.getAllOpenSubject();
     }
+
+    @GetMapping("/getAllIdOpenSubject")
+    public ResponseEntity getAllIdOpenSubject() {
+        return this.openSubjectService.getAllIdOpenSubject();
+    }
 }

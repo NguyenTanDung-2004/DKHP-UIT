@@ -97,4 +97,10 @@ public class OpenSubjectService {
          }
        return ResponseEntity.ok().body(subjects);
    }
+
+   public ResponseEntity getAllIdOpenSubject() {
+    List<String> listSubjectId = this.supportOpenSubjectService.getListSubjectFollowingYearAndSemester();
+
+   return ResponseEntity.ok().body(listSubjectId);
+}
 }

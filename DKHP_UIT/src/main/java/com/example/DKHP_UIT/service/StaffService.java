@@ -65,6 +65,8 @@ public class StaffService {
         String token = this.utilsHandleJwtToken.createToken(staff);
         // Thiết lập token vào cookie
         this.utilsHandleCookie.setCookie("jwtToken", token, httpServletResponse);
+        this.utilsHandleCookie.setCookie("userInfo", staff.getId(), httpServletResponse);
+
 
         // add role to response
         Map<String, Object> response = ResponseCode.jsonOfResponseCode(ResponseCode.LoginSuccessfully);
