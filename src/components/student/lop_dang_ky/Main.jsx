@@ -2,13 +2,20 @@ import React, { useState, useEffect, useMemo } from "react";
 import Layout from "../../layout/Layout";
 import ProgressList from "./ProgressList";
 import ClassTable from "../home/ClassTable";
-import { getRegisteredClasses } from "../../../services/studentDKHPService";
+import {
+  getRegisteredClasses,
+  undkhp,
+} from "../../../services/studentDKHPService";
 import { ClipLoader } from "react-spinners";
+import RegisterResultModal from "../modal/RegisterResultModal";
 
 const Main = () => {
   const [selectedClasses, setSelectedClasses] = useState({});
   const [registeredClasses, setRegisteredClasses] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [showModal, setShowModal] = useState(false);
+  const [unregisterResult, setUnregisterResult] = useState(null);
+  const [classesForModal, setClassesForModal] = useState([]); // State for modal class names
 
   useEffect(() => {
     const fetchRegisteredClasses = async () => {
@@ -31,7 +38,8 @@ const Main = () => {
       return {
         className:
           classData.subject?.maMonHoc + "." + classData.className.split(".")[1],
-        subject: classData.subject?.tenMonHoc,
+        subject:
+          classData.subject?.maMonHoc + " - " + classData.subject?.tenMonHoc,
         siso: classData.siso,
         startDate: new Date(classData.startDate).toLocaleDateString("en-GB"),
         endDate: new Date(classData.endDate).toLocaleDateString("en-GB"),
@@ -42,6 +50,7 @@ const Main = () => {
         id: classData.id,
         currentSiSo: classData.currentSiSo,
         credits: classData.subject?.soTinChiLT,
+        maMonHoc: classData.subject?.maMonHoc,
       };
     });
   };
@@ -89,15 +98,43 @@ const Main = () => {
       0
     );
   };
+  const calculateTotalSelectedCredits = () => {
+    return Object.values(selectedClasses).reduce(
+      (total, classData) => total + (classData.credits || 0),
+      0
+    );
+  };
 
-  const handleUnregister = () => {
+  const handleUnregister = async () => {
+    setLoading(true);
+    // Capture class names before unregistering
+    const classesForModal = Object.values(selectedClasses).map((classData) => ({
+      id: classData.id,
+      className: classData.className,
+    }));
+    setClassesForModal(classesForModal);
     const selectedIds = Object.values(selectedClasses).map(
       (classData) => classData.id
     );
-    setSelectedClasses({});
-    alert(`Đã hủy đăng ký các môn học: ${selectedIds.join(", ")}`);
+    try {
+      const result = await undkhp(selectedIds);
+      setUnregisterResult(result);
+      setShowModal(true);
+      setSelectedClasses({});
+      // After unregistering classes, you might want to refresh the list:
+      const registeredClassesData = await getRegisteredClasses();
+      setRegisteredClasses(mapRegisteredClasses(registeredClassesData));
+    } catch (error) {
+      console.error(error);
+      // Handle the error
+    } finally {
+      setLoading(false);
+    }
   };
-
+  const closeModal = () => {
+    setShowModal(false);
+    setUnregisterResult(null);
+  };
   const modifiedClasses = useMemo(() => {
     return registeredClasses.map((classData) => {
       return {
@@ -106,6 +143,16 @@ const Main = () => {
       };
     });
   }, [registeredClasses, selectedClasses]);
+  const problemText = (problem) => {
+    switch (problem) {
+      case "NotRegistered":
+        return "Lớp không tồn tại trong danh sách đăng ký";
+      case "NonTheory":
+        return "Không thể hủy lớp lý thuyết";
+      default:
+        return "Lỗi không xác định";
+    }
+  };
   return (
     <Layout role="student">
       <div className="flex bg-[#F2F4F7]">
@@ -136,10 +183,18 @@ const Main = () => {
             selectedClasses={selectedClasses}
             onRemove={handleRemoveSelectedClass}
             onRegister={handleUnregister}
-            totalCredits={calculateTotalCredits()}
+            totalCredits={calculateTotalSelectedCredits()}
           />
         </div>
       </div>
+      <RegisterResultModal
+        isOpen={showModal}
+        onClose={closeModal}
+        result={unregisterResult}
+        allClasses={classesForModal} // Use the captured class names for modal
+        problemText={problemText}
+        dkhp={false}
+      />
     </Layout>
   );
 };

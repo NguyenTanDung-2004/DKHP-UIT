@@ -62,4 +62,43 @@ const getCTDT = async (hocKy) => {
   }
 };
 
-export { getAllClasses, getRegisteredClasses, getCTDT };
+const dkhp = async (classIds) => {
+  const token = Cookies.get("jwtToken");
+  try {
+    const response = await fetch(`${API_URL}/student/dkhp?token=${token}`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(classIds),
+    });
+    if (!response.ok) {
+      const errorData = await response.json();
+      throw new Error(errorData.message || "Register classes failed");
+    }
+    return await response.json();
+  } catch (error) {
+    throw error;
+  }
+};
+
+const undkhp = async (classIds) => {
+  const token = Cookies.get("jwtToken");
+  try {
+    const response = await fetch(`${API_URL}/student/undkhp?token=${token}`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(classIds),
+    });
+    if (!response.ok) {
+      const errorData = await response.json();
+      throw new Error(errorData.message || "Unregister classes failed");
+    }
+    return await response.json();
+  } catch (error) {
+    throw error;
+  }
+};
+export { getAllClasses, getRegisteredClasses, getCTDT, dkhp, undkhp };
