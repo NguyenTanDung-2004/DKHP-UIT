@@ -1,38 +1,84 @@
-.App {
-  text-align: center;
+/* css reset */
+*,
+*:before,
+*:after {
+  box-sizing: border-box;
+  background-color: white;
 }
-
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
+* {
+  margin: 0;
+  padding: 0;
+  font: inherit;
 }
-
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
+img,
+picture,
+svg,
+video {
+  display: block;
+  max-width: 100%;
 }
-
-.App-header {
-  background-color: #282c34;
+input,
+select,
+textarea {
+  background-color: transparent;
+  outline: none;
+}
+button {
+  cursor: pointer;
+  background-color: transparent;
+  outline: none;
+  border: 0;
+}
+body {
   min-height: 100vh;
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 1;
+
+  background-color: rgba(240, 241, 242, 0.7);
+}
+
+/* main */
+.youtube-list {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  grid-gap: 25px;
+  padding: 25px;
+}
+.youtube-image {
+  height: 250px;
+  margin-bottom: 15px;
+}
+.youtube-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.youtube-footer {
+  display: flex;
+  flex-direction: row;
+  gap: 16px;
+  justify-content: start;
+}
+.youtube-avatar {
+  width: 50px;
+  height: 50px;
+  border-radius: 100rem;
+  object-fit: cover;
+  flex-shrink: 0;
+}
+
+.youtube-info {
   display: flex;
   flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
+  justify-content: space-around;
+  gap: 6px;
 }
-
-.App-link {
-  color: #61dafb;
+.youtube-title {
+  font-size: 16px;
+  font-weight: bold;
 }
-
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+.youtube-author {
+  font-size: 14px;
+  color: #626262;
 }
