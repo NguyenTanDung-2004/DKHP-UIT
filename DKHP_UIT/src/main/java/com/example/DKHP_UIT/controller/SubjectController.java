@@ -88,4 +88,9 @@ public class SubjectController {
     public ResponseEntity getClasses() {
         return ResponseEntity.ok().body(this.subjectRepository.findAll());
     }
+
+    @GetMapping("/getAllMaMonHoc")
+    public ResponseEntity<List<String>> getAllSubjectIds() {
+       return ResponseEntity.ok().body(subjectService.getAllMaMonHoc());
+    }
 }

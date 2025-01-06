@@ -17,6 +17,7 @@ import com.example.DKHP_UIT.support_service.SupportSubjectService;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class SubjectService {
@@ -64,7 +65,7 @@ public class SubjectService {
 
     public ResponseEntity editSubject(SubjectRequest subjectRequest, String id) {
         // kiểm tra mã môn học có tồn tại chưa.
-        Subject sub = this.subjectRepository.checkMaMonHoc(subjectRequest.getMaMonHoc());
+        Subject sub = this.subjectRepository.checkMaMonHocExcludeCurrent(subjectRequest.getMaMonHoc(), id);
         if (sub != null) {
             throw new ExceptionSubject(ExceptionCode.MaMonHocExist);
         }
@@ -128,6 +129,14 @@ public class SubjectService {
 
     public ResponseEntity getSubject(String maKhoa) {
         return ResponseEntity.ok().body(this.subjectRepository.getSubjectFollowingMaKhoa(maKhoa));
+    }
+
+
+    public List<String> getAllMaMonHoc() {
+        List<Subject> subjects = subjectRepository.findAll();
+        return subjects.stream()
+                .map(Subject::getMaMonHoc)
+                .collect(Collectors.toList());
     }
 
 }
