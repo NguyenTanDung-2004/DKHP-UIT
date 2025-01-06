@@ -4,11 +4,13 @@ import {
   getAllSubjects,
   getAllIdOpenSubjects,
   addListOpenSubject,
+  getAllMaMonHoc,
 } from "../../../services/subjectServices";
 import SubjectTable from "./SubjectTable";
 import { ClipLoader } from "react-spinners";
 import FilterDropdown from "./FilterDropdown";
 import OpenSubjectResultModal from "./OpenSubjectResultModal";
+import AddSubjectModal from "./AddSubjectModal";
 
 const SubjectPage = () => {
   const [subjects, setSubjects] = useState([]);
@@ -19,8 +21,10 @@ const SubjectPage = () => {
   const [filterMajor, setFilterMajor] = useState("");
   const [searchTerm, setSearchTerm] = useState("");
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isAddModalOpen, setIsAddModalOpen] = useState(false);
   const [modalResult, setModalResult] = useState(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [maMonHocList, setMaMonHocList] = useState([]);
 
   const subjectTypes = [
     { label: "Tất cả", value: "Tất cả" },
@@ -59,6 +63,14 @@ const SubjectPage = () => {
       console.error("Error fetching open subject IDs:", error);
     }
   };
+  const fetchMaMonHoc = async () => {
+    try {
+      const maMonHocData = await getAllMaMonHoc();
+      setMaMonHocList(maMonHocData);
+    } catch (error) {
+      console.error("Error fetching ma mon hoc:", error);
+    }
+  };
 
   const fetchSubjects = async () => {
     try {
@@ -73,6 +85,7 @@ const SubjectPage = () => {
 
   useEffect(() => {
     fetchOpenSubjectIds();
+    fetchMaMonHoc();
     fetchSubjects();
   }, []);
 
@@ -86,16 +99,12 @@ const SubjectPage = () => {
       }
     });
   };
+  const handleOpenAddModal = () => {
+    setIsAddModalOpen(true);
+  };
 
-  const handleAddSubject = () => {
-    if (Object.keys(selectedSubjects).length === 0) {
-      alert("Please select at least one subject");
-      return;
-    }
-    const selectedIds = Object.values(selectedSubjects).map(
-      (subject) => subject.id
-    );
-    alert("Selected Subject IDs (Add Subject): " + selectedIds.join(", "));
+  const handleEditSubjectSuccess = () => {
+    fetchSubjects();
   };
 
   const handleOpenSubject = async () => {
@@ -151,6 +160,9 @@ const SubjectPage = () => {
     setIsModalOpen(false);
     setModalResult(null);
   };
+  const handleCloseAddModal = () => {
+    setIsAddModalOpen(false);
+  };
 
   const handleSearchChange = (event) => {
     setSearchTerm(event.target.value);
@@ -184,6 +196,7 @@ const SubjectPage = () => {
     return filtered;
   }, [subjects, filterType, filterMajor, searchTerm]);
 
+  const isOpenButtonDisabled = Object.keys(selectedSubjects).length === 0;
   return (
     <Layout role="staff">
       <div className="flex bg-[#F2F4F7] min-h-screen flex-col px-[100px] py-[40px] w-full">
@@ -193,14 +206,18 @@ const SubjectPage = () => {
               DANH SÁCH MÔN HỌC
             </span>
             <button
-              onClick={handleAddSubject}
+              onClick={handleOpenAddModal}
               className="min-w-[150px] bg-[#2F6BFF] text-white py-2 px-4 rounded shadow-xl hover:bg-opacity-90"
             >
               THÊM MÔN HỌC
             </button>
             <button
               onClick={handleOpenSubject}
-              className="min-w-[150px] bg-[#2F6BFF] text-white py-2 px-4 rounded shadow-xl hover:bg-opacity-90"
+              className={`min-w-[150px] text-white py-2 px-4 rounded shadow-xl ${
+                isOpenButtonDisabled
+                  ? "bg-gray-400 cursor-not-allowed"
+                  : "bg-[#2F6BFF]  hover:bg-opacity-90"
+              }`}
             >
               MỞ MÔN HỌC
             </button>
@@ -245,10 +262,17 @@ const SubjectPage = () => {
                 selectedSubjects={selectedSubjects}
                 onToggleSelect={handleToggleSelect}
                 openSubjectIds={openSubjectIds}
+                maMonHocList={maMonHocList}
+                onEditSubject={handleEditSubjectSuccess}
               />
             </div>
           )}
         </div>
+        <AddSubjectModal
+          isOpen={isAddModalOpen}
+          onClose={handleCloseAddModal}
+          maMonHocList={maMonHocList}
+        />
         <OpenSubjectResultModal
           isOpen={isModalOpen}
           onClose={handleCloseModal}

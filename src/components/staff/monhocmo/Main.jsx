@@ -2,12 +2,19 @@ import React, { useState, useEffect } from "react";
 import Layout from "../../layout/Layout";
 import SubjectTable from "./SubjectTable";
 import { ClipLoader } from "react-spinners";
-import { getAllOpenSubjects } from "../../../services/subjectServices";
+import {
+  getAllOpenSubjects,
+  deleteOpenSubject,
+} from "../../../services/subjectServices";
+import DeleteResultModal from "./DeleteResultModal";
 
 const Main = () => {
   const [subjects, setSubjects] = useState([]);
   const [selectedSubjects, setSelectedSubjects] = useState({});
   const [loading, setLoading] = useState(true);
+  const [modalOpen, setModalOpen] = useState(false);
+  const [deleteResult, setDeleteResult] = useState(null);
+  const [modalSubjects, setModalSubjects] = useState([]);
 
   useEffect(() => {
     const fetchOpenSubjects = async () => {
@@ -34,25 +41,54 @@ const Main = () => {
     });
   };
 
-  const handleDeleteOpenSubject = () => {
+  const handleDeleteOpenSubject = async () => {
     if (Object.keys(selectedSubjects).length === 0) {
-      alert("Please select at least one subject to delete.");
-      return;
+      return; // Không làm gì nếu không có môn học nào được chọn
     }
     const selectedIds = Object.values(selectedSubjects).map(
       (subject) => subject.id
     );
-    alert(
-      "Selected Subject IDs (Delete Open Subject): " + selectedIds.join(", ")
-    );
-    // Delete logic here
+    try {
+      //1. call API và set deleteResult
+      const result = await deleteOpenSubject(selectedIds);
+      setDeleteResult(result);
+      // 2. get current subjects for modal
+      setModalSubjects(subjects);
+      //3. Mở modal
+      setModalOpen(true);
+
+      setSelectedSubjects({});
+    } catch (error) {
+      console.error("Error deleting open subjects:", error);
+      setDeleteResult({
+        code: 500,
+        message: "Đã có lỗi xảy ra!",
+      });
+      // Set modalOpen to true *after* the result has been obtained
+      setModalSubjects(subjects);
+      setModalOpen(true);
+    } finally {
+      const openSubjectsData = await getAllOpenSubjects();
+      setSubjects(openSubjectsData);
+    }
   };
 
+  const handleCloseModal = () => {
+    setModalOpen(false);
+    setDeleteResult(null);
+    setModalSubjects([]);
+  };
   const handleOpenClass = (subject) => {
     alert(
       "Open class for subject: " + subject.tenMonHoc + " " + subject.maMonHoc
     );
     // Open class logic here
+  };
+  const problemText = (problem) => {
+    if (problem === "class") {
+      return "Môn học đã có lớp học phần";
+    }
+    return "Lỗi không xác định";
   };
 
   const isDeleteButtonDisabled = Object.keys(selectedSubjects).length === 0;
@@ -67,10 +103,10 @@ const Main = () => {
           <button
             disabled={isDeleteButtonDisabled}
             onClick={handleDeleteOpenSubject}
-            className={`min-w-[150px]  text-white py-2 px-4 rounded shadow-xl hover:bg-opacity-90 ${
+            className={`min-w-[150px]  text-white py-2 px-4 rounded shadow-xl ${
               isDeleteButtonDisabled
                 ? "bg-gray-400 cursor-not-allowed"
-                : "bg-[#E43D3D]"
+                : "bg-[#E43D3D] hover:bg-opacity-90"
             }`}
           >
             XÓA MÔN HỌC MỞ
@@ -92,6 +128,15 @@ const Main = () => {
             </div>
           )}
         </div>
+        {modalOpen && (
+          <DeleteResultModal
+            isOpen={modalOpen}
+            onClose={handleCloseModal}
+            result={deleteResult}
+            allClasses={modalSubjects}
+            problemText={problemText}
+          />
+        )}
       </div>
     </Layout>
   );
