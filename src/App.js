@@ -4,12 +4,15 @@ import HomePage from "./pages/admin/HomePage";
 import StaffPage from "./pages/staff/HomePage";
 import StudentPage from "./pages/student/HomePage";
 import LopDangKyPage from "./pages/student/LopDangKyPage";
+import TKBPage from "./pages/student/TKBPage";
 import AuthPage from "./pages/AuthPage";
 import NotFoundPage from "./pages/NotFoundPage";
 import CTDTPage from "./pages/student/CTDTPage";
 import SubjectPage from "./pages/staff/SubjectPage";
 import ObjectSubjectPage from "./pages/staff/ObjectSubject";
 import ClassPage from "./pages/staff/ClassPage";
+import StudentManagementPage from "./pages/staff/StudentPage";
+
 const App = () => {
   return (
     <BrowserRouter>
@@ -17,11 +20,16 @@ const App = () => {
         <Route path="/student/trangchu" element={<StudentPage />} />
         <Route path="/student/lopdangky" element={<LopDangKyPage />} />
         <Route path="/student/chuongtrinh" element={<CTDTPage />} />
+        <Route path="/student/tkb" element={<TKBPage />} />
 
         <Route path="/staff/trangchu" element={<StaffPage />} />
         <Route path="/staff/quanly/monhoc" element={<SubjectPage />} />
         <Route path="/staff/quanly/monhocmo" element={<ObjectSubjectPage />} />
         <Route path="/staff/quanly/lophoc" element={<ClassPage />} />
+        <Route
+          path="/staff/quanly/sinhvien"
+          element={<StudentManagementPage />}
+        />
 
         <Route path="/admin/trangchu" element={<HomePage />} />
 
