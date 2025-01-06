@@ -30,7 +30,9 @@ public enum ResponseCode {
     AddClassWithOutTH(1000, "Add successfully!", HttpStatus.ACCEPTED),
     AddClassWithInTH(1000, "Add successfully!", HttpStatus.ACCEPTED),
     DeleteClass(1000, "Delete class successfully!", HttpStatus.ACCEPTED),
-    EditClass(1000, "Edit class successfully!", HttpStatus.ACCEPTED);
+    EditClass(1000, "Edit class successfully!", HttpStatus.ACCEPTED),
+    DeleteStaffSuccess(1000, "Delete staff successfully!", HttpStatus.ACCEPTED),
+    EditStaffSuccess(1000, "Edit staff successfully!", HttpStatus.ACCEPTED);
 
     private int code;
     private String message;

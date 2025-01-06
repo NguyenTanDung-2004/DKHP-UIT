@@ -1,6 +1,7 @@
 package com.example.DKHP_UIT.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
@@ -11,6 +12,7 @@ import com.example.DKHP_UIT.exception.ExceptionUser;
 import com.example.DKHP_UIT.repository.StaffRepository;
 import com.example.DKHP_UIT.repository.StudentRepository;
 import com.example.DKHP_UIT.response.ResponseCode;
+import com.example.DKHP_UIT.response.StaffResponse;
 import com.example.DKHP_UIT.support_service.SupportStaffService;
 import com.example.DKHP_UIT.utils.UtilsHandleCookie;
 import com.example.DKHP_UIT.utils.UtilsHandleEmail;
@@ -19,7 +21,11 @@ import com.example.DKHP_UIT.utils.UtilsHandlePassword;
 
 import jakarta.servlet.http.HttpServletResponse;
 
+import java.util.Arrays;
+import java.util.List;
 import java.util.Map;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class StaffService {
@@ -79,5 +85,52 @@ public class StaffService {
 
         // Trả về response thành công
         return ResponseEntity.ok().body(response);
+    }
+
+    public ResponseEntity<List<StaffResponse>> getListStaff() {
+        List<Staff> staffList = staffRepository.findAll();
+        List<StaffResponse> staffResponseList = staffList.stream()
+                .map(staff -> new StaffResponse(
+                        staff.getId(),
+                        staff.getStaffId(),
+                        staff.getFullName(),
+                        staff.getEmail(),
+                        staff.getAccount(),
+                        staff.getFlagAdmin()
+                ))
+                .collect(Collectors.toList());
+        return new ResponseEntity<>(staffResponseList, HttpStatus.OK);
+    }
+    
+    public ResponseEntity<Map<String, Object>> deleteListStaff(String[] array) {
+        int countDeleted = 0; // Biến đếm số staff đã xóa thành công
+        List<String> ids = Arrays.asList(array);
+        for (String id : ids) {
+            Optional<Staff> optionalStaff = staffRepository.findById(id);
+            if (optionalStaff.isPresent()) {
+                staffRepository.deleteById(id);
+                countDeleted++;
+            }
+        }
+         if(countDeleted>0){
+           return ResponseEntity.ok().body(ResponseCode.jsonOfResponseCode(ResponseCode.DeleteStaffSuccess));
+        }else{
+            throw new ExceptionUser(ExceptionCode.StaffNotFound);        
+        }
+    }
+
+    public ResponseEntity<Map<String,Object>> editStaff(StaffResponse staffResponse){
+        Optional<Staff> optionalStaff = staffRepository.findById(staffResponse.getId());
+        if(optionalStaff.isPresent()){
+            Staff staffUpdate = optionalStaff.get();
+            staffUpdate.setFullName(staffResponse.getFullName());
+            staffUpdate.setEmail(staffResponse.getEmail());
+            staffUpdate.setAccount(staffResponse.getAccount());
+             staffUpdate.setFlagAdmin(staffResponse.getFlagAdmin());
+            staffRepository.save(staffUpdate);
+            return ResponseEntity.ok().body(ResponseCode.jsonOfResponseCode(ResponseCode.EditStaffSuccess));
+        }else {
+            throw new ExceptionUser(ExceptionCode.StaffNotFound);   
+        }
     }
 }

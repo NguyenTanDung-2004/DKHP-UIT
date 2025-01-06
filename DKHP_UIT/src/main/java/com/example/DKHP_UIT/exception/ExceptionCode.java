@@ -34,7 +34,8 @@ public enum ExceptionCode {
     RoomIsChoosen(1001, "This room is busy at this time", HttpStatus.BAD_REQUEST),
     TheoryAndPractice(1001, "theory and practice are conflict", HttpStatus.BAD_REQUEST),
     EditRoomTheoryClass(1001, "This room is busy at this time", HttpStatus.BAD_REQUEST),
-    StaffExist(1001, "Staff is exist in database!", HttpStatus.BAD_REQUEST);
+    StaffExist(1001, "Staff is exist in database!", HttpStatus.BAD_REQUEST),
+    StaffNotFound(1001, "Staff not found!", HttpStatus.BAD_REQUEST);
 
     private int code;
     private String message;
