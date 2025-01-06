@@ -1,17 +1,22 @@
 package com.example.DKHP_UIT.service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import com.example.DKHP_UIT.entities.GiangVien;
 import com.example.DKHP_UIT.entities.Room;
 import com.example.DKHP_UIT.exception.ExceptionCode;
 import com.example.DKHP_UIT.exception.ExceptionUser;
 import com.example.DKHP_UIT.repository.RoomRepository;
 import com.example.DKHP_UIT.request.RequestAddRoom;
+import com.example.DKHP_UIT.response.GiangVienResponse;
 import com.example.DKHP_UIT.response.ResponseCode;
+import com.example.DKHP_UIT.response.RoomResponse;
 import com.example.DKHP_UIT.support_service.SupportRoomService;
 
 @Service
@@ -84,5 +89,15 @@ public class RoomService {
 
     public ResponseEntity getListRoom() {
         return ResponseEntity.ok().body(supportRoomService.createResponseListRoom());
+    }
+
+    public ResponseEntity<List<RoomResponse>> getListRoomName() {
+        List<Room> rooms = this.roomRepository.findAll();
+
+        List<RoomResponse> responses = rooms.stream()
+                .map(room -> new RoomResponse(room.getId(), room.getRoomName()))
+                .collect(Collectors.toList());
+
+        return new ResponseEntity<>(responses, HttpStatus.OK);
     }
 }

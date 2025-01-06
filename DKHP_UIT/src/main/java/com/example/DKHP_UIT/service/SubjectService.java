@@ -51,19 +51,7 @@ public class SubjectService {
        return ResponseEntity.ok().body(ResponseCode.jsonOfResponseCode(ResponseCode.CreateSubjectSuccessfully));
    }
 
-   public ResponseEntity createListSubject(List<SubjectRequest> listSubject) {
-        // Duyệt qua danh sách các SubjectRequest
-        for (int i = 0; i < listSubject.size(); i++) {
-            // Chuyển đổi SubjectRequest sang Subject entity
-            Subject subject = this.subjectMapper.convertRequest(listSubject.get(i));
-            // Lưu Subject entity vào database
-            this.subjectRepository.save(subject);
-        }
-        // Trả về response thành công
-        return ResponseEntity.ok().body(ResponseCode.jsonOfResponseCode(ResponseCode.CreateSubjectSuccessfully));
-    }
-
-    public ResponseEntity editSubject(SubjectRequest subjectRequest, String id) {
+   public ResponseEntity editSubject(SubjectRequest subjectRequest, String id) {
         // kiểm tra mã môn học có tồn tại chưa.
         Subject sub = this.subjectRepository.checkMaMonHocExcludeCurrent(subjectRequest.getMaMonHoc(), id);
         if (sub != null) {
@@ -76,6 +64,20 @@ public class SubjectService {
         this.subjectRepository.save(subject1);
         return ResponseEntity.ok().body(ResponseCode.jsonOfResponseCode(ResponseCode.EditSubject));
     }
+
+   public ResponseEntity createListSubject(List<SubjectRequest> listSubject) {
+        // Duyệt qua danh sách các SubjectRequest
+        for (int i = 0; i < listSubject.size(); i++) {
+            // Chuyển đổi SubjectRequest sang Subject entity
+            Subject subject = this.subjectMapper.convertRequest(listSubject.get(i));
+            // Lưu Subject entity vào database
+            this.subjectRepository.save(subject);
+        }
+        // Trả về response thành công
+        return ResponseEntity.ok().body(ResponseCode.jsonOfResponseCode(ResponseCode.CreateSubjectSuccessfully));
+    }
+
+
 
 
     public ResponseEntity deleteSubject(String maMonHoc, String maKhoa) {

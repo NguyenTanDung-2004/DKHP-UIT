@@ -14,6 +14,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.DKHP_UIT.request.RequestAddRoom;
+import com.example.DKHP_UIT.response.GiangVienResponse;
+import com.example.DKHP_UIT.response.RoomResponse;
 import com.example.DKHP_UIT.service.RoomService;
 
 @RestController
@@ -35,6 +37,11 @@ public class RoomController {
     @GetMapping("/getListRoom")
     public ResponseEntity getListRoom() {
         return this.roomService.getListRoom();
+    }
+
+    @GetMapping("/listRoomName")
+    public ResponseEntity<List<RoomResponse>> getListRoomName() {
+        return this.roomService.getListRoomName();
     }
 
     public static void main(String[] args) {
