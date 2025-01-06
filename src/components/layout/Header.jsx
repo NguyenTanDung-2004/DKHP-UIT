@@ -42,7 +42,7 @@ function Header() {
       { to: "/staff/quanly/monhoc", text: "Quản lý môn học" },
       { to: "/staff/quanly/monhocmo", text: "Quản lý môn học mở" },
       { to: "/staff/quanly/lophoc", text: "Quản lý lớp học" },
-      { to: "/staff/quanly/ctdt", text: "Quản lý CTDT" },
+      // { to: "/staff/quanly/ctdt", text: "Quản lý CTDT" },
       { to: "/staff/quanly/sinhvien", text: "Quản lý sinh viên" },
     ],
   };

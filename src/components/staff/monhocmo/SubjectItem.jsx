@@ -2,8 +2,15 @@ import React, { useState } from "react";
 import OpenClassModal from "./OpenClassModal";
 
 const SubjectItem = ({ subject, onSelect, isSelected }) => {
-  const { maMonHoc, tenMonHoc, loaiMonHoc, maKhoa, soTinChiLT, soTinChiTH } =
-    subject;
+  const {
+    maMonHoc,
+    tenMonHoc,
+    loaiMonHoc,
+    maKhoa,
+    soTinChiLT,
+    soTinChiTH,
+    classCount,
+  } = subject;
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   const handleOpenModal = () => {
@@ -39,6 +46,9 @@ const SubjectItem = ({ subject, onSelect, isSelected }) => {
         </td>
         <td className="py-4 px-4 border border-[#B9B9B9] text-center">
           {soTinChiTH}
+        </td>
+        <td className="py-4 px-4 border border-[#B9B9B9] text-center">
+          {classCount}
         </td>
         <td className="py-4 px-4 border border-[#B9B9B9] text-center">
           <button

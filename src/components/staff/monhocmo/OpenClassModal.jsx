@@ -17,6 +17,9 @@ const OpenClassModal = ({ isOpen, onClose, subject, hasPractice }) => {
   const [thu, setThu] = useState(2);
   const [giangVienId, setGiangVienId] = useState("");
   const [roomId, setRoomId] = useState("");
+  const [thGiangVienId, setThGiangVienId] = useState("");
+  const [thRoomId, setThRoomId] = useState("");
+  const [thThu, setThThu] = useState(2);
   const [flagTH, setFlagTH] = useState(1);
   const [thStart, setThStart] = useState("");
   const [thEnd, setThEnd] = useState("");
@@ -40,11 +43,13 @@ const OpenClassModal = ({ isOpen, onClose, subject, hasPractice }) => {
     { label: "HT1", value: 1 },
     { label: "HT2", value: 2 },
   ];
-  const morningTimeSlots = [6, 7, 8, 9, 10];
-  const afternoonTimeSlots = [1, 2, 3, 4, 5];
+  const morningTimeSlots = [1, 2, 3, 4, 5];
+  const afternoonTimeSlots = [6, 7, 8, 9, 10];
 
   const getTimeSlots = () => {
-    return sectionOfDay === 1 ? morningTimeSlots : afternoonTimeSlots;
+    if (hasPractice && flagTH === 2)
+      return [...morningTimeSlots, ...afternoonTimeSlots];
+    return sectionOfDay === 1 ? afternoonTimeSlots : morningTimeSlots;
   };
 
   useEffect(() => {
@@ -88,10 +93,11 @@ const OpenClassModal = ({ isOpen, onClose, subject, hasPractice }) => {
         start: thStart,
         end: thEnd,
         sectionOfDay: Number(sectionOfDay),
-        thu: Number(thu),
-        giangVienId: giangVienId,
-        roomId: roomId,
+        thu: Number(thThu),
+        giangVienId: thGiangVienId,
+        roomId: thRoomId,
       };
+      console.log("Request data (hasPractice):", classData);
       try {
         await addClassWithInPractice(classData);
         await new Promise((resolve) => {
@@ -158,6 +164,9 @@ const OpenClassModal = ({ isOpen, onClose, subject, hasPractice }) => {
   const handleCloseModal = () => {
     onClose();
   };
+  const handleSectionOfDayChange = (e) => {
+    setSectionOfDay(Number(e.target.value));
+  };
   const handleTietBatDauChange = (e) => {
     const newTietBatDau = Number(e.target.value);
     setTietBatDau(newTietBatDau);
@@ -170,17 +179,8 @@ const OpenClassModal = ({ isOpen, onClose, subject, hasPractice }) => {
     const newTietKetThuc = Number(e.target.value);
     if (newTietKetThuc > tietBatDau) setTietKetThuc(newTietKetThuc);
   };
-  const handleSectionOfDayChange = (e) => {
-    const newSectionOfDay = Number(e.target.value);
-    setSectionOfDay(newSectionOfDay);
-    // Reset the time slots to be correct
-    if (newSectionOfDay === 1) {
-      setTietBatDau(6);
-      setTietKetThuc(7);
-    } else {
-      setTietBatDau(1);
-      setTietKetThuc(2);
-    }
+  const handleFlagTHChange = (e) => {
+    setFlagTH(Number(e.target.value));
   };
   if (!isOpen) return null;
 
@@ -252,7 +252,7 @@ const OpenClassModal = ({ isOpen, onClose, subject, hasPractice }) => {
             <div className="mb-4 flex gap-4">
               <div className="flex-1 flex-col">
                 <label className="block text-sm font-medium text-gray-700">
-                  Tiết bắt đầu
+                  Tiết bắt đầu (Lý Thuyết)
                 </label>
                 <select
                   className="mt-1 block w-full border rounded px-2 py-1 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
@@ -268,7 +268,7 @@ const OpenClassModal = ({ isOpen, onClose, subject, hasPractice }) => {
               </div>
               <div className="flex-1 flex-col">
                 <label className="block text-sm font-medium text-gray-700">
-                  Tiết kết thúc
+                  Tiết kết thúc (Lý Thuyết)
                 </label>
                 <select
                   className="mt-1 block w-full border rounded px-2 py-1 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
@@ -290,7 +290,7 @@ const OpenClassModal = ({ isOpen, onClose, subject, hasPractice }) => {
             <div className="mb-4 flex gap-4">
               <div className="flex-1 flex-col">
                 <label className="block text-sm font-medium text-gray-700">
-                  Thứ
+                  Thứ (Lý Thuyết)
                 </label>
                 <select
                   className="mt-1 block w-full border rounded px-2 py-1 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
@@ -308,7 +308,7 @@ const OpenClassModal = ({ isOpen, onClose, subject, hasPractice }) => {
             <div className="mb-4 flex gap-4">
               <div className="flex-1 flex-col">
                 <label className="block text-sm font-medium text-gray-700">
-                  Giảng viên
+                  Giảng viên (Lý Thuyết)
                 </label>
                 <select
                   className="mt-1 block w-full border rounded px-2 py-1 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
@@ -327,7 +327,7 @@ const OpenClassModal = ({ isOpen, onClose, subject, hasPractice }) => {
               </div>
               <div className="flex-1 flex-col">
                 <label className="block text-sm font-medium text-gray-700">
-                  Phòng học
+                  Phòng học (Lý Thuyết)
                 </label>
                 <select
                   className="mt-1 block w-full border rounded px-2 py-1 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
@@ -372,16 +372,19 @@ const OpenClassModal = ({ isOpen, onClose, subject, hasPractice }) => {
             <div className="mb-4 flex gap-4">
               <div className="flex-1 flex-col">
                 <label className="block text-sm font-medium text-gray-700">
-                  Buổi
+                  Giảng viên (Thực Hành)
                 </label>
                 <select
                   className="mt-1 block w-full border rounded px-2 py-1 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
-                  value={sectionOfDay}
-                  onChange={handleSectionOfDayChange}
+                  value={thGiangVienId}
+                  onChange={(e) => setThGiangVienId(e.target.value)}
                 >
-                  {sectionOfDays.map((section) => (
-                    <option key={section.value} value={section.value}>
-                      {section.label}
+                  <option value="" disabled>
+                    Chọn giảng viên
+                  </option>
+                  {giangVienList.map((gv) => (
+                    <option key={gv.id} value={gv.id}>
+                      {gv.name}
                     </option>
                   ))}
                 </select>
@@ -393,7 +396,7 @@ const OpenClassModal = ({ isOpen, onClose, subject, hasPractice }) => {
                 <select
                   className="mt-1 block w-full border rounded px-2 py-1 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
                   value={flagTH}
-                  onChange={(e) => setFlagTH(Number(e.target.value))}
+                  onChange={handleFlagTHChange}
                 >
                   {practiceType.map((type) => (
                     <option key={type.value} value={type.value}>
@@ -403,6 +406,63 @@ const OpenClassModal = ({ isOpen, onClose, subject, hasPractice }) => {
                 </select>
               </div>
             </div>
+            {flagTH === 1 && (
+              <div className="mb-4 flex gap-4">
+                <div className="flex-1 flex-col">
+                  <label className="block text-sm font-medium text-gray-700">
+                    Thứ (Thực Hành)
+                  </label>
+                  <select
+                    className="mt-1 block w-full border rounded px-2 py-1 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
+                    value={thThu}
+                    onChange={(e) => setThThu(Number(e.target.value))}
+                  >
+                    {daysOfWeek.map((day) => (
+                      <option key={day.value} value={day.value}>
+                        {day.label}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+                <div className="flex-1 flex-col">
+                  <label className="block text-sm font-medium text-gray-700">
+                    Buổi (Thực Hành)
+                  </label>
+                  <select
+                    className="mt-1 block w-full border rounded px-2 py-1 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
+                    value={sectionOfDay}
+                    onChange={handleSectionOfDayChange}
+                    disabled={flagTH === 2}
+                  >
+                    {sectionOfDays.map((section) => (
+                      <option key={section.value} value={section.value}>
+                        {section.label}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+
+                <div className="flex-1 flex-col">
+                  <label className="block text-sm font-medium text-gray-700">
+                    Phòng học (Thực Hành)
+                  </label>
+                  <select
+                    className="mt-1 block w-full border rounded px-2 py-1 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
+                    value={thRoomId}
+                    onChange={(e) => setThRoomId(e.target.value)}
+                  >
+                    <option value="" disabled>
+                      Chọn phòng học
+                    </option>
+                    {roomList.map((room) => (
+                      <option key={room.id} value={room.id}>
+                        {room.roomName}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+              </div>
+            )}
           </>
         ) : (
           <>
@@ -543,7 +603,7 @@ const OpenClassModal = ({ isOpen, onClose, subject, hasPractice }) => {
           </>
         )}
 
-        <div className="flex justify-end mt-4">
+        <div className="flex justify-center mt-4">
           <button
             className="bg-[#2F6BFF] text-white py-2 px-4 rounded shadow-xl hover:bg-opacity-90"
             onClick={handleOpenClass}

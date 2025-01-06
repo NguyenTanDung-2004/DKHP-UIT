@@ -9,6 +9,7 @@ import NotFoundPage from "./pages/NotFoundPage";
 import CTDTPage from "./pages/student/CTDTPage";
 import SubjectPage from "./pages/staff/SubjectPage";
 import ObjectSubjectPage from "./pages/staff/ObjectSubject";
+import ClassPage from "./pages/staff/ClassPage";
 const App = () => {
   return (
     <BrowserRouter>
@@ -20,6 +21,7 @@ const App = () => {
         <Route path="/staff/trangchu" element={<StaffPage />} />
         <Route path="/staff/quanly/monhoc" element={<SubjectPage />} />
         <Route path="/staff/quanly/monhocmo" element={<ObjectSubjectPage />} />
+        <Route path="/staff/quanly/lophoc" element={<ClassPage />} />
 
         <Route path="/admin/trangchu" element={<HomePage />} />
 

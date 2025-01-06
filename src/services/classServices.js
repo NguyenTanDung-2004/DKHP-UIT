@@ -62,4 +62,46 @@ const getRoomList = async () => {
   }
 };
 
-export { addClassNonTH, addClassWithInPractice, getGiangVienList, getRoomList };
+const deleteClass = async (classId) => {
+  try {
+    const response = await fetch(
+      `${API_URL}/class/deleteClass?classId=${classId}`,
+      {
+        method: "POST", // Use POST for delete
+      }
+    );
+    if (!response.ok) {
+      throw new Error(`Failed to delete class with ID: ${classId}`);
+    }
+    return await response.json();
+  } catch (error) {
+    throw error;
+  }
+};
+
+const editClass = async (classData) => {
+  try {
+    const response = await fetch(`${API_URL}/class/editClass`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(classData),
+    });
+    if (!response.ok) {
+      throw new Error("Failed to edit class");
+    }
+    return await response.json();
+  } catch (error) {
+    throw error;
+  }
+};
+
+export {
+  addClassNonTH,
+  addClassWithInPractice,
+  getGiangVienList,
+  getRoomList,
+  deleteClass,
+  editClass,
+};

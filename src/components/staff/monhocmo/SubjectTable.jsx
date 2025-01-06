@@ -28,6 +28,9 @@ const SubjectTable = ({
           <th className="py-2 px-4 border border-[#B9B9B9] text-center">
             Tín chỉ TH
           </th>
+          <th className="py-2 px-4 border border-[#B9B9B9] text-center">
+            Số lớp đang mở
+          </th>
           <th className="py-2 px-4 border border-[#B9B9B9]"></th>
         </tr>
       </thead>
