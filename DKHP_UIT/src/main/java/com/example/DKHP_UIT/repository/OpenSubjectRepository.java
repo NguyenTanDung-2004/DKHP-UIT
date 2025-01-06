@@ -2,6 +2,7 @@ package com.example.DKHP_UIT.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 
 import com.example.DKHP_UIT.entities.OpenSubject.OpenSubject;
 import com.example.DKHP_UIT.entities.OpenSubject.OpenSubjectId;

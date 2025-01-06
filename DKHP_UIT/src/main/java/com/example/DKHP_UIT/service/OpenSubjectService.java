@@ -8,6 +8,7 @@ import com.example.DKHP_UIT.entities.Subject;
 import com.example.DKHP_UIT.repository.OpenSubjectRepository;
 import com.example.DKHP_UIT.repository.SubjectRepository;
 import com.example.DKHP_UIT.request.RequestOpenSubject;
+import com.example.DKHP_UIT.response.OpenSubjectResponse;
 import com.example.DKHP_UIT.response.ResponseAddOpenSubject;
 import com.example.DKHP_UIT.response.ResponseCode;
 import com.example.DKHP_UIT.response.ResponseDeleteSubjectFromAllSubject;
@@ -88,15 +89,20 @@ public class OpenSubjectService {
         return ResponseEntity.ok().body(response);
     }
 
-    public ResponseEntity getAllOpenSubject() {
-        List<String> listSubjectId = this.supportOpenSubjectService.getListSubjectFollowingYearAndSemester();
-         List<Subject> subjects = new ArrayList<>();
-         for (String subjectId : listSubjectId) {
-             Optional<Subject> optionalSubject = this.subjectRepository.findById(subjectId);
-             optionalSubject.ifPresent(subjects::add);
-         }
-       return ResponseEntity.ok().body(subjects);
-   }
+//     public ResponseEntity getAllOpenSubject() {
+//         List<String> listSubjectId = this.supportOpenSubjectService.getListSubjectFollowingYearAndSemester();
+//          List<Subject> subjects = new ArrayList<>();
+//          for (String subjectId : listSubjectId) {
+//              Optional<Subject> optionalSubject = this.subjectRepository.findById(subjectId);
+//              optionalSubject.ifPresent(subjects::add);
+//          }
+//        return ResponseEntity.ok().body(subjects);
+//    }
+   public ResponseEntity<List<OpenSubjectResponse>> getAllOpenSubject() {
+        List<OpenSubjectResponse> subjectResponses = this.supportOpenSubjectService.getAllOpenSubject();
+
+        return ResponseEntity.ok().body(subjectResponses);
+    }
 
    public ResponseEntity getAllIdOpenSubject() {
     List<String> listSubjectId = this.supportOpenSubjectService.getListSubjectFollowingYearAndSemester();

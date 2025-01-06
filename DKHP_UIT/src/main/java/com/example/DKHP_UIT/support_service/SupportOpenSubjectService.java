@@ -9,10 +9,13 @@ import com.example.DKHP_UIT.entities.OpenSubject.OpenSubject;
 import com.example.DKHP_UIT.entities.OpenSubject.OpenSubjectId;
 import com.example.DKHP_UIT.repository.OpenSubjectRepository;
 import com.example.DKHP_UIT.repository.SubjectRepository;
+import com.example.DKHP_UIT.response.OpenSubjectResponse;
 
 import lombok.Data;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Component
 @Data
@@ -45,6 +48,31 @@ public class SupportOpenSubjectService {
         return listSubject;
     }
 
+    public List<OpenSubjectResponse> getAllOpenSubject() {
+        List<String> listSubjectId = getListSubjectFollowingYearAndSemester();
+        List<OpenSubjectResponse> subjectResponses = new ArrayList<>();
+
+        for (String subjectId : listSubjectId) {
+            Optional<Subject> optionalSubject = this.subjectRepository.findById(subjectId);
+            optionalSubject.ifPresent(subject -> {
+            int classCount = this.subjectRepository.countClassesBySubjectId(subjectId);
+            OpenSubjectResponse subjectResponse = new OpenSubjectResponse(
+                        subject.getId(),
+                        subject.getMaMonHoc(),
+                        subject.getTenMonHoc(),
+                        subject.getDsMaMonHocTruoc(),
+                        subject.getLoaiMonHoc(),
+                        subject.getSoTinChiLT(),
+                        subject.getSoTinChiTH(),
+                        subject.getMaKhoa(),
+                        classCount
+                );
+                subjectResponses.add(subjectResponse);
+            });
+        }
+        return subjectResponses;
+    }
+    
     public void saveOpenSubject(String subjectId, int semester, int year) {
         Subject subject = this.subjectRepository.findById(subjectId).get();
         OpenSubject openSubject = OpenSubject.builder()

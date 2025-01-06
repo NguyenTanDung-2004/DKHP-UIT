@@ -2,6 +2,7 @@ package com.example.DKHP_UIT.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 
 import com.example.DKHP_UIT.entities.Subject;
 import java.util.List;
@@ -16,4 +17,7 @@ public interface SubjectRepository extends JpaRepository<Subject, String> {
 
     @Query("select sub from Subject sub where sub.maMonHoc = :maMonHoc and sub.id <> :id")
     Subject checkMaMonHocExcludeCurrent(String maMonHoc, String id); // Method mới
+
+    @Query("SELECT COUNT(c) FROM Class c WHERE c.subject.id = :subjectId")
+    int countClassesBySubjectId(@Param("subjectId") String subjectId);
 }

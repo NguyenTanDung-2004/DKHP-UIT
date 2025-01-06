@@ -1,5 +1,7 @@
 package com.example.DKHP_UIT.controller;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -9,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.DKHP_UIT.request.RequestOpenSubject;
+import com.example.DKHP_UIT.response.OpenSubjectResponse;
 import com.example.DKHP_UIT.service.OpenSubjectService;
 
 @RestController
@@ -27,8 +30,12 @@ public class OpenSubjectController {
         return this.openSubjectService.deleteOpenSubject(requestOpenSubject);
     }
 
+    // @GetMapping("/getAllOpenSubject")
+    // public ResponseEntity getAllOpenSubject() {
+    //     return this.openSubjectService.getAllOpenSubject();
+    // }
     @GetMapping("/getAllOpenSubject")
-    public ResponseEntity getAllOpenSubject() {
+    public ResponseEntity<List<OpenSubjectResponse>> getAllOpenSubject() {
         return this.openSubjectService.getAllOpenSubject();
     }
 
