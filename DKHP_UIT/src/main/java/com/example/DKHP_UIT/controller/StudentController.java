@@ -18,6 +18,8 @@ import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 import com.example.DKHP_UIT.request.LoginRequest;
 import com.example.DKHP_UIT.request.StudentRequestAdd;
 import com.example.DKHP_UIT.request.StudentRequestEdit;
+import com.example.DKHP_UIT.response.StudentResponse;
+import com.example.DKHP_UIT.response.StudentResponseList;
 import com.example.DKHP_UIT.service.RoleService;
 import com.example.DKHP_UIT.service.StudentService;
 
@@ -74,6 +76,10 @@ public class StudentController {
         return studentService.getStudent(page);
     }
 
+    @GetMapping("/getAllStudent")
+    public ResponseEntity<List<StudentResponse>> getAllStudent() {
+        return studentService.getAllStudent();
+    }
 
     @PostMapping("/closeDKHP")
     public ResponseEntity closeDKHP() {

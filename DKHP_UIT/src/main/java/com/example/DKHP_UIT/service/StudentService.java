@@ -1,6 +1,8 @@
 package com.example.DKHP_UIT.service;
 
 import java.util.Optional;
+import java.util.stream.Collectors;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -18,6 +20,7 @@ import com.example.DKHP_UIT.request.StudentRequestEdit;
 import com.example.DKHP_UIT.request.StudentRequestLogin;
 import com.example.DKHP_UIT.response.ResponseCode;
 import com.example.DKHP_UIT.response.ResponseDKHP;
+import com.example.DKHP_UIT.response.StudentResponse;
 import com.example.DKHP_UIT.response.StudentResponseList;
 import com.example.DKHP_UIT.support_service.SupportStudentService;
 import com.example.DKHP_UIT.utils.UtilsHandleCookie;
@@ -110,6 +113,23 @@ public class StudentService {
 
         // Trả về response thành công cùng với danh sách sinh viên
         return ResponseEntity.ok().body(result);
+    }
+
+    public ResponseEntity<List<StudentResponse>> getAllStudent() {
+        List<Student> students = this.studentRepository.findAll();
+
+        List<StudentResponse> studentResponses = students.stream()
+                .map(student -> new StudentResponse(
+                        student.getMssv(),
+                        student.getTenDayDu(),
+                        student.getTenKhoa(),
+                        student.getTenNganh(),
+                        student.getGioiTinh(),
+                        student.getPassword() != null && !student.getPassword().equals("")
+                ))
+                .collect(Collectors.toList());
+
+        return ResponseEntity.ok().body(studentResponses);
     }
 
     public ResponseEntity getDetailStudent(String mssv) {
