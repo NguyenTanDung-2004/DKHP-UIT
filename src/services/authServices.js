@@ -23,4 +23,25 @@ const login = async (credentials) => {
   }
 };
 
-export { login };
+const resetPassword = async (account) => {
+  try {
+    const response = await fetch(
+      `${API_URL}/user/reset-password?account=${account}`,
+      {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
+
+    if (!response.ok) {
+      throw new Error("Failed to edit class");
+    }
+    return response;
+  } catch (error) {
+    throw error;
+  }
+};
+
+export { login, resetPassword };

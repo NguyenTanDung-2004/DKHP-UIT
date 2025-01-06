@@ -26,7 +26,7 @@ const Main = () => {
   if (loading)
     return (
       <Layout role="student">
-        <div className="flex bg-[#F2F4F7] min-h-screen flex-col px-[100px] py-[40px] w-full">
+        <div className="flex bg-white min-h-screen flex-col px-[100px] py-[40px] w-full">
           <div className="flex items-center justify-center h-96">
             <ClipLoader color={"#2F6BFF"} loading={loading} size={40} />
           </div>
@@ -35,7 +35,7 @@ const Main = () => {
     );
   return (
     <Layout role="student">
-      <div className="flex bg-[#F2F4F7] min-h-screen flex-col px-[100px] py-[40px] w-full">
+      <div className="flex bg-white min-h-screen flex-col px-[100px] py-[40px] w-full">
         <div className="flex justify-between items-center w-full mb-4">
           <span className="w-full text-2xl text-black font-bold mr-10 text-center">
             THỜI KHOA BIỂU

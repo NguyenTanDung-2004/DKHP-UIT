@@ -98,10 +98,33 @@ const getDetailStudent = async (mssv) => {
   }
 };
 
+const createAccount = async (mssvList) => {
+  try {
+    const response = await fetch(`${API_URL}/student/createStudentAccount`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(mssvList),
+    });
+
+    if (!response.ok) {
+      const errorData = await response.json();
+      throw new Error(errorData.message || "Failed to create account students");
+    }
+
+    const sseUrl = await response.text();
+    return { url: sseUrl };
+  } catch (error) {
+    throw error;
+  }
+};
+
 export {
   getAllStudent,
   deleteListStudent,
   createStudent,
   editStudent,
   getDetailStudent,
+  createAccount,
 };

@@ -35,8 +35,9 @@ function Header() {
     ],
     admin: [
       { to: "/admin/trangchu", text: "Trang chủ" },
-      { to: "/admin/danhsachtaikhoan", text: "Quản lý tài khoản" },
-      { to: "/admin/danhsachhocphan", text: "Điều chỉnh đăng ký học phần" },
+      { to: "/admin/sinhvien", text: "Quản lý tài khoản sinh viên" },
+      { to: "/admin/nhanvien", text: "Quản lý nhân viên" },
+      { to: "/admin/dieuchinhdkhp", text: "Điều chỉnh đăng ký học phần" },
     ],
     staff: [
       { to: "/staff/trangchu", text: "Trang chủ" },
@@ -73,7 +74,7 @@ function Header() {
     <nav className="bg-white shadow-md sticky top-0 z-10 px-12">
       <div className="container mx-auto flex justify-between items-center p-4">
         <ul className="flex items-center space-x-4">
-          <img src={logo} alt="Logo website" className="w-10 h-10 mr-4" />
+          <img src={logo} alt="Logo website" className="w-14  mr-4" />
           {userNavbarItems()}
         </ul>
         <div className="flex items-center space-x-4">

@@ -5,6 +5,7 @@ import { login } from "../services/authServices";
 import LoginBg from "../images/background-login.png";
 import Logo from "../images/logo.png";
 import { ClipLoader } from "react-spinners";
+import ForgetPasswordModal from "../components/auth/ForgetPasswordModal";
 
 const AuthPage = () => {
   const [userName, setUserName] = useState("");
@@ -13,6 +14,8 @@ const AuthPage = () => {
   const [showError, setShowError] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [isForgetModalOpen, setIsForgetModalOpen] = useState(false);
+
   const navigate = useNavigate();
 
   // Part for handle form
@@ -40,6 +43,12 @@ const AuthPage = () => {
       setIsLoading(false);
       setLoading(false);
     }
+  };
+  const handleOpenForgetModal = () => {
+    setIsForgetModalOpen(true);
+  };
+  const handleCloseForgetModal = () => {
+    setIsForgetModalOpen(false);
   };
 
   return (
@@ -125,7 +134,12 @@ const AuthPage = () => {
             </div>
           </div>
           <div className="mt-8 flex items-center justify-between">
-            <button className="text-[#2F6BFF] text-sm">Quên mật khẩu?</button>
+            <button
+              onClick={handleOpenForgetModal}
+              className="text-[#2F6BFF] text-sm"
+            >
+              Quên mật khẩu?
+            </button>
             <button
               type="submit"
               className=" bg-[#2F6BFF] text-white font-bold py-2 px-4 rounded hover:bg-[#5284ff] transition-colors relative"
@@ -139,6 +153,10 @@ const AuthPage = () => {
           </div>
         </form>
       </div>
+      <ForgetPasswordModal
+        isOpen={isForgetModalOpen}
+        onClose={handleCloseForgetModal}
+      />
     </div>
   );
 };

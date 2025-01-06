@@ -27,13 +27,13 @@ const ScheduleTable = ({ scheduleData }) => {
     <table className="w-full border-collapse">
       <thead>
         <tr>
-          <th className="border border-gray-500 px-4 py-2 w-[150px] ">
+          <th className="border border-gray-500 px-4 py-2 w-[150px] bg-[#F2F4F7]">
             Thứ / Tiết
           </th>
           {days.map((day) => (
             <th
               key={day}
-              className="border border-gray-500 px-4 py-2 w-[150px]"
+              className="border border-gray-500 px-4 py-2 w-[150px] bg-[#F2F4F7]"
             >
               {day}
             </th>

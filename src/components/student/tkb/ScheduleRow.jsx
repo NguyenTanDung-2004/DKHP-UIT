@@ -6,7 +6,7 @@ const ScheduleRow = ({ time, scheduleData, slotIndex }) => {
 
   return (
     <tr>
-      <td className="border border-gray-500 px-4 py-2 whitespace-pre-line max-w-[200px] w-[150px]">
+      <td className="border border-gray-500 px-4 py-2 whitespace-pre-line max-w-[200px] w-[150px] bg-[#F2F4F7]">
         {time}
       </td>
       {days.map((day) => {
@@ -19,7 +19,7 @@ const ScheduleRow = ({ time, scheduleData, slotIndex }) => {
         return (
           <td
             key={day}
-            className="border border-gray-500 px-4 py-2 bg-[#cccccc] w-[150px]"
+            className="border border-gray-500 px-4 py-2 bg-[#cccccc] w-[150px] "
           >
             {classInDayAndSlot.map((classItem) => (
               <ClassItem key={classItem.id} classItem={classItem} />
