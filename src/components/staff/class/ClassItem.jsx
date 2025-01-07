@@ -15,6 +15,7 @@ const ClassItem = ({ classData, onSelect, isSelected }) => {
     siso,
     flagTH,
     room,
+    credits,
   } = classData;
   const [editModalOpen, setEditModalOpen] = useState(false);
 
@@ -48,6 +49,9 @@ const ClassItem = ({ classData, onSelect, isSelected }) => {
       </td>
       <td className="py-4 px-4 border border-[#B9B9B9] text-center">
         {hinhThuc}
+      </td>
+      <td className="py-4 px-4 border border-[#B9B9B9] text-center">
+        {credits}
       </td>
       <td className="py-4 px-4 border border-[#B9B9B9]">{`${thu}, Tiết ${tietBatDau}-${tietKetThuc}; ${startDate}-${endDate}`}</td>
       <td className="py-4 px-4 border border-[#B9B9B9]">{giangVien.name}</td>

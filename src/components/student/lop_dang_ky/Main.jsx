@@ -1,19 +1,20 @@
 import React, { useState, useEffect, useMemo } from "react";
 import Layout from "../../layout/Layout";
 import ProgressList from "./ProgressList";
-import ClassTable from "../home/ClassTable";
+import ClassTable from "./ClassTable";
 import {
   getRegisteredClasses,
   undkhp,
 } from "../../../services/studentDKHPService";
 import { ClipLoader } from "react-spinners";
-import RegisterResultModal from "../modal/RegisterResultModal";
+import UnregisterResultModal from "../modal/UnregisterResultModal"; // Import modal mới
 
 const Main = () => {
   const [selectedClasses, setSelectedClasses] = useState({});
   const [registeredClasses, setRegisteredClasses] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [showModal, setShowModal] = useState(false);
+  // const [showModal, setShowModal] = useState(false); // Xóa state này
+  const [showUnregisterModal, setShowUnregisterModal] = useState(false); // Thêm state cho modal hủy đăng ký
   const [unregisterResult, setUnregisterResult] = useState(null);
   const [classesForModal, setClassesForModal] = useState([]); // State for modal class names
   const [flagDKHP, setFlagDKHP] = useState(null);
@@ -42,8 +43,7 @@ const Main = () => {
   const mapRegisteredClasses = (classes) => {
     return classes.map((classData) => {
       return {
-        className:
-          classData.subject?.maMonHoc + "." + classData.className.split(".")[1],
+        className: classData.className,
         subject:
           classData.subject?.maMonHoc + " - " + classData.subject?.tenMonHoc,
         siso: classData.siso,
@@ -55,8 +55,12 @@ const Main = () => {
         giangVien: classData.giangVien?.name,
         id: classData.id,
         currentSiSo: classData.currentSiSo,
-        credits: classData.subject?.soTinChiLT,
+        credits:
+          classData.flagTH === 0
+            ? classData.subject?.soTinChiLT
+            : classData.subject?.soTinChiTH,
         maMonHoc: classData.subject?.maMonHoc,
+        flagTH: classData.flagTH,
       };
     });
   };
@@ -125,7 +129,7 @@ const Main = () => {
     try {
       const result = await undkhp(selectedIds);
       setUnregisterResult(result);
-      setShowModal(true);
+      setShowUnregisterModal(true); // Mở modal hủy đăng ký
       setSelectedClasses({});
       // After unregistering classes, you might want to refresh the list:
       const registeredClassesData = await getRegisteredClasses();
@@ -138,7 +142,12 @@ const Main = () => {
     }
   };
   const closeModal = () => {
-    setShowModal(false);
+    // setShowModal(false); // Xóa dòng này
+    setShowUnregisterModal(false);
+    setUnregisterResult(null);
+  };
+  const closeUnregisterModal = () => {
+    setShowUnregisterModal(false);
     setUnregisterResult(null);
   };
   const modifiedClasses = useMemo(() => {
@@ -199,13 +208,11 @@ const Main = () => {
           Chưa tới thời gian đăng ký của bạn
         </div>
       )}
-      <RegisterResultModal
-        isOpen={showModal}
-        onClose={closeModal}
+      <UnregisterResultModal
+        isOpen={showUnregisterModal}
+        onClose={closeUnregisterModal}
         result={unregisterResult}
-        allClasses={classesForModal} // Use the captured class names for modal
-        problemText={problemText}
-        dkhp={false}
+        allClasses={classesForModal}
       />
     </Layout>
   );

@@ -4,8 +4,7 @@ const ClassItem = ({ classItem }) => {
   return (
     <div className="bg-white p-2 rounded mb-1 text-xs max-w-[200px]">
       <div className="font-semibold">
-        {classItem.subject.maMonHoc}.{classItem.className.split(".").pop()} -{" "}
-        {classItem.giangVien.name}
+        {classItem.className} - {classItem.giangVien.name}
       </div>
       <div className="whitespace-pre-line">
         Sĩ số: {classItem.siso}

@@ -45,8 +45,7 @@ const Home = () => {
   const mapAllClasses = (classes) => {
     return classes.map((classData) => {
       return {
-        className:
-          classData.subject?.maMonHoc + "." + classData.className.split(".")[1],
+        className: classData.className,
         subject:
           classData.subject?.maMonHoc + " - " + classData.subject?.tenMonHoc,
         siso: classData.siso,
@@ -58,8 +57,12 @@ const Home = () => {
         giangVien: classData.giangVien?.name,
         id: classData.id,
         currentSiSo: classData.currentSiSo,
-        credits: classData.subject?.soTinChiLT,
+        credits:
+          classData.flagTH === 0
+            ? classData.subject?.soTinChiLT
+            : classData.subject?.soTinChiTH,
         maMonHoc: classData.subject?.maMonHoc,
+        flagTH: classData.flagTH,
       };
     });
   };

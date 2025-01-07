@@ -9,6 +9,9 @@ const ClassTable = ({ classes, selectedClasses, onToggleSelect }) => {
           <th className="border border-[#B9B9B9] px-4 py-4"></th>
           <th className="border border-[#B9B9B9] px-4 py-4">Mã lớp</th>
           <th className="border border-[#B9B9B9] px-4 py-4">Tên môn học</th>
+          <th className="py-2 px-4 border border-[#B9B9B9] text-center">
+            Hình thức
+          </th>
           <th className="border border-[#B9B9B9] px-4 py-4">Số TC</th>
           <th className="border border-[#B9B9B9] px-4 py-4">Thời gian học</th>
           <th className="border border-[#B9B9B9] px-4 py-4">Giảng viên</th>

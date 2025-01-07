@@ -52,8 +52,7 @@ const Main = () => {
   const mapClasses = (classes) => {
     return classes.map((classData) => {
       return {
-        className:
-          classData.subject?.maMonHoc + "." + classData.className.split(".")[1],
+        className: classData.className,
         subject: classData.subject,
         siso: classData.siso,
         startDate: new Date(classData.startDate).toLocaleDateString("en-GB"),
@@ -64,7 +63,10 @@ const Main = () => {
         giangVien: classData.giangVien,
         id: classData.id,
         currentSiSo: classData.currentSiSo,
-        credits: classData.subject?.soTinChiLT,
+        credits:
+          classData.flagTH === 0
+            ? classData.subject?.soTinChiLT
+            : classData.subject?.soTinChiTH,
         maMonHoc: classData.subject?.maMonHoc,
         subjectId: classData.subject?.id,
         flagTH: classData.flagTH,
