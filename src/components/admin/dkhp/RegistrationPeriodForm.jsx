@@ -1,4 +1,3 @@
-// RegistrationPeriodForm.js
 import React from "react";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
@@ -17,7 +16,17 @@ const RegistrationPeriodForm = ({
   handleBatchChange,
   handleSubmit,
   handleCancelEdit,
+  isCreateForm, // add new prop isCreateForm
 }) => {
+  // default value for allowedBatches
+  const allowedBatchesDefault = isCreateForm
+    ? {
+        22: 1,
+        23: 1,
+        24: 1,
+      }
+    : allowedBatches;
+
   return (
     <div className="bg-white shadow-md rounded p-6 mb-6">
       <div className="flex  mb-4 gap-4">
@@ -80,7 +89,7 @@ const RegistrationPeriodForm = ({
                 type="number"
                 min="1"
                 max={totalDays}
-                value={allowedBatches[batch] || 1}
+                value={allowedBatchesDefault[batch] || 1}
                 onChange={(e) => handleBatchChange(batch, e.target.value)}
                 className="border p-2 rounded w-16"
               />

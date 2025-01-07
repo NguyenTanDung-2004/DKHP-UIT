@@ -19,6 +19,9 @@ const Main = () => {
   const [totalDays, setTotalDays] = useState(0);
   const [loading, setLoading] = useState(false);
 
+  // new state to track if this is form create or edit
+  const [isCreateForm, setIsCreateForm] = useState(false);
+
   useEffect(() => {
     fetchRegistrationPeriod();
   }, []);
@@ -66,10 +69,12 @@ const Main = () => {
     setEndTime("00:00");
     setAllowedBatches({});
     setRegistrationPeriod(null);
+    setIsCreateForm(true); // set is create flag to true
   };
 
   const handleEditRegistrationPeriod = () => {
     setIsEditing(true);
+    setIsCreateForm(false); // set is create flag to false
   };
 
   const handleSubmit = async () => {
@@ -135,23 +140,15 @@ const Main = () => {
       <div className="flex bg-[#F2F4F7] min-h-screen flex-col px-[100px] py-[40px] w-full items-center">
         <ToastContainer />
         <div className="flex justify-between items-center w-full mb-4">
-          <span className="w-full text-2xl text-black font-bold mr-10 text-center mb-8">
+          <span className="w-full text-2xl text-black font-bold text-center mb-8">
             ĐIỀU CHỈNH ĐĂNG KÝ HỌC PHẦN
           </span>
         </div>
-
+        {console.log("isEditing", isEditing)}
+        {console.log("registrationPeriod", registrationPeriod)}
         {loading ? (
           <div className="flex justify-center items-center h-64">
             <ClipLoader color="#2F6BFF" loading={true} size={40} />
-          </div>
-        ) : registrationPeriod === null ? (
-          <div className="flex justify-center items-center h-64">
-            <button
-              onClick={handleAddRegistrationPeriod}
-              className="text-white py-2 px-4 rounded shadow-xl bg-[#2F6BFF] hover:bg-opacity-90"
-            >
-              TẠO THỜI GIAN ĐĂNG KÝ HỌC PHẦN
-            </button>
           </div>
         ) : (
           <div className="flex flex-col w-[600px] ">
@@ -170,12 +167,22 @@ const Main = () => {
                 handleBatchChange={handleBatchChange}
                 handleSubmit={handleSubmit}
                 handleCancelEdit={handleCancelEdit}
+                isCreateForm={isCreateForm} // pass new prop to form
               />
-            ) : (
+            ) : registrationPeriod ? ( // render this if registrationPeriod is not null, and not editing
               <RegistrationPeriodDisplay
                 registrationPeriod={registrationPeriod}
                 handleEditRegistrationPeriod={handleEditRegistrationPeriod}
               />
+            ) : (
+              <div className="flex justify-center items-center h-64">
+                <button
+                  onClick={handleAddRegistrationPeriod}
+                  className="text-white py-2 px-4 rounded shadow-xl bg-[#2F6BFF] hover:bg-opacity-90"
+                >
+                  TẠO THỜI GIAN ĐĂNG KÝ HỌC PHẦN
+                </button>
+              </div>
             )}
           </div>
         )}

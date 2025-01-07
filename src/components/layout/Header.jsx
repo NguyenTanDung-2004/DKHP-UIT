@@ -1,8 +1,10 @@
 import React, { useEffect, useState } from "react";
-import { NavLink, Link, useNavigate, useLocation } from "react-router-dom";
+import { NavLink, useNavigate, useLocation } from "react-router-dom";
 import Cookies from "js-cookie";
 import logo from "../../images/logo.png";
-import defaultAvatar from "../../images/default-avatar.png"; // Import ảnh avatar mặc định
+import defaultAvatar from "../../images/default-avatar.png";
+import { getName } from "../../services/staffServices";
+import { getDetailStudent } from "../../services/studentServices";
 
 function MenuItem({ to, children }) {
   return (
@@ -23,8 +25,10 @@ function MenuItem({ to, children }) {
 
 function Header() {
   const navigate = useNavigate();
-  const location = useLocation(); // Get the current location
-  const [role, setRole] = useState(Cookies.get("roleUser")); // Initialize and store role in state
+  const location = useLocation();
+  const [role, setRole] = useState(Cookies.get("roleUser"));
+  const [userName, setUserName] = useState("");
+  // Remove error state as we are not displaying errors
 
   const menuItems = {
     student: [
@@ -53,6 +57,27 @@ function Header() {
     // Update role state when location changes (route navigation)
     setRole(Cookies.get("roleUser"));
   }, [location]);
+
+  useEffect(() => {
+    const fetchUserName = async () => {
+      try {
+        if (role === "student") {
+          const userInfo = Cookies.get("userInfo");
+          if (userInfo) {
+            const detail = await getDetailStudent(userInfo);
+            setUserName(detail.tenDayDu);
+          }
+        } else if (role === "staff" || role === "admin") {
+          const name = await getName();
+          setUserName(name);
+        }
+      } catch (err) {
+        console.error("Error fetching user name:", err);
+        // If error, keep the role in header
+      }
+    };
+    fetchUserName();
+  }, [role]);
 
   const handleLogoutAndRedirect = () => {
     Cookies.remove("roleUser");
@@ -87,7 +112,7 @@ function Header() {
                 alt="Avatar"
                 className="w-8 h-8 rounded-full mr-2"
               />
-              <span className="text-gray-700">{role}</span>
+              <span className="text-gray-700">{userName || role}</span>
             </div>
             <ul className="w-[150px] absolute hidden group-hover:block bg-white border border-gray-300  rounded shadow-md right-0 z-10">
               <li

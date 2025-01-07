@@ -10,6 +10,13 @@ const ForgetPasswordModal = ({ isOpen, onClose }) => {
   const [isSuccess, setIsSuccess] = useState(false);
   const handleChangeAccount = (e) => setAccount(e.target.value);
 
+  const handleResetState = () => {
+    setAccount("");
+    setMessage("");
+    setError("");
+    setIsSuccess(false);
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
@@ -30,6 +37,10 @@ const ForgetPasswordModal = ({ isOpen, onClose }) => {
     } finally {
       setLoading(false);
     }
+  };
+
+  const handleTryAgain = () => {
+    handleResetState();
   };
 
   if (!isOpen) return null;
@@ -59,15 +70,15 @@ const ForgetPasswordModal = ({ isOpen, onClose }) => {
             </svg>
           </button>
         </div>
-        <form onSubmit={handleSubmit}>
-          {!isSuccess && (
+        {!isSuccess && !error && (
+          <form onSubmit={handleSubmit}>
             <div className="flex flex-col">
               <div className="mb-4 flex flex-col">
                 <label className="block text-sm font-medium text-gray-700">
-                  Nhập tên tài khoản:
+                  Nhập tên email:
                 </label>
                 <input
-                  type="text"
+                  type="email"
                   name="account"
                   value={account}
                   onChange={handleChangeAccount}
@@ -76,37 +87,69 @@ const ForgetPasswordModal = ({ isOpen, onClose }) => {
                 />
               </div>
             </div>
-          )}
 
-          {message && (
-            <div className="text-black mb-4 text-center">{message}</div>
-          )}
-          {error && (
-            <div className="text-red-500 mb-4 text-center">{error}</div>
-          )}
-          <div className="flex justify-end mt-4 gap-4">
-            <button
-              type="button"
-              onClick={onClose}
-              className="bg-gray-300 hover:bg-gray-400 px-4 py-2 rounded mr-2"
-            >
-              Hủy bỏ
-            </button>
-            <button
-              type="submit"
-              className="bg-[#2F6BFF] text-white py-2 px-4 rounded shadow-xl hover:bg-opacity-90 disabled:bg-opacity-50 disabled:cursor-not-allowed flex items-center justify-center"
-              disabled={loading}
-            >
-              {loading ? (
-                <ClipLoader color={"white"} loading={loading} size={20} />
-              ) : (
-                "Đặt lại mật khẩu"
-              )}
-            </button>
+            <div className="flex justify-end mt-4 gap-4">
+              <button
+                type="button"
+                onClick={onClose}
+                className="bg-gray-300 hover:bg-gray-400 px-4 py-2 rounded mr-2"
+              >
+                Hủy bỏ
+              </button>
+              <button
+                type="submit"
+                className="bg-[#2F6BFF] text-white py-2 px-4 rounded shadow-xl hover:bg-opacity-90 disabled:bg-opacity-50 disabled:cursor-not-allowed flex items-center justify-center"
+                disabled={loading}
+              >
+                {loading ? (
+                  <ClipLoader color={"white"} loading={loading} size={20} />
+                ) : (
+                  "Đặt lại mật khẩu"
+                )}
+              </button>
+            </div>
+          </form>
+        )}
+        {isSuccess && (
+          <div className="text-center">
+            <p className="text-green-600 mb-4">{message}</p>
+            <div className="flex justify-end mt-4 gap-4">
+              <button
+                type="button"
+                onClick={handleResetState}
+                className="bg-gray-300 hover:bg-gray-400 px-4 py-2 rounded mr-2"
+              >
+                Đặt lại
+              </button>
+              <button
+                onClick={() => {
+                  onClose();
+
+                  handleResetState();
+                }}
+                className="bg-[#2F6BFF] text-white py-2 px-4 rounded shadow-xl hover:bg-opacity-90 disabled:bg-opacity-50 disabled:cursor-not-allowed"
+              >
+                OK
+              </button>
+            </div>
           </div>
-        </form>
+        )}
+        {error && (
+          <div className="text-center">
+            <p className="text-red-600 mb-4">{error}</p>
+            <div className="flex justify-end mt-4 gap-4">
+              <button
+                onClick={handleTryAgain}
+                className="bg-[#2F6BFF] text-white py-2 px-4 rounded shadow-xl hover:bg-opacity-90 disabled:bg-opacity-50 disabled:cursor-not-allowed"
+              >
+                Thử lại
+              </button>
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );
 };
+
 export default ForgetPasswordModal;

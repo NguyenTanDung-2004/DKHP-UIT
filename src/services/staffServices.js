@@ -1,3 +1,5 @@
+import Cookies from "js-cookie";
+
 const API_URL = process.env.REACT_APP_API_URL;
 
 const createStaff = async (staffData) => {
@@ -80,4 +82,23 @@ const getAllStaff = async () => {
   }
 };
 
-export { createStaff, deleteList, editStaff, getAllStaff };
+const getName = async () => {
+  try {
+    const userInfo = Cookies.get("userInfo");
+    if (!userInfo) {
+      throw new Error("userInfo not found in cookie");
+    }
+
+    const response = await fetch(`${API_URL}/staff/name?id=${userInfo}`);
+    if (!response.ok) {
+      const errorData = await response.json();
+      throw new Error(errorData.message || "Failed to fetch staff name");
+    }
+    const name = await response.text();
+    return name;
+  } catch (error) {
+    throw error;
+  }
+};
+
+export { createStaff, deleteList, editStaff, getAllStaff, getName };
