@@ -68,12 +68,9 @@ public class UserController {
 
     @GetMapping("/reset-password")
     public ResponseEntity sendAuthenCode(@RequestParam(name = "account") String account) {
-        // check user
-        if (account.contains("staff") || account.contains("admin")) {
-            Staff staff = staffRepository.getStaffByAccount(account);
-            if (staff == null) {
-                return ResponseEntity.badRequest().body("Account not found");
-            }
+        // Check staff or admin by email
+        Staff staff = staffRepository.getStaffByEmail(account);
+        if (staff != null) {
             // create password
             String randomPassword = this.supportAdminService.createPassword();
             // encrypt password
@@ -89,23 +86,25 @@ public class UserController {
 
             utilsHandleEmail.sendCreateAccount(staff.getEmail(), title,
                     staff.getEmail(), randomPassword);
-        } else if (account.contains("staff") == false
-                && account.contains("admin") == false) {
-            Optional optional = studentRepository.findById(account);
-            if (optional.isEmpty()) {
-                return ResponseEntity.badRequest().body("Account not found");
+             return ResponseEntity.ok().body("Reset password success");
+        } else {
+            // Check student by email
+            Optional<Student> optional = studentRepository.findByEmailCaNhan(account);
+             if (optional.isEmpty()) {
+                return ResponseEntity.badRequest().body("Email not found");
             }
-            Student student = (Student) optional.get();
+            Student student = optional.get();
             // create password
             String password = this.SupportStaffService.createPassword();
-
+             // encrypt password
+              String encryptedPassword = this.utilsHandlePassword.encryptPassword(password);
+              student.setPassword(encryptedPassword);
+            this.studentRepository.save(student);
             // Gửi password cho người dùng qua email
-            this.utilsHandleEmail.sendCreateAccount(student.getEmailCaNhan(), "TÀI KHOẢN MẬT KHẨU - DKHP - UIT",
+             this.utilsHandleEmail.sendCreateAccount(student.getEmailCaNhan(), "TÀI KHOẢN MẬT KHẨU - DKHP - UIT",
                     student.getMssv(),
                     password);
-        } else {
-            return ResponseEntity.badRequest().body("Account not found");
-        }
-        return null;
+            return ResponseEntity.ok().body("Reset password success");
+         }
     }
 }

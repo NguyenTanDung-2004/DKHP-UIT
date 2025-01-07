@@ -46,6 +46,12 @@ public class StaffController {
     public ResponseEntity<List<StaffResponse>> getListStaff() {
         return staffService.getListStaff();
     }
+
+    // API lấy danh sách tất cả staff
+    @GetMapping("/name")
+    public ResponseEntity<String> getStaffName(@RequestParam(name = "id") String id) {
+        return staffService.getStaffName(id);
+    }
     
     // API xoá danh sách staff theo id
     @PostMapping("/deleteList")

@@ -22,6 +22,7 @@ import com.example.DKHP_UIT.request.StudentRequestLogin;
 import com.example.DKHP_UIT.response.ClassResponseDTO;
 import com.example.DKHP_UIT.response.ResponseCode;
 import com.example.DKHP_UIT.response.ResponseDKHP;
+import com.example.DKHP_UIT.response.StudentDTO;
 import com.example.DKHP_UIT.response.StudentResponse;
 import com.example.DKHP_UIT.response.StudentResponseList;
 import com.example.DKHP_UIT.support_service.SupportStudentService;
@@ -145,7 +146,29 @@ public class StudentService {
         Optional<Student> optional = this.studentRepository.findById(mssv);
         Student student = optional.get();
         student.setPassword("");
-        return ResponseEntity.ok().body(student);
+
+        StudentDTO studentDTO = StudentDTO.builder()
+                .mssv(student.getMssv())
+                .tenDayDu(student.getTenDayDu())
+                .tenKhoa(student.getTenKhoa())
+                .tenNganh(student.getTenNganh())
+                .diaChiChiTiet(student.getDiaChiChiTiet())
+                .tinh_thanhPho(student.getTinh_thanhPho())
+                .quan_huyen(student.getQuan_huyen())
+                .xa_phuong(student.getXa_phuong())
+                .gioiTinh(student.getGioiTinh())
+                .noiSinh(student.getNoiSinh())
+                .diaChiChiTiet1(student.getDiaChiChiTiet1())
+                .tinh_thanhPho1(student.getTinh_thanhPho1())
+                .quan_huyen1(student.getQuan_huyen1())
+                .xa_phuong1(student.getXa_phuong1())
+                .ngaySinh(student.getNgaySinh())
+                .cmnd(student.getCmnd())
+                .emailCaNhan(student.getEmailCaNhan())
+                .password("")
+                .build();
+
+        return ResponseEntity.ok().body(studentDTO);
     }
 
     public ResponseEntity createStudentAccount(String[] listMSSV, HttpServletResponse response) {

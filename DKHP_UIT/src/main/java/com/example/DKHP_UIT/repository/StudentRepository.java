@@ -6,6 +6,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 
 import com.example.DKHP_UIT.entities.Class;
 import com.example.DKHP_UIT.entities.Student;
@@ -27,4 +28,6 @@ public interface StudentRepository extends JpaRepository<Student, String> {
     @Modifying
     @Transactional
     void removeClassesFromStudent(String mssv, String classId);
+
+    Optional<Student> findByEmailCaNhan(String email);
 }

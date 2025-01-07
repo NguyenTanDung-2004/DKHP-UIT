@@ -133,4 +133,14 @@ public class StaffService {
             throw new ExceptionUser(ExceptionCode.StaffNotFound);   
         }
     }
+
+    public ResponseEntity<String> getStaffName(String id) {
+        Optional<Staff> optionalStaff = staffRepository.findById(id);
+        if(optionalStaff.isPresent()){
+            Staff staff = optionalStaff.get();
+            return ResponseEntity.ok().body(staff.getFullName());
+        }else {
+            throw new ExceptionUser(ExceptionCode.StaffNotFound);   
+        }
+    }
 }
