@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 
@@ -18,14 +18,30 @@ const RegistrationPeriodForm = ({
   handleCancelEdit,
   isCreateForm, // add new prop isCreateForm
 }) => {
-  // default value for allowedBatches
-  const allowedBatchesDefault = isCreateForm
-    ? {
-        22: 1,
-        23: 1,
-        24: 1,
-      }
-    : allowedBatches;
+  // initialize with allowedBatches or create defaults
+  const [localAllowedBatches, setLocalAllowedBatches] = useState(() => {
+    if (isCreateForm || !allowedBatches) {
+      return { 22: 1, 23: 1, 24: 1 };
+    } else {
+      return allowedBatches;
+    }
+  });
+
+  // Sync changes with parent if `allowedBatches` changes from parent
+  useEffect(() => {
+    if (!isCreateForm && allowedBatches) {
+      setLocalAllowedBatches(allowedBatches);
+    }
+  }, [allowedBatches, isCreateForm]);
+
+  const handleLocalBatchChange = (batch, days) => {
+    const day = parseInt(days, 10) || 1;
+    setLocalAllowedBatches((prev) => ({
+      ...prev,
+      [batch]: day,
+    }));
+    handleBatchChange(batch, day);
+  };
 
   return (
     <div className="bg-white shadow-md rounded p-6 mb-6">
@@ -89,8 +105,8 @@ const RegistrationPeriodForm = ({
                 type="number"
                 min="1"
                 max={totalDays}
-                value={allowedBatchesDefault[batch] || 1}
-                onChange={(e) => handleBatchChange(batch, e.target.value)}
+                value={localAllowedBatches[batch] || 1}
+                onChange={(e) => handleLocalBatchChange(batch, e.target.value)}
                 className="border p-2 rounded w-16"
               />
               <span className="ml-2">ngày</span>

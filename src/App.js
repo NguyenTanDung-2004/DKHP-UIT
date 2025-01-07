@@ -15,32 +15,123 @@ import StudentManagementPage from "./pages/staff/StudentPage";
 import StudentAccountPage from "./pages/admin/StudentPage";
 import StaffManagementPage from "./pages/admin/StaffPage";
 import DKHPPage from "./pages/admin/DKHPPage";
+import ProtectedRoute from "./components/ProtectedRoute"; // Import the protected route
 
 const App = () => {
   return (
     <BrowserRouter>
       <Routes>
-        <Route path="/student/trangchu" element={<StudentPage />} />
-        <Route path="/student/lopdangky" element={<LopDangKyPage />} />
-        <Route path="/student/chuongtrinh" element={<CTDTPage />} />
-        <Route path="/student/tkb" element={<TKBPage />} />
+        <Route path="/auth" element={<AuthPage />} />
+        <Route path="/" element={<AuthPage />} />
+        <Route path="/not-found" element={<NotFoundPage />} />
 
-        <Route path="/staff/trangchu" element={<StaffPage />} />
-        <Route path="/staff/quanly/monhoc" element={<SubjectPage />} />
-        <Route path="/staff/quanly/monhocmo" element={<ObjectSubjectPage />} />
-        <Route path="/staff/quanly/lophoc" element={<ClassPage />} />
         <Route
-          path="/staff/quanly/sinhvien"
-          element={<StudentManagementPage />}
+          path="/student/trangchu"
+          element={
+            <ProtectedRoute allowedRoles={["student"]}>
+              <StudentPage />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/student/lopdangky"
+          element={
+            <ProtectedRoute allowedRoles={["student"]}>
+              <LopDangKyPage />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/student/chuongtrinh"
+          element={
+            <ProtectedRoute allowedRoles={["student"]}>
+              <CTDTPage />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/student/tkb"
+          element={
+            <ProtectedRoute allowedRoles={["student"]}>
+              <TKBPage />
+            </ProtectedRoute>
+          }
         />
 
-        <Route path="/admin/trangchu" element={<HomePage />} />
-        <Route path="/admin/sinhvien" element={<StudentAccountPage />} />
-        <Route path="/admin/nhanvien" element={<StaffManagementPage />} />
-        <Route path="/admin/dieuchinhdkhp" element={<DKHPPage />} />
+        <Route
+          path="/staff/trangchu"
+          element={
+            <ProtectedRoute allowedRoles={["staff"]}>
+              <StaffPage />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/staff/quanly/monhoc"
+          element={
+            <ProtectedRoute allowedRoles={["staff"]}>
+              <SubjectPage />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/staff/quanly/monhocmo"
+          element={
+            <ProtectedRoute allowedRoles={["staff"]}>
+              <ObjectSubjectPage />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/staff/quanly/lophoc"
+          element={
+            <ProtectedRoute allowedRoles={["staff"]}>
+              <ClassPage />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/staff/quanly/sinhvien"
+          element={
+            <ProtectedRoute allowedRoles={["staff"]}>
+              <StudentManagementPage />
+            </ProtectedRoute>
+          }
+        />
 
-        <Route path="/" element={<AuthPage />} />
-        <Route path="/auth" element={<AuthPage />} />
+        <Route
+          path="/admin/trangchu"
+          element={
+            <ProtectedRoute allowedRoles={["admin"]}>
+              <HomePage />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/admin/sinhvien"
+          element={
+            <ProtectedRoute allowedRoles={["admin"]}>
+              <StudentAccountPage />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/admin/nhanvien"
+          element={
+            <ProtectedRoute allowedRoles={["admin"]}>
+              <StaffManagementPage />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/admin/dieuchinhdkhp"
+          element={
+            <ProtectedRoute allowedRoles={["admin"]}>
+              <DKHPPage />
+            </ProtectedRoute>
+          }
+        />
+
         <Route path="/*" element={<NotFoundPage />} />
       </Routes>
     </BrowserRouter>
