@@ -132,7 +132,7 @@ public class SupportStudentService {
 
 
     public void undkhp(List<Class> registeredClasses, List<String> listWrong,
-                       List<String> listTrue, List<String> listProblem, String mssv, List<String> listClassId) {
+                    List<String> listTrue, List<String> listProblem, String mssv, List<String> listClassId) {
         List<String> classIds = new ArrayList<>(listClassId);
         Student student = this.studentRepository.findById(mssv).get();
         System.out.println("Start undkhp with mssv: " + mssv);
@@ -140,37 +140,42 @@ public class SupportStudentService {
         System.out.println("List classes registered " + registeredClasses.size());
         System.out.println("Student has class:" + student.getClasses().size());
 
-        for (String classId : classIds) {
-            if(registeredClasses.stream().anyMatch(registeredClass -> registeredClass.getId().equals(classId))){
-                // check whether this class is theory or practice class
-                Class registeredClass = registeredClasses.stream().filter(registeredClass1 -> registeredClass1.getId().equals(classId)).findFirst().get();
-                if (registeredClass.getFlagTH() == 0 || registeredClass.getFlagTH() == 3 || registeredClass.getFlagTH() == 1) {
-                    // unregister
-                    this.studentRepository.removeClassesFromStudent(mssv, classId);
-                    // Giảm currentSiSo khi hủy đăng ký
-                     updateCurrentSiSo(registeredClass, -1);
 
-                    listTrue.add(classId);
-                    if(registeredClass.getFlagTH() == 0){
-                        // Nếu là lớp lý thuyết, thì sẽ xóa luôn lớp thực hành của lớp đó
-                        for (Class class1 : registeredClasses) {
-                            if (class1.getFlagTH() == 1 && class1.getIdLT() != null && class1.getIdLT().equals(classId)) {
-                                this.studentRepository.removeClassesFromStudent(mssv, class1.getId());
-                                 // Giảm currentSiSo khi hủy đăng ký
-                                   updateCurrentSiSo(class1, -1);
-                                listTrue.add(class1.getId());
-                            }
-                        }
-                    }
-                }  else {
-                    addWrongClass("NonTheory", listWrong, listProblem, classId);
+        for (String classId : classIds) {
+            Class registeredClass = registeredClasses.stream()
+                    .filter(c -> c.getId().equals(classId))
+                    .findFirst()
+                    .orElse(null);
+            if (registeredClass == null) {
+                addWrongClass("NotRegistered", listWrong, listProblem, classId);
+                continue;
+            }
+
+            if (registeredClass.getFlagTH() == 0 || registeredClass.getFlagTH() == 3 || registeredClass.getFlagTH() == 1) {
+                // Unregister lớp hiện tại
+                this.studentRepository.removeClassesFromStudent(mssv, classId);
+                updateCurrentSiSo(registeredClass, -1);
+                listTrue.add(classId);
+
+
+                if (registeredClass.getFlagTH() == 0) {
+                    // Nếu là lớp lý thuyết, tìm và xóa lớp thực hành tương ứng trong danh sách đã đăng ký
+                    registeredClasses.stream()
+                        .filter(c -> c.getFlagTH() == 1 && c.getIdLT() != null && c.getIdLT().equals(classId))
+                        .findFirst() // Find the first matching practical class
+                        .ifPresent(practicalClass -> {
+                            this.studentRepository.removeClassesFromStudent(mssv, practicalClass.getId());
+                            updateCurrentSiSo(practicalClass, -1);
+                            listTrue.add(practicalClass.getId());
+                        });
+
                 }
             } else {
-                addWrongClass("NotRegistered", listWrong, listProblem, classId);
+                addWrongClass("NonTheory", listWrong, listProblem, classId);
             }
+
         }
     }
-
     public boolean checkStudentSchedule(String mssv, Class newClass) {
         List<List<Integer>> listScheduleIn1Day = this.studentRepository.getStudentScheduleIn1Day(newClass.getThu(),
                 mssv);
