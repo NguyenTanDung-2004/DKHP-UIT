@@ -30,10 +30,17 @@ const AuthPage = () => {
     try {
       const response = await login({ userName: userName, password: password });
       if (response && response.code === 1000) {
-        const { role } = response;
+        const { role, flagDKHP } = response;
         const normalizedRole = role.toLowerCase();
         Cookies.set("roleUser", normalizedRole);
-        navigate(`/${normalizedRole}/trangchu`); // Chuyển hướng đến trang chủ tương ứng
+
+        if (normalizedRole === "student" && flagDKHP !== undefined) {
+          localStorage.setItem("flagDKHP", Number(flagDKHP));
+        } else {
+          localStorage.removeItem("flagDKHP");
+        }
+
+        navigate(`/${normalizedRole}/trangchu`);
       } else {
         setShowError(true);
       }

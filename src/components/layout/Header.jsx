@@ -90,14 +90,6 @@ function Header() {
               <span className="text-gray-700">{role}</span>
             </div>
             <ul className="w-[150px] absolute hidden group-hover:block bg-white border border-gray-300  rounded shadow-md right-0 z-10">
-              <li>
-                <Link
-                  to="/student/thongtin"
-                  className="block px-4 py-2 text-gray-700 hover:bg-gray-100"
-                >
-                  Thông tin
-                </Link>
-              </li>
               <li
                 onClick={handleLogoutAndRedirect}
                 className="block px-4 py-2 text-gray-700 hover:bg-gray-100 cursor-pointer"

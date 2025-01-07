@@ -64,7 +64,7 @@ const ForgetPasswordModal = ({ isOpen, onClose }) => {
             <div className="flex flex-col">
               <div className="mb-4 flex flex-col">
                 <label className="block text-sm font-medium text-gray-700">
-                  Tài khoản:
+                  Nhập tên tài khoản:
                 </label>
                 <input
                   type="text"

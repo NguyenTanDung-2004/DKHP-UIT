@@ -8,7 +8,7 @@ const Main = () => {
   const [selectedSemester, setSelectedSemester] = useState(2);
   const [curriculumData, setCurriculumData] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [maKhoa, setMaKhoa] = useState("SE"); // Mặc định là SE
+  const [maKhoa, setMaKhoa] = useState(""); // Mặc định là SE
 
   useEffect(() => {
     const fetchCurriculum = async () => {

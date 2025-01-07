@@ -18,6 +18,7 @@ const Home = () => {
   const [loading, setLoading] = useState(false);
   const [showModal, setShowModal] = useState(false);
   const [registerResult, setRegisterResult] = useState(null);
+  const [flagDKHP, setFlagDKHP] = useState(null);
 
   useEffect(() => {
     const fetchClassData = async () => {
@@ -34,6 +35,11 @@ const Home = () => {
       }
     };
     fetchClassData();
+    const storedFlagDKHP = localStorage.getItem("flagDKHP");
+    console.log("dkhp: " + storedFlagDKHP);
+    if (storedFlagDKHP) {
+      setFlagDKHP(Number(storedFlagDKHP));
+    }
   }, []);
 
   const mapAllClasses = (classes) => {
@@ -255,38 +261,45 @@ const Home = () => {
   };
   return (
     <Layout role="student">
-      <div className="flex bg-[#F2F4F7]">
-        <div className="flex-1 p-8 overflow-auto">
-          <div className="mb-4">
-            <input
-              type="text"
-              placeholder="Nhập vào mã lớp để tìm kiếm, nhiều lớp cách nhau dấu phẩy, khoảng trắng, xuống dòng hoặc dấu chấm phẩy (;; \n\r)"
-              className="border p-2 rounded w-full outline-none"
-              value={searchTerm}
-              onChange={handleSearchChange}
+      {flagDKHP === 1 ? (
+        <div className="flex bg-[#F2F4F7]">
+          <div className="flex-1 p-8 overflow-auto">
+            <div className="mb-4">
+              <input
+                type="text"
+                placeholder="Nhập vào mã lớp để tìm kiếm, nhiều lớp cách nhau dấu phẩy, khoảng trắng, xuống dòng hoặc dấu chấm phẩy (;; \n\r)"
+                className="border p-2 rounded w-full outline-none"
+                value={searchTerm}
+                onChange={handleSearchChange}
+              />
+            </div>
+            {loading ? (
+              <div className="flex items-center justify-center h-96">
+                <ClipLoader color={"#2F6BFF"} loading={loading} size={40} />
+              </div>
+            ) : (
+              <ClassTable
+                classes={modifiedClasses}
+                selectedClasses={selectedClasses}
+                onToggleSelect={handleToggleSelect}
+              />
+            )}
+          </div>
+          <div className="w-60">
+            <ProgressList
+              selectedClasses={selectedClasses}
+              onRemove={handleRemoveSelectedClass}
+              onRegister={handleRegister}
+              totalCredits={calculateTotalCredits()}
             />
           </div>
-          {loading ? (
-            <div className="flex items-center justify-center h-96">
-              <ClipLoader color={"#2F6BFF"} loading={loading} size={40} />
-            </div>
-          ) : (
-            <ClassTable
-              classes={modifiedClasses}
-              selectedClasses={selectedClasses}
-              onToggleSelect={handleToggleSelect}
-            />
-          )}
         </div>
-        <div className="w-60">
-          <ProgressList
-            selectedClasses={selectedClasses}
-            onRemove={handleRemoveSelectedClass}
-            onRegister={handleRegister}
-            totalCredits={calculateTotalCredits()}
-          />
+      ) : (
+        <div className="flex items-center justify-center h-96 text-2xl font-bold">
+          Chưa tới thời gian đăng ký của bạn
         </div>
-      </div>
+      )}
+
       <RegisterResultModal
         isOpen={showModal}
         onClose={closeModal}

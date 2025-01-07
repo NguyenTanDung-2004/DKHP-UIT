@@ -210,7 +210,7 @@ const Main = () => {
             staffs={staffs}
             selectedStaffIds={selectedStaffIds}
             onToggleSelect={handleToggleSelect}
-            onEditStaff={handleOpenEditModal}
+            onEditStaff={handleEditStaff}
           />
         )}
 

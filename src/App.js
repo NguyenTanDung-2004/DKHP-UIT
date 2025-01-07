@@ -14,6 +14,7 @@ import ClassPage from "./pages/staff/ClassPage";
 import StudentManagementPage from "./pages/staff/StudentPage";
 import StudentAccountPage from "./pages/admin/StudentPage";
 import StaffManagementPage from "./pages/admin/StaffPage";
+import DKHPPage from "./pages/admin/DKHPPage";
 
 const App = () => {
   return (
@@ -36,6 +37,7 @@ const App = () => {
         <Route path="/admin/trangchu" element={<HomePage />} />
         <Route path="/admin/sinhvien" element={<StudentAccountPage />} />
         <Route path="/admin/nhanvien" element={<StaffManagementPage />} />
+        <Route path="/admin/dieuchinhdkhp" element={<DKHPPage />} />
 
         <Route path="/" element={<AuthPage />} />
         <Route path="/auth" element={<AuthPage />} />
