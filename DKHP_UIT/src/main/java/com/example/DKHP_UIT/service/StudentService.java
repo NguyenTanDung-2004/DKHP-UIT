@@ -14,6 +14,7 @@ import com.example.DKHP_UIT.exception.ExceptionCode;
 import com.example.DKHP_UIT.exception.ExceptionStudent;
 import com.example.DKHP_UIT.mapper.StudentMapper;
 import com.example.DKHP_UIT.repository.StudentRepository;
+import com.example.DKHP_UIT.request.CreateRegistrationPeriodRequest;
 import com.example.DKHP_UIT.request.LoginRequest;
 import com.example.DKHP_UIT.request.StudentRequestAdd;
 import com.example.DKHP_UIT.request.StudentRequestEdit;
@@ -34,7 +35,11 @@ import lombok.extern.slf4j.Slf4j;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Date;
 import java.io.IOException;
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -62,6 +67,9 @@ public class StudentService {
 
     @Autowired
     private UtilsHandleCookie utilsHandleCookie;
+
+    @Autowired
+    private RegistrationPeriodService registrationPeriodService;
 
     public ResponseEntity<Map<String, Object>> login(StudentRequestLogin studentRequestLogin) {
         java.util.Optional<Student> optional = this.studentRepository.findById(studentRequestLogin.getMssv());
@@ -301,12 +309,54 @@ public class StudentService {
 
         Map<String, Object> response = ResponseCode.jsonOfResponseCode(ResponseCode.LoginSuccessfully);
         response.put("role", "Student");
+        response.put("flagDKHP", checkRegistrationAvailability(student.getMssv()));
 
         // Trả về response thành công
         return ResponseEntity.ok()
                 .body(response);
     }
 
+    public int checkRegistrationAvailability(String mssv) {
+        CreateRegistrationPeriodRequest periodRequest = registrationPeriodService.getRegistrationPeriod();
+        if (periodRequest == null) {
+            return 1; // Nếu chưa có thời gian đăng ký, cho phép đăng ký
+        }
+        
+         // Lấy 2 số đầu của MSSV
+        int studentBatch = Integer.parseInt(mssv.substring(0, 2));
+
+        Date currentDate = new Date();
+
+        if (currentDate.after(periodRequest.getStartDate()) && currentDate.before(periodRequest.getEndDate())) {
+              // Kiểm tra thời gian
+            LocalTime currentTime = LocalTime.now();
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm");
+            LocalTime startTime = LocalTime.parse(periodRequest.getStartTime(),formatter);
+            LocalTime endTime = LocalTime.parse(periodRequest.getEndTime(),formatter);
+    
+    
+            if (currentTime.isAfter(startTime) && currentTime.isBefore(endTime)) {
+                System.out.println("Start check time");
+               Map<Integer, Integer> allowedBatches = periodRequest.getAllowedBatches();
+                for (Map.Entry<Integer, Integer> entry : allowedBatches.entrySet()) {
+                    Integer batch = entry.getKey();
+                     System.out.println("batch: " + batch); // Log
+                    Integer allowedDays = entry.getValue();
+                     System.out.println("allowedDays: " + allowedDays); // Log
+    
+                    if (studentBatch <= batch) { // Check khóa hiện tại của sinh viên
+                         long daysBetween = ChronoUnit.DAYS.between(periodRequest.getStartDate().toInstant(), currentDate.toInstant());
+
+    
+                         if (daysBetween < allowedDays) {
+                            return 1; // Được phép đăng ký
+                        }
+                    }
+                }
+            }
+        }
+        return 0; // Không được phép đăng ký
+    }
     public ResponseEntity dkhp(List<String> listClassId, String token) {
         List<String> listTrue = new ArrayList<>();
         List<String> listWrong = new ArrayList<>();
