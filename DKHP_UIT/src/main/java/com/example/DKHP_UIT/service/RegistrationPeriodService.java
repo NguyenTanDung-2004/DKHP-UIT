@@ -46,21 +46,4 @@ public class RegistrationPeriodService {
         return registrationPeriodRepository.findAll(); // trả về danh sách bản ghi sau khi tạo
     }
 
-
-    public List<RegistrationPeriod> updateRegistrationPeriod( CreateRegistrationPeriodRequest request) {
-        // Xóa tất cả bản ghi cũ (nếu có)
-        registrationPeriodRepository.deleteAll();
-
-         RegistrationPeriod period = new RegistrationPeriod();
-        period.setStartDate(request.getStartDate());
-        period.setEndDate(request.getEndDate());
-        period.setStartTime(request.getStartTime());
-        period.setEndTime(request.getEndTime());
-        period.setAllowedBatches(request.getAllowedBatches());
-
-
-        registrationPeriodRepository.save(period);
-        return registrationPeriodRepository.findAll(); // trả về danh sách bản ghi sau khi update
-    }
-
 }

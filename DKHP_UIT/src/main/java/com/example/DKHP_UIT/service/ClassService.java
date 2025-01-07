@@ -1,6 +1,7 @@
 package com.example.DKHP_UIT.service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -12,6 +13,7 @@ import com.example.DKHP_UIT.repository.ClassRepository;
 import com.example.DKHP_UIT.request.RequestAddClassWithPractice;
 import com.example.DKHP_UIT.request.RequestCreateClassNonTH;
 import com.example.DKHP_UIT.request.RequestEditClass;
+import com.example.DKHP_UIT.response.ClassResponseDTO;
 import com.example.DKHP_UIT.response.ResponseCode;
 import com.example.DKHP_UIT.support_service.SupportClassService;
 
@@ -135,6 +137,62 @@ public class ClassService {
 
     public ResponseEntity getAllOpenClass() {
         List<Class> classes = this.classRepository.findAll();
-        return ResponseEntity.ok().body(classes);
+
+        List<ClassResponseDTO> classResponseDTOS = classes.stream()
+                .map(this::convertToDto)
+                .collect(Collectors.toList());
+
+        return ResponseEntity.ok().body(classResponseDTOS);
+    }
+
+    private ClassResponseDTO convertToDto(Class clazz) {
+         ClassResponseDTO dto = new ClassResponseDTO();
+        dto.setId(clazz.getId());
+        dto.setClassName(clazz.getClassName());
+        dto.setSiso(clazz.getSiso());
+        dto.setStartDate(clazz.getStartDate());
+        dto.setEndDate(clazz.getEndDate());
+        dto.setTietBatDau(clazz.getTietBatDau());
+        dto.setTietKetThuc(clazz.getTietKetThuc());
+        dto.setThu(clazz.getThu());
+        dto.setFlagTH(clazz.getFlagTH());
+        // dto.setNote(clazz.getNote());
+        // dto.setIdLT(clazz.getIdLT());
+        dto.setStartDate1(clazz.getStartDate1());
+        dto.setEndDate1(clazz.getEndDate1());
+        dto.setSectionOfDay(clazz.getSectionOfDay());
+        dto.setCurrentSiSo(clazz.getCurrentSiSo());
+
+        // Room
+        if(clazz.getRoom() != null){
+           ClassResponseDTO.RoomDTO roomDTO = new ClassResponseDTO.RoomDTO();
+            roomDTO.setId(clazz.getRoom().getId());
+            roomDTO.setRoomName(clazz.getRoom().getRoomName());
+           dto.setRoom(roomDTO);
+        }
+       
+        // Subject
+        if(clazz.getSubject() != null){
+            ClassResponseDTO.SubjectDTO subjectDTO = new ClassResponseDTO.SubjectDTO();
+            subjectDTO.setId(clazz.getSubject().getId());
+            subjectDTO.setMaMonHoc(clazz.getSubject().getMaMonHoc());
+            subjectDTO.setTenMonHoc(clazz.getSubject().getTenMonHoc());
+            subjectDTO.setDsMaMonHocTruoc(clazz.getSubject().getDsMaMonHocTruoc());
+            subjectDTO.setLoaiMonHoc(clazz.getSubject().getLoaiMonHoc());
+             subjectDTO.setSoTinChiLT(clazz.getSubject().getSoTinChiLT());
+            subjectDTO.setSoTinChiTH(clazz.getSubject().getSoTinChiTH());
+            subjectDTO.setMaKhoa(clazz.getSubject().getMaKhoa());
+            dto.setSubject(subjectDTO);
+        }
+        
+         // GiangVien
+        if(clazz.getGiangVien() != null){
+           ClassResponseDTO.GiangVienDTO giangVienDTO = new ClassResponseDTO.GiangVienDTO();
+            giangVienDTO.setId(clazz.getGiangVien().getId());
+            giangVienDTO.setName(clazz.getGiangVien().getName());
+            dto.setGiangVien(giangVienDTO);
+        }
+
+        return dto;
     }
 }

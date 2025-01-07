@@ -28,12 +28,6 @@ public class RegistrationPeriodController {
         return new ResponseEntity<>(createdPeriod, HttpStatus.CREATED);
     }
 
-    @PostMapping("/edit")
-    public ResponseEntity<List<RegistrationPeriod>> update( @RequestBody CreateRegistrationPeriodRequest request) {
-        List<RegistrationPeriod> updatedPeriod = registrationPeriodService.updateRegistrationPeriod( request);
-        return ResponseEntity.ok(updatedPeriod);
-    }
-
     @GetMapping
     public ResponseEntity<CreateRegistrationPeriodRequest> get() {
         CreateRegistrationPeriodRequest updatedPeriod = registrationPeriodService.getRegistrationPeriod();
