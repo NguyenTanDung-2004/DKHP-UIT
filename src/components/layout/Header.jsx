@@ -35,7 +35,7 @@ function Header() {
       { to: "/student/trangchu", text: "Trang chủ" },
       { to: "/student/lopdangky", text: "Các lớp học đăng ký" },
       { to: "/student/chuongtrinh", text: "Chương trình đào tạo" },
-      { to: "/student/tkb", text: "Thời khoa biểu" },
+      { to: "/student/tkb", text: "Thời khóa biểu" },
     ],
     admin: [
       { to: "/admin/trangchu", text: "Trang chủ" },
