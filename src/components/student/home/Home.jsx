@@ -70,8 +70,7 @@ const Home = () => {
   const mapRegisteredClasses = (classes) => {
     return classes.map((classData) => {
       return {
-        className:
-          classData.subject?.maMonHoc + "." + classData.className.split(".")[1],
+        className: classData.subject?.className,
         subject:
           classData.subject?.maMonHoc + " - " + classData.subject?.tenMonHoc,
         siso: classData.siso,

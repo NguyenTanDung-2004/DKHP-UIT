@@ -34,11 +34,23 @@ const AdminHome = () => {
   }
 
   if (error) {
-    return <div className="text-red-500"> {error}</div>;
+    return (
+      <Layout role="admin">
+        <div className="flex justify-center items-center min-h-screen text-red-500">
+          {error}
+        </div>
+      </Layout>
+    );
   }
 
   if (!statistics) {
-    return <div>Không có dữ liệu thống kê.</div>;
+    return (
+      <Layout role="admin">
+        <div className="flex justify-center items-center min-h-screen text-red-500">
+          Không có dữ liệu thống kê.
+        </div>
+      </Layout>
+    );
   }
   const {
     totalStudents,

@@ -144,8 +144,6 @@ const Main = () => {
             ĐIỀU CHỈNH ĐĂNG KÝ HỌC PHẦN
           </span>
         </div>
-        {console.log("isEditing", isEditing)}
-        {console.log("registrationPeriod", registrationPeriod)}
         {loading ? (
           <div className="flex justify-center items-center h-64">
             <ClipLoader color="#2F6BFF" loading={true} size={40} />
