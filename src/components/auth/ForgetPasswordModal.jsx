@@ -112,7 +112,7 @@ const ForgetPasswordModal = ({ isOpen, onClose }) => {
         )}
         {isSuccess && (
           <div className="text-center">
-            <p className="text-green-600 mb-4">{message}</p>
+            <p className="text-black mb-4">{message}</p>
             <div className="flex justify-end mt-4 gap-4">
               <button
                 type="button"
@@ -136,7 +136,9 @@ const ForgetPasswordModal = ({ isOpen, onClose }) => {
         )}
         {error && (
           <div className="text-center">
-            <p className="text-red-600 mb-4">{error}</p>
+            <p className="text-red-600 mb-4">
+              Email không tồn tại trong hệ thống
+            </p>
             <div className="flex justify-end mt-4 gap-4">
               <button
                 onClick={handleTryAgain}

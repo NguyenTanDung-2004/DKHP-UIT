@@ -72,18 +72,27 @@ const AuthPage = () => {
             WEBSITE QUẢN LÝ ĐĂNG KÝ HỌC PHẦN
           </h2>
         </div>
-        <div className="mt-10">
-          <span className="text-gray-600 font-semibold">
-            Thành viên nhóm 9:
-          </span>
-          <ul className="text-gray-700 text-left mt-2">
+        {/* <div className="mt-10">
+          <div className="flex flex-col">
+            <span className="text-black font-semibold">
+              Phương pháp phát triển phần mềm hướng đối tượng - SE100
+            </span>
+            <span className="text-gray-600 font-semibold">
+              GVHD: Ths. Lê Thanh Trọng
+            </span>
+            <span className="text-gray-600 font-semibold">
+              Nhóm: 9 - Lớp: SE100.P12
+            </span>
+          </div>
+
+          <ul className="text-gray-700 text-right mt-2">
             <li className="mb-1">Nguyễn Tấn Dũng - 22520001</li>
-            <li className="mb-1">Ngô Hoàng Khang - 22520002</li>
-            <li className="mb-1">Trần Bảo Phú - 22520003</li>
+            <li className="mb-1">Ngô Hoàng Khang - 22520616</li>
+            <li className="mb-1">Trần Bảo Phú - 22521104</li>
             <li className="mb-1">Phan Nguyễn Trà Giang - 22520360</li>
-            <li className="mb-1">Phạm Đức Duy - 22520005</li>
+            <li className="mb-1">Phạm Đức Duy - 22520338 (không đóng góp)</li>
           </ul>
-        </div>
+        </div> */}
       </div>
 
       {/* Phần form đăng nhập */}
