@@ -38,7 +38,7 @@ const Main = () => {
       <div className="flex bg-white min-h-screen flex-col px-[100px] py-[40px] w-full">
         <div className="flex justify-between items-center w-full mb-4">
           <span className="w-full text-2xl text-black font-bold mr-10 text-center">
-            THỜI KHOA BIỂU
+            THỜI KHÓA BIỂU
           </span>
         </div>
         <ScheduleTable scheduleData={scheduleData} />
