@@ -93,7 +93,7 @@ const AdminHome = () => {
           </div>
           <div className="flex flex-wrap justify-center gap-8">
             <Card
-              title="Tổng số học sinh"
+              title="Tổng số sinh viên"
               value={totalStudents}
               icon={<i className="fas fa-user-graduate"></i>}
             />
@@ -122,7 +122,7 @@ const AdminHome = () => {
           <ChartComponent
             title="Thống kê nhân sự"
             data={{
-              "Tổng số học sinh": totalStudents,
+              "Tổng số sinh viên": totalStudents,
               "Tổng số nhân viên": totalStaffs,
               "Tổng số giáo viên": totalTeachers,
             }}
