@@ -234,7 +234,7 @@ const EditStudentModal = ({ isOpen, onClose, onEditStudent, student }) => {
               </div>
             </div>
             <div className="flex gap-4">
-              <div className="mb-4 flex flex-col flex-1">
+              {/* <div className="mb-4 flex flex-col flex-1">
                 <label className="block text-sm font-medium text-gray-700">
                   Điện thoại:
                 </label>
@@ -245,7 +245,7 @@ const EditStudentModal = ({ isOpen, onClose, onEditStudent, student }) => {
                   onChange={handleChange}
                   className="mt-1 block w-full border rounded px-2 py-1 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
                 />
-              </div>
+              </div> */}
               <div className="mb-4 flex flex-col flex-1">
                 <label className="block text-sm font-medium text-gray-700">
                   Giới tính:

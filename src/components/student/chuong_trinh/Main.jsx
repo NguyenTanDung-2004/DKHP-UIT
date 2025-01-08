@@ -8,7 +8,7 @@ const Main = () => {
   const [selectedSemester, setSelectedSemester] = useState(2);
   const [curriculumData, setCurriculumData] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [maKhoa, setMaKhoa] = useState(""); // Mặc định là SE
+  const [maKhoa, setMaKhoa] = useState("");
 
   useEffect(() => {
     const fetchCurriculum = async () => {
@@ -16,7 +16,7 @@ const Main = () => {
         setLoading(true);
         const response = await getCTDT(selectedSemester);
         setCurriculumData(mapCurriculumData(response));
-        setMaKhoa(response.maKhoa || "SE"); // Lấy mã khoa từ response, nếu không có thì dùng SE
+        setMaKhoa(response.maKhoa || ""); // Lấy mã khoa từ response, nếu không có thì dùng SE
       } catch (error) {
         console.error("Error fetching curriculum:", error);
       } finally {

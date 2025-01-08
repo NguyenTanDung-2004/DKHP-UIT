@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { ClipLoader } from "react-spinners";
 
 const CreateStaffModal = ({ isOpen, onClose, onCreateStaff }) => {
   const [staffData, setStaffData] = useState({
@@ -7,6 +8,7 @@ const CreateStaffModal = ({ isOpen, onClose, onCreateStaff }) => {
     username: "",
     role: "staff",
   });
+  const [loading, setLoading] = useState(false);
 
   const handleChange = (e) => {
     setStaffData({ ...staffData, [e.target.name]: e.target.value });
@@ -17,7 +19,15 @@ const CreateStaffModal = ({ isOpen, onClose, onCreateStaff }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    await onCreateStaff(staffData);
+    setLoading(true); // Set loading to true before the API call
+    try {
+      await onCreateStaff(staffData);
+      onClose();
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setLoading(false); // Set loading to false after the API call completes (success or error)
+    }
   };
 
   if (!isOpen) return null;
@@ -127,10 +137,15 @@ const CreateStaffModal = ({ isOpen, onClose, onCreateStaff }) => {
               Hủy bỏ
             </button>
             <button
-              onClick={handleSubmit}
-              className="bg-[#2F6BFF] text-white py-2 px-4 rounded shadow-xl hover:bg-opacity-90"
+              type="submit"
+              className="bg-[#2F6BFF] text-white py-2 px-4 rounded shadow-xl hover:bg-opacity-90 disabled:bg-opacity-50 disabled:cursor-not-allowed flex items-center justify-center"
+              disabled={loading}
             >
-              Lưu
+              {loading ? (
+                <ClipLoader color={"white"} loading={loading} size={20} />
+              ) : (
+                "Lưu"
+              )}
             </button>
           </div>
         </form>
