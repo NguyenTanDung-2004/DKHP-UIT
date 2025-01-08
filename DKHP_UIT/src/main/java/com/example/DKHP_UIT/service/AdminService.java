@@ -51,7 +51,7 @@ public class AdminService {
         this.staffRepository.save(staff);
         // send notification via email.
         utilsHandleEmail.sendCreateAccount(staff.getEmail(), "TÀI KHOẢN VÀ MẬT KHẨU CHO NHÂN VIÊN - UIT",
-                staff.getEmail(), randomPassword);
+                staff.getAccount(), randomPassword);
 
         return ResponseEntity.ok().body(ResponseCode.jsonOfResponseCode(ResponseCode.CreateAccountSuccessfully));
     }
