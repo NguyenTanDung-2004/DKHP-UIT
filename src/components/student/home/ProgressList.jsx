@@ -23,7 +23,7 @@ const ProgressList = ({
       </div>
       <button
         onClick={onRegister}
-        className="bg-[#2F6BFF] text-white py-2 px-4 rounded mt-24 shadow-xl"
+        className="bg-[#2F6BFF] text-white py-2 px-4 rounded mt-24 shadow-xl font-bold"
       >
         Đăng ký
       </button>
