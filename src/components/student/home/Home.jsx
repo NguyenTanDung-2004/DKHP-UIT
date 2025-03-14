@@ -257,8 +257,10 @@ const Home = () => {
         return "Thiếu lớp lý thuyết";
       case "Schedule":
         return "Trùng lịch";
+      case "tinchi":
+        return "Không thể vượt số tín chỉ tối đa (13)";
       default:
-        return "Lỗi không xác định";
+        return "Chưa học môn trước";
     }
   };
   return (

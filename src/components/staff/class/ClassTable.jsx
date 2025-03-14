@@ -20,6 +20,7 @@ const ClassTable = ({ classes, selectedClasses, onToggleSelect }) => {
           <th className="py-2 px-4 border border-[#B9B9B9] text-center">
             Sỉ số/Đã ĐK
           </th>
+          <th className="py-2 px-4 border border-[#B9B9B9]">Trạng thái</th>
           <th className="py-2 px-4 border border-[#B9B9B9]"></th>
         </tr>
       </thead>

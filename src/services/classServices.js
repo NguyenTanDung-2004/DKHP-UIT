@@ -79,6 +79,23 @@ const deleteClass = async (classId) => {
   }
 };
 
+const deleteClassAfter = async (classId) => {
+  try {
+    const response = await fetch(
+      `${API_URL}/class/deleteSubject?classId=${classId}`,
+      {
+        method: "POST", // Use POST for delete
+      }
+    );
+    if (!response.ok) {
+      throw new Error(`Failed to delete class with ID: ${classId}`);
+    }
+    return await response.json();
+  } catch (error) {
+    throw error;
+  }
+};
+
 const editClass = async (classData) => {
   try {
     const response = await fetch(`${API_URL}/class/editClass`, {
@@ -104,4 +121,5 @@ export {
   getRoomList,
   deleteClass,
   editClass,
+  deleteClassAfter,
 };
